@@ -30678,6 +30678,148 @@ body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
   }
 }
 
+/* Match the supplied premium dock: color-led accents, a clear active rail, and no glossy fill. */
+.floating-nav {
+  padding: 8px 10px !important;
+  gap: 5px !important;
+  border-radius: 25px !important;
+  background: rgba(247, 251, 249, 0.96) !important;
+  box-shadow:
+    0 22px 52px rgba(6, 78, 59, 0.15),
+    0 5px 14px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+}
+.floating-nav .nav-item,
+.floating-nav .nav-item.active,
+.floating-nav .nav-item[aria-current="page"] {
+  min-height: 60px;
+  padding: 5px 9px 6px;
+  gap: 3px;
+  border-radius: 17px;
+}
+.floating-nav .nav-item::before {
+  inset: 2px;
+  border-radius: 15px;
+}
+.floating-nav .nav-item::after {
+  content: "";
+  left: 50%;
+  bottom: 3px;
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--nav-accent);
+  box-shadow: 0 0 8px var(--nav-glow);
+  opacity: 0;
+  transform: translateX(-50%) scaleX(0.45);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.floating-nav .nav-item.active::before,
+.floating-nav .nav-item[aria-current="page"]::before {
+  border-color: var(--nav-accent) !important;
+  background: var(--nav-soft) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54) !important;
+}
+.floating-nav .nav-item.active::after,
+.floating-nav .nav-item[aria-current="page"]::after {
+  opacity: 1;
+  transform: translateX(-50%) scaleX(1);
+}
+.floating-nav .nav-item .nav-tile i,
+.floating-nav .nav-item.active .nav-tile i,
+.floating-nav .nav-item[aria-current="page"] .nav-tile i {
+  width: 37px;
+  height: 37px;
+  border-radius: 12px;
+  color: var(--nav-accent) !important;
+  border-color: var(--nav-accent) !important;
+  background: var(--nav-soft) !important;
+  box-shadow: 0 5px 12px var(--nav-glow) !important;
+}
+.floating-nav .nav-item.active .nav-tile i,
+.floating-nav .nav-item[aria-current="page"] .nav-tile i {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 7px 15px var(--nav-glow) !important;
+}
+.floating-nav .nav-item span,
+.floating-nav .nav-item.active span,
+.floating-nav .nav-item[aria-current="page"] span {
+  font-size: 0.61rem;
+  font-weight: 740;
+  letter-spacing: 0.015em;
+}
+@media (hover: hover) and (pointer: fine) {
+  .floating-nav .nav-item:not(.active):not([aria-current="page"]):hover {
+    color: var(--nav-accent);
+    transform: translateY(-2px);
+  }
+  .floating-nav .nav-item:not(.active):not([aria-current="page"]):hover::before {
+    border-color: var(--nav-accent) !important;
+    background: var(--nav-soft) !important;
+    opacity: 0.72 !important;
+    transform: scale(1);
+  }
+  .floating-nav .nav-item:not(.active):not([aria-current="page"]):hover .nav-tile i {
+    transform: translateY(-1px) scale(1.04);
+    box-shadow: 0 7px 15px var(--nav-glow) !important;
+  }
+  .floating-nav .nav-item:not(.active):not([aria-current="page"]):hover span {
+    opacity: 0.94;
+  }
+}
+body.dark-mode .floating-nav {
+  background: rgba(8, 25, 19, 0.97) !important;
+  box-shadow:
+    0 24px 58px rgba(0, 0, 0, 0.42),
+    0 5px 14px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+body.dark-mode .floating-nav .nav-item.active::before,
+body.dark-mode .floating-nav .nav-item[aria-current="page"]::before {
+  background: var(--nav-soft) !important;
+  border-color: var(--nav-accent) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+body.dark-mode .floating-nav .nav-item .nav-tile i,
+body.dark-mode .floating-nav .nav-item.active .nav-tile i,
+body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
+  background: var(--nav-soft) !important;
+  border-color: var(--nav-accent) !important;
+  box-shadow: 0 6px 14px var(--nav-glow) !important;
+}
+@media (max-width: 599px) {
+  .floating-nav {
+    padding: 5px !important;
+    gap: 2px !important;
+    border-radius: 22px !important;
+  }
+  .floating-nav .nav-item,
+  .floating-nav .nav-item.active,
+  .floating-nav .nav-item[aria-current="page"] {
+    min-height: 0;
+    height: 60px;
+    padding: 4px 2px 5px;
+    gap: 2px;
+    border-radius: 16px;
+  }
+  .floating-nav .nav-item .nav-tile i,
+  .floating-nav .nav-item.active .nav-tile i,
+  .floating-nav .nav-item[aria-current="page"] .nav-tile i {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+  .floating-nav .nav-item span,
+  .floating-nav .nav-item.active span,
+  .floating-nav .nav-item[aria-current="page"] span {
+    font-size: clamp(0.5rem, 2.15vw, 0.56rem);
+  }
+  .floating-nav .nav-item::after {
+    bottom: 2px;
+    width: 16px;
+  }
+}
+
 /* Second premium pass: a more composed dock with quiet, tactile controls. */
 .floating-nav {
   border-radius: 26px !important;
