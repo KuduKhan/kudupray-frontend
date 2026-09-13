@@ -30678,4 +30678,54 @@ body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
   }
 }
 
+/* Library parity: Ruqyah uses the same compact control rhythm as Duas. */
+.brand-wordmark {
+  width: clamp(132px, 14vw, 178px);
+  height: 40px;
+}
+@media (min-width: 1024px) {
+  #tab-duas.active.dua-library-mode-ruqyah {
+    --ruqyah-switcher-height: 68px;
+    --ruqyah-search-height: 50px;
+  }
+  #tab-duas.active.dua-library-mode-ruqyah > .dua-library-switcher,
+  #tab-duas.active.dua-library-mode-ruqyah > .ruqyah-library-intro {
+    height: var(--ruqyah-switcher-height) !important;
+    min-height: var(--ruqyah-switcher-height) !important;
+  }
+  #tab-duas.active.dua-library-mode-ruqyah > .search-row,
+  #tab-duas.active.dua-library-mode-ruqyah > .search-row .search-wrapper,
+  #tab-duas.active.dua-library-mode-ruqyah .search-box {
+    height: var(--ruqyah-search-height) !important;
+    min-height: var(--ruqyah-search-height) !important;
+  }
+  #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro {
+    padding: 10px 12px !important;
+    grid-template-columns: 36px minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+  #tab-duas.active.dua-library-mode-ruqyah .ruqyah-intro-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro strong {
+    font-size: 0.7rem !important;
+    line-height: 1.2 !important;
+  }
+  #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro p {
+    font-size: 0.58rem !important;
+    line-height: 1.28 !important;
+  }
+  #tab-duas.active.dua-library-mode-ruqyah .dua-mode-button {
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+}
+@media (max-width: 599px) {
+  .brand-wordmark {
+    width: clamp(124px, 42vw, 160px);
+    height: 36px;
+  }
+}
+
 
