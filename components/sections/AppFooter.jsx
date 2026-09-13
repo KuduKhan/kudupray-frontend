@@ -5,12 +5,8 @@ import { dispatch } from "../runtime-events";
 export default function AppFooter() {
   return (
     <footer className="app-footer" aria-label="KuduPray credits">
-      <div
-        className="footer-brand-mark brand-symbol brand-monogram-seal"
-        aria-hidden="true"
-      >
-        <span className="brand-monogram">{"KP"}</span>
-        <i className="fa-solid fa-star brand-monogram-star"></i>
+      <div className="footer-brand-mark" aria-hidden="true">
+        <img src="/brand/kudupray-emblem.png" alt="" />
       </div>
       <div className="footer-copy">
         <span className="footer-kicker">{"KuduPray Premium"}</span>

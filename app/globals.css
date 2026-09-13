@@ -10272,6 +10272,19 @@ header::after {
 .brand-copy {
   min-width: 0;
 }
+.brand-logo-mark img {
+  display: block;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+.brand-wordmark {
+  display: block;
+  width: clamp(118px, 14vw, 160px);
+  height: 34px;
+  object-fit: contain;
+  object-position: left center;
+}
 .brand-kicker {
   display: block;
   margin: 0 0 2px;
@@ -18175,6 +18188,12 @@ body.dark-mode .modal-body .panel-content {
 }
 .footer-copy {
   min-width: 0;
+}
+.footer-brand-mark img {
+  display: block;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
 }
 .footer-kicker {
   display: block;

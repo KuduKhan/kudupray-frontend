@@ -1323,7 +1323,7 @@ export default function TabArabic() {
                   id="arabic-write-input"
                   lang="ar"
                   dir="rtl"
-                  inputmode="text"
+                  inputMode="text"
                   autoComplete="off"
                   aria-label="Write the Arabic word for water"
                 />

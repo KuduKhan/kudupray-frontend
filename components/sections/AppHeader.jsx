@@ -7,12 +7,11 @@ export default function AppHeader() {
     <header>
       <div className="mobile-header-row">
         <div className="brand-lockup">
-          <div className="brand-symbol brand-monogram-seal" aria-hidden="true">
-            <span className="brand-monogram">{"KP"}</span>
-            <i className="fa-solid fa-star brand-monogram-star"></i>
+          <div className="brand-symbol brand-logo-mark" aria-hidden="true">
+            <img src="/brand/kudupray-emblem.png" alt="" />
           </div>
           <div className="brand-copy">
-            <h1>{"KuduPray"}</h1>
+            <img className="brand-wordmark" src="/brand/kudupray-wordmark.png" alt="KuduPray" />
             <span className="brand-kicker">
               {"Your daily worship companion"}
             </span>
