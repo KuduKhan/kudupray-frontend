@@ -730,7 +730,6 @@ input:checked + .slider:before {
     border-bottom-right-radius: 0;
     max-height: 90vh;
     height: auto;
-    min-height: auto;
   }
 }
 
@@ -10305,6 +10304,7 @@ header h1 {
   font-size: 0.73rem;
   line-height: 1.48;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   position: relative;
 }
@@ -10542,6 +10542,7 @@ body.dark-mode .mini-card {
   font-size: 0.69rem;
   line-height: 1.45;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 .guides-grid {
@@ -10674,6 +10675,7 @@ body.dark-mode .floating-nav {
     margin: 13px 0;
     font-size: 0.8rem;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
   }
   .hijri-pill {
     font-size: 0.75rem;
@@ -10737,6 +10739,7 @@ body.dark-mode .floating-nav {
   .desktop-page-heading p {
     font-size: 0.76rem;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
   }
   .guides-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -10776,6 +10779,7 @@ body.dark-mode .floating-nav {
     max-width: 500px;
     font-size: 0.84rem;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
   .page {
     margin-top: -24px;
@@ -11720,6 +11724,7 @@ img {
   .brand-tagline {
     max-width: 620px;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
   .modal-card {
     width: min(600px, calc(100% - 32px));
@@ -11815,7 +11820,6 @@ img {
 .modal-body {
   scroll-behavior: smooth;
   overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 1023px) {
@@ -11984,7 +11988,6 @@ img {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
   padding: clamp(18px, 3vw, 28px);
   color: var(--text-main);
   line-height: 1.7;
@@ -24397,7 +24400,6 @@ body.dark-mode #tab-duas .desktop-page-heading {
   display: block;
   max-width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 @media (max-width: 600px) {
   #tab-companion .daily-companion-grid {
@@ -27572,7 +27574,6 @@ body.dark-mode .floating-nav .nav-item span {
   letter-spacing: 0;
   text-transform: none;
   text-align: left;
-  vertical-align: middle;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -27841,7 +27842,6 @@ body.dark-mode #schedule-card .prayer-item:not(.prayer-alarm).active {
   overscroll-behavior: contain;
   scroll-behavior: smooth;
   scroll-padding-block: 12px 28px;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(5, 150, 105, 0.38) transparent;
 }
@@ -28192,7 +28192,6 @@ body.guide-reading-open #tab-guides {
   overflow-x: hidden !important;
   overflow-y: auto !important;
   overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
   scroll-padding-block: 10px 30px;
   padding-bottom: calc(32px + env(safe-area-inset-bottom)) !important;
 }
@@ -28634,7 +28633,6 @@ html:has(body.guide-reading-open) {
   backdrop-filter: none;
 }
 .quran-reader-page .quran-reader-scroll {
-  -webkit-overflow-scrolling: touch;
   scrollbar-gutter: stable;
   touch-action: pan-y;
 }
