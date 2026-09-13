@@ -1,9 +1,74 @@
 import "./globals.css";
 
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://kudupray.com").replace(
+  /\/$/,
+  "",
+);
+const siteName = "KuduPray";
+const siteDescription =
+  "A peaceful Islamic companion for prayer times, Qibla, Qur’an reading, duas, Ruqyah, and daily guidance.";
+
 export const metadata = {
-  title: "KuduPray | Premium Islamic Companion",
-  description:
-    "Prayer times, Qur’an reading and audio, duas, daily remembrance, and practical Islamic guides.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "KuduPray | Premium Islamic Companion",
+    template: "%s | KuduPray",
+  },
+  description: siteDescription,
+  applicationName: siteName,
+  authors: [{ name: "Mufasa Khan", url: siteUrl }],
+  creator: "Mufasa Khan",
+  publisher: "KuduPray",
+  keywords: [
+    "Islamic prayer times",
+    "Qibla finder",
+    "Quran reader",
+    "daily duas",
+    "Ruqyah",
+    "Islamic companion",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName,
+    title: "KuduPray | Premium Islamic Companion",
+    description: siteDescription,
+    images: [
+      {
+        url: "/brand/kudupray-lockup.png",
+        width: 1440,
+        height: 1024,
+        alt: "KuduPray logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KuduPray | Premium Islamic Companion",
+    description: siteDescription,
+    images: ["/brand/kudupray-lockup.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: "/brand/kudupray-emblem.png",
+    apple: "/brand/kudupray-emblem.png",
+  },
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 export const viewport = {
   width: "device-width",
@@ -13,9 +78,50 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${siteUrl}/#organization`,
+        name: siteName,
+        url: siteUrl,
+        logo: `${siteUrl}/brand/kudupray-emblem.png`,
+        founder: { "@type": "Person", name: "Mufasa Khan" },
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": `${siteUrl}/#application`,
+        name: siteName,
+        applicationCategory: "LifestyleApplication",
+        operatingSystem: "Web",
+        url: siteUrl,
+        description: siteDescription,
+        image: `${siteUrl}/brand/kudupray-lockup.png`,
+        publisher: { "@id": `${siteUrl}/#organization` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${siteUrl}/#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: siteName,
+            item: siteUrl,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <html lang="en">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
