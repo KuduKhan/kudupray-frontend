@@ -3770,7 +3770,7 @@ body.dark-mode .info-disclosure > summary {
 .nav-item.active,
 .nav-item[aria-current="page"] {
   color: var(--nav-accent);
-  border-color: color-mix(in srgb, var(--nav-accent) 15%, transparent);
+  border-color: var(--nav-accent);
   background:
     radial-gradient(circle at 50% 0, var(--nav-soft), transparent 68%),
     linear-gradient(
@@ -3786,10 +3786,10 @@ body.dark-mode .info-disclosure > summary {
 .nav-item.active .nav-tile,
 .nav-item[aria-current="page"] .nav-tile {
   color: white;
-  border-color: color-mix(in srgb, var(--nav-accent) 48%, white);
+  border-color: var(--nav-accent);
   background: linear-gradient(
     145deg,
-    color-mix(in srgb, var(--nav-accent) 82%, white),
+    var(--nav-accent),
     var(--nav-accent)
   );
   box-shadow:
@@ -3811,16 +3811,16 @@ body.dark-mode .info-disclosure > summary {
 @media (hover: hover) and (pointer: fine) {
   .nav-item:not(.active):hover {
     color: var(--nav-accent);
-    border-color: color-mix(in srgb, var(--nav-accent) 10%, transparent);
+    border-color: var(--nav-accent);
     background: var(--nav-soft);
     transform: translateY(-2px);
   }
   .nav-item:not(.active):hover .nav-tile {
-    border-color: color-mix(in srgb, var(--nav-accent) 22%, white);
+    border-color: var(--nav-accent);
     background: linear-gradient(
       145deg,
       white,
-      color-mix(in srgb, var(--nav-accent) 8%, white)
+      var(--nav-accent)
     );
     box-shadow:
       0 9px 20px var(--nav-glow),
@@ -3835,7 +3835,7 @@ body.dark-mode .info-disclosure > summary {
   }
 }
 .nav-item:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--nav-accent) 32%, transparent);
+  outline: 3px solid var(--nav-accent);
   outline-offset: 3px;
 }
 .nav-item:active {
@@ -3877,8 +3877,8 @@ body.dark-mode .nav-item .nav-tile {
 }
 body.dark-mode .nav-item.active,
 body.dark-mode .nav-item[aria-current="page"] {
-  color: color-mix(in srgb, var(--nav-accent) 62%, white);
-  border-color: color-mix(in srgb, var(--nav-accent) 22%, transparent);
+  color: var(--nav-accent);
+  border-color: var(--nav-accent);
   background: linear-gradient(
     145deg,
     rgba(255, 255, 255, 0.1),
@@ -3891,7 +3891,7 @@ body.dark-mode .nav-item[aria-current="page"] {
 }
 body.dark-mode .nav-item.active span,
 body.dark-mode .nav-item[aria-current="page"] span {
-  color: color-mix(in srgb, var(--nav-accent) 58%, white);
+  color: var(--nav-accent);
 }
 
 @media (max-width: 599px) {
@@ -5389,7 +5389,6 @@ body.dark-mode .islamic-calendar-toolbar {
     background: rgba(16, 185, 129, 0.055);
     font-size: 0.62rem;
     line-height: 1.5;
-    text-wrap: pretty;
   }
   .info-popup-layer.prayer-guidance-popup .prayer-guidance-grid {
     display: grid;
@@ -5433,7 +5432,6 @@ body.dark-mode .islamic-calendar-toolbar {
     font-size: 0.59rem;
     line-height: 1.5;
     overflow-wrap: anywhere;
-    text-wrap: pretty;
   }
   body.dark-mode
     .info-popup-layer.prayer-guidance-popup
@@ -5489,7 +5487,6 @@ body.dark-mode .islamic-calendar-toolbar {
     font-size: 0.64rem !important;
     line-height: 1.62 !important;
     overflow-wrap: anywhere;
-    text-wrap: pretty;
   }
   :is(.info-popup-content, .modal-body .panel-content, .calendar-details-panel)
     p:last-child {
@@ -5512,7 +5509,6 @@ body.dark-mode .islamic-calendar-toolbar {
     color: var(--primary-dark);
     font-size: 0.73rem;
     line-height: 1.35;
-    text-wrap: balance;
   }
   :is(.info-popup-content, .modal-body .panel-content)
     :is(h3, h4, h5):first-child {
@@ -5564,7 +5560,6 @@ body.dark-mode .islamic-calendar-toolbar {
     font-size: 0.59rem;
     line-height: 1.55;
     overflow-wrap: anywhere;
-    text-wrap: pretty;
   }
   body.dark-mode
     :is(.info-popup-content, .modal-body .panel-content)
@@ -9250,7 +9245,7 @@ button {
   font-family: inherit;
 }
 :where(button, input, select, summary, [role="button"]):focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--accent) 72%, white);
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 [role="button"] {
@@ -11506,7 +11501,6 @@ body.dark-mode .accordion-visual-icon {
   margin: 0 0 14px;
   padding: 2px 2px 9px;
   overflow-x: auto;
-  scrollbar-width: thin;
   scroll-snap-type: x proximity;
 }
 .dua-visual-category {
@@ -11711,7 +11705,6 @@ img {
 }
 .modal-body {
   overscroll-behavior: contain;
-  scrollbar-gutter: stable;
 }
 .lang-select,
 .glass-select,
@@ -11769,9 +11762,6 @@ img {
   .modal-card {
     width: 100%;
     max-width: 100%;
-  }
-  .modal-body {
-    scrollbar-gutter: auto;
   }
   .prayer-item.active::after {
     top: -7px;
@@ -12600,11 +12590,11 @@ body.dark-mode .support-tile {
       rgba(255, 255, 255, 0.92)
     );
   overflow: visible;
-  border-color: color-mix(in srgb, var(--time-accent) 18%, transparent);
+  border-color: var(--time-accent);
   background: var(--time-bg);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.74),
-    0 8px 20px color-mix(in srgb, var(--time-accent) 10%, transparent);
+    0 8px 20px var(--time-accent);
 }
 .prayer-item::before {
   content: "";
@@ -12625,7 +12615,7 @@ body.dark-mode .support-tile {
   color: var(--time-accent);
 }
 .prayer-item .tile-icon {
-  border-color: color-mix(in srgb, var(--time-accent) 20%, transparent);
+  border-color: var(--time-accent);
   color: var(--time-accent);
 }
 .prayer-fajr {
@@ -12695,17 +12685,17 @@ body.dark-mode .support-tile {
     linear-gradient(145deg, #f5f3ff, #faf5ff);
 }
 .prayer-item.active {
-  border-color: color-mix(in srgb, var(--time-accent) 42%, transparent);
+  border-color: var(--time-accent);
   background: var(--time-bg);
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--time-accent) 11%, transparent),
-    0 10px 26px color-mix(in srgb, var(--time-accent) 22%, transparent);
+    inset 0 0 0 1px var(--time-accent),
+    0 10px 26px var(--time-accent);
 }
 .prayer-item.active .tile-icon {
   color: white;
   background: var(--time-accent);
-  border-color: color-mix(in srgb, var(--time-accent) 72%, black);
-  box-shadow: 0 7px 18px color-mix(in srgb, var(--time-accent) 30%, transparent);
+  border-color: var(--time-accent);
+  box-shadow: 0 7px 18px var(--time-accent);
 }
 .prayer-item.active .prayer-name {
   color: var(--time-ink);
@@ -12728,31 +12718,23 @@ body.dark-mode .prayer-item {
   --time-bg:
     radial-gradient(
       circle at 82% 12%,
-      color-mix(in srgb, var(--time-accent) 22%, transparent),
+      var(--time-accent),
       transparent 44%
     ),
     linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(9, 18, 15, 0.94));
   --time-ink: #e5f7ef;
-  border-color: color-mix(
-    in srgb,
-    var(--time-accent) 28%,
-    rgba(255, 255, 255, 0.06)
-  );
+  border-color: var(--time-accent);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.045),
     0 10px 24px rgba(0, 0, 0, 0.24);
 }
 body.dark-mode .prayer-item .prayer-time {
-  color: color-mix(in srgb, var(--time-accent) 72%, white);
+  color: var(--time-accent);
 }
 body.dark-mode .prayer-item .tile-icon {
-  color: color-mix(in srgb, var(--time-accent) 70%, white);
+  color: var(--time-accent);
   background: rgba(255, 255, 255, 0.065);
-  border-color: color-mix(
-    in srgb,
-    var(--time-accent) 30%,
-    rgba(255, 255, 255, 0.06)
-  );
+  border-color: var(--time-accent);
 }
 body.dark-mode .prayer-item.active .tile-icon {
   color: white;
@@ -13153,12 +13135,12 @@ body.dark-mode .prayer-item.active .tile-icon {
   padding: 14px 10px 12px;
   gap: 2px;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--sunnah-accent) 18%, transparent);
+  border: 1px solid var(--sunnah-accent);
   border-radius: 18px;
   background: var(--sunnah-surface);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.82),
-    0 9px 22px color-mix(in srgb, var(--sunnah-accent) 9%, transparent);
+    0 9px 22px var(--sunnah-accent);
 }
 #sunnah-card .sunnah-item::before {
   content: "";
@@ -13180,18 +13162,18 @@ body.dark-mode .prayer-item.active .tile-icon {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--sunnah-accent) 10%, transparent);
+  background: var(--sunnah-accent);
   pointer-events: none;
 }
 #sunnah-card .sunnah-item .tile-icon {
   width: 40px;
   height: 40px;
   margin: 0 0 5px;
-  border-color: color-mix(in srgb, var(--sunnah-accent) 22%, transparent);
+  border-color: var(--sunnah-accent);
   color: var(--sunnah-accent);
   background: rgba(255, 255, 255, 0.72);
   box-shadow: 0 6px 15px
-    color-mix(in srgb, var(--sunnah-accent) 14%, transparent);
+    var(--sunnah-accent);
 }
 #sunnah-card .sunnah-label {
   max-width: 100%;
@@ -13593,21 +13575,17 @@ body.dark-mode #sunnah-card .sunnah-item {
   --sunnah-surface:
     radial-gradient(
       circle at 90% 0%,
-      color-mix(in srgb, var(--sunnah-accent) 18%, transparent),
+      var(--sunnah-accent),
       transparent 43%
     ),
     linear-gradient(145deg, rgba(30, 27, 55, 0.86), rgba(9, 24, 19, 0.94));
-  border-color: color-mix(
-    in srgb,
-    var(--sunnah-accent) 26%,
-    rgba(255, 255, 255, 0.06)
-  );
+  border-color: var(--sunnah-accent);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 10px 24px rgba(0, 0, 0, 0.22);
 }
 body.dark-mode #sunnah-card .sunnah-item .tile-icon {
-  color: color-mix(in srgb, var(--sunnah-accent) 72%, white);
+  color: var(--sunnah-accent);
   background: rgba(255, 255, 255, 0.06);
 }
 body.dark-mode #sunnah-card .sunnah-note {
@@ -14280,10 +14258,10 @@ body.dark-mode
   min-height: 140px;
   padding: 16px 10px 14px;
   border-radius: var(--radius-lg);
-  border-color: color-mix(in srgb, var(--sunnah-accent) 20%, transparent);
+  border-color: var(--sunnah-accent);
   background: var(--sunnah-surface);
   box-shadow: 0 4px 15px
-    color-mix(in srgb, var(--sunnah-accent) 6%, transparent);
+    var(--sunnah-accent);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -14297,7 +14275,7 @@ body.dark-mode
   right: -15px;
   width: 70px;
   height: 70px;
-  background: color-mix(in srgb, var(--sunnah-accent) 8%, transparent);
+  background: var(--sunnah-accent);
 }
 #sunnah-card .sunnah-item:nth-child(even)::after {
   right: auto;
@@ -14312,12 +14290,12 @@ body.dark-mode
   height: 45px;
   margin: 0 0 8px;
   z-index: 2;
-  border-color: color-mix(in srgb, var(--sunnah-accent) 18%, transparent);
+  border-color: var(--sunnah-accent);
   border-radius: 14px;
   color: var(--sunnah-accent);
   background: rgba(255, 255, 255, 0.82);
   box-shadow: 0 7px 18px
-    color-mix(in srgb, var(--sunnah-accent) 13%, transparent);
+    var(--sunnah-accent);
   font-size: 1.2rem;
 }
 #sunnah-card .sunnah-label,
@@ -14381,9 +14359,9 @@ body.dark-mode
 }
 @media (hover: hover) and (pointer: fine) {
   #sunnah-card .sunnah-item:hover {
-    border-color: color-mix(in srgb, var(--sunnah-accent) 30%, transparent);
+    border-color: var(--sunnah-accent);
     box-shadow: 0 12px 28px
-      color-mix(in srgb, var(--sunnah-accent) 12%, transparent);
+      var(--sunnah-accent);
     transform: translateY(-3px);
   }
 }
@@ -14477,7 +14455,7 @@ body.dark-mode
   i {
   border-color: rgba(255, 255, 255, 0.34);
   box-shadow:
-    0 8px 18px color-mix(in srgb, currentColor 8%, rgba(15, 23, 42, 0.2)),
+    0 8px 18px rgba(255, 255, 255, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -14487,26 +14465,18 @@ body.dark-mode #sunnah-card .sunnah-item {
   --sunnah-surface:
     radial-gradient(
       circle at 100% 0%,
-      color-mix(in srgb, var(--sunnah-accent) 16%, transparent),
+      var(--sunnah-accent),
       transparent 42%
     ),
     linear-gradient(145deg, rgba(17, 32, 27, 0.96), rgba(9, 24, 19, 0.92));
-  border-color: color-mix(
-    in srgb,
-    var(--sunnah-accent) 26%,
-    rgba(255, 255, 255, 0.06)
-  );
+  border-color: var(--sunnah-accent);
   box-shadow:
     0 8px 22px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 body.dark-mode #sunnah-card .sunnah-item .tile-icon {
-  color: color-mix(in srgb, var(--sunnah-accent) 72%, white);
-  border-color: color-mix(
-    in srgb,
-    var(--sunnah-accent) 24%,
-    rgba(255, 255, 255, 0.06)
-  );
+  color: var(--sunnah-accent);
+  border-color: var(--sunnah-accent);
   background: rgba(255, 255, 255, 0.06);
 }
 body.dark-mode .sunnah-note-icon {
@@ -16644,12 +16614,12 @@ body.dark-mode #sunnah-card .sunnah-imsak {
     min-width: 0;
     min-height: 128px;
     padding: 14px 8px 12px;
-    border: 1px solid color-mix(in srgb, var(--support-accent) 18%, transparent) !important;
+    border: 1px solid var(--support-accent) !important;
     border-radius: 18px !important;
     background: var(--support-surface) !important;
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.82),
-      0 9px 22px color-mix(in srgb, var(--support-accent) 9%, transparent) !important;
+      0 9px 22px var(--support-accent) !important;
   }
   #tab-support .support-tile:nth-child(1) {
     --support-accent: #d97706;
@@ -16698,12 +16668,12 @@ body.dark-mode #sunnah-card .sunnah-imsak {
     width: 42px !important;
     height: 42px !important;
     margin: 0 0 7px !important;
-    border: 1px solid color-mix(in srgb, var(--support-accent) 20%, transparent);
+    border: 1px solid var(--support-accent);
     border-radius: 14px;
     color: var(--support-accent);
     background: rgba(255, 255, 255, 0.78);
     box-shadow: 0 7px 18px
-      color-mix(in srgb, var(--support-accent) 13%, transparent);
+      var(--support-accent);
     font-size: 1rem !important;
   }
   #tab-support .support-tile .tile-title {
@@ -16831,7 +16801,6 @@ body.dark-mode #sunnah-card .sunnah-imsak {
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
-    scrollbar-width: thin;
     border: 0;
     background: transparent;
   }
@@ -16891,7 +16860,7 @@ body.dark-mode #sunnah-card .sunnah-imsak {
       linear-gradient(145deg, rgba(13, 42, 34, 0.97), rgba(15, 23, 42, 0.95));
   }
   body.dark-mode #tab-support .support-tile .tile-icon {
-    color: color-mix(in srgb, var(--support-accent) 72%, white);
+    color: var(--support-accent);
     background: rgba(255, 255, 255, 0.07);
   }
   body.dark-mode #tab-support .support-more > summary {
@@ -16955,7 +16924,7 @@ body.dark-mode #tab-support .support-tile {
   background:
     radial-gradient(
       circle at 100% 0%,
-      color-mix(in srgb, var(--support-accent, #34d399) 14%, transparent),
+      var(--support-accent),
       transparent 54%
     ),
     linear-gradient(145deg, #12261f, #091914) !important;
@@ -17226,13 +17195,13 @@ body.dark-mode :is(.dua-trans, .transliteration-layer) {
   align-items: start;
   gap: 10px;
   padding: 15px;
-  border: 1px solid color-mix(in srgb, var(--contact-accent) 18%, transparent);
+  border: 1px solid var(--contact-accent);
   border-radius: 17px;
   color: var(--text-main);
   background:
     radial-gradient(
       circle at 100% 0%,
-      color-mix(in srgb, var(--contact-accent) 10%, transparent),
+      var(--contact-accent),
       transparent 45%
     ),
     rgba(255, 255, 255, 0.68);
@@ -17256,10 +17225,10 @@ body.dark-mode :is(.dua-trans, .transliteration-layer) {
 }
 .support-contact-option:hover {
   transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--contact-accent) 36%, transparent);
+  border-color: var(--contact-accent);
   background-color: rgba(255, 255, 255, 0.92);
   box-shadow: 0 13px 28px
-    color-mix(in srgb, var(--contact-accent) 10%, transparent);
+    var(--contact-accent);
 }
 .support-contact-icon {
   width: 36px;
@@ -17268,7 +17237,7 @@ body.dark-mode :is(.dua-trans, .transliteration-layer) {
   place-items: center;
   border-radius: 12px;
   color: var(--contact-accent);
-  background: color-mix(in srgb, var(--contact-accent) 10%, transparent);
+  background: var(--contact-accent);
 }
 .support-contact-content {
   min-width: 0;
@@ -17350,15 +17319,11 @@ body.dark-mode
 }
 body.dark-mode .support-contact-option {
   color: #e9f4ef;
-  border-color: color-mix(
-    in srgb,
-    var(--contact-accent) 24%,
-    rgba(255, 255, 255, 0.08)
-  );
+  border-color: var(--contact-accent);
   background:
     radial-gradient(
       circle at 100% 0%,
-      color-mix(in srgb, var(--contact-accent) 13%, transparent),
+      var(--contact-accent),
       transparent 48%
     ),
     rgba(255, 255, 255, 0.035);
@@ -17367,15 +17332,11 @@ body.dark-mode .support-contact-option {
     0 8px 21px rgba(0, 0, 0, 0.18);
 }
 body.dark-mode .support-contact-option:hover {
-  border-color: color-mix(
-    in srgb,
-    var(--contact-accent) 42%,
-    rgba(255, 255, 255, 0.1)
-  );
+  border-color: var(--contact-accent);
   background-color: rgba(255, 255, 255, 0.07);
 }
 body.dark-mode .support-contact-address {
-  color: color-mix(in srgb, var(--contact-accent) 66%, white);
+  color: var(--contact-accent);
 }
 body.dark-mode .support-contact-arrow {
   color: #b4c8c0;
@@ -17769,8 +17730,8 @@ body.dark-mode
 .nav-item:hover::before {
   opacity: 1;
   transform: scale(1);
-  background: color-mix(in srgb, var(--nav-accent) 7%, white);
-  border-color: color-mix(in srgb, var(--nav-accent) 12%, transparent);
+  background: var(--nav-accent);
+  border-color: var(--nav-accent);
 }
 .nav-item.active,
 .nav-item[aria-current="page"] {
@@ -17784,12 +17745,12 @@ body.dark-mode
 .nav-item[aria-current="page"]::before {
   opacity: 1;
   transform: scale(1);
-  border-color: color-mix(in srgb, var(--nav-accent) 19%, transparent);
+  border-color: var(--nav-accent);
   background:
     radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.9), transparent 52%),
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--nav-accent) 10%, white),
+      var(--nav-accent),
       rgba(255, 255, 255, 0.7)
     );
   box-shadow:
@@ -17805,10 +17766,10 @@ body.dark-mode
 }
 .nav-item .nav-tile i {
   color: var(--nav-accent);
-  border: 1px solid color-mix(in srgb, var(--nav-accent) 14%, transparent);
-  background: color-mix(in srgb, var(--nav-accent) 7%, white);
+  border: 1px solid var(--nav-accent);
+  background: var(--nav-accent);
   box-shadow:
-    0 4px 11px color-mix(in srgb, var(--nav-accent) 10%, transparent),
+    0 4px 11px var(--nav-accent),
     inset 0 1px 0 rgba(255, 255, 255, 0.84);
 }
 .nav-item.active .nav-tile i,
@@ -17817,7 +17778,7 @@ body.dark-mode
   border-color: rgba(255, 255, 255, 0.35);
   background: linear-gradient(
     145deg,
-    color-mix(in srgb, var(--nav-accent) 80%, white),
+    var(--nav-accent),
     var(--nav-accent)
   );
   box-shadow:
@@ -17854,19 +17815,15 @@ body.dark-mode .nav-item {
   color: #91a29b;
 }
 body.dark-mode .nav-item:hover::before {
-  background: color-mix(
-    in srgb,
-    var(--nav-accent) 11%,
-    rgba(255, 255, 255, 0.04)
-  );
+  background: var(--nav-accent);
 }
 body.dark-mode .nav-item.active::before,
 body.dark-mode .nav-item[aria-current="page"]::before {
-  border-color: color-mix(in srgb, var(--nav-accent) 24%, transparent);
+  border-color: var(--nav-accent);
   background: linear-gradient(
     145deg,
     rgba(255, 255, 255, 0.09),
-    color-mix(in srgb, var(--nav-accent) 12%, transparent)
+    var(--nav-accent)
   );
   box-shadow:
     0 9px 22px rgba(0, 0, 0, 0.23),
@@ -17874,13 +17831,9 @@ body.dark-mode .nav-item[aria-current="page"]::before {
     inset 0 1px 0 rgba(255, 255, 255, 0.075);
 }
 body.dark-mode .nav-item .nav-tile i {
-  color: color-mix(in srgb, var(--nav-accent) 66%, white);
-  border-color: color-mix(in srgb, var(--nav-accent) 20%, transparent);
-  background: color-mix(
-    in srgb,
-    var(--nav-accent) 12%,
-    rgba(255, 255, 255, 0.035)
-  );
+  color: var(--nav-accent);
+  border-color: var(--nav-accent);
+  background: var(--nav-accent);
 }
 
 /* Modal family: calmer overlay, sticky chrome, clearer hierarchy. */
@@ -17947,10 +17900,10 @@ body.dark-mode .nav-item .nav-tile i {
   backdrop-filter: blur(22px) saturate(145%);
 }
 .modal-title > i {
-  border-color: color-mix(in srgb, currentColor 18%, transparent);
-  background: color-mix(in srgb, currentColor 7%, white);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.16);
   box-shadow:
-    0 8px 20px color-mix(in srgb, currentColor 13%, transparent),
+    0 8px 20px rgba(255, 255, 255, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.88);
 }
 .modal-close-btn,
@@ -18033,7 +17986,7 @@ body.dark-mode
   );
 }
 body.dark-mode .modal-title > i {
-  background: color-mix(in srgb, currentColor 10%, rgba(255, 255, 255, 0.035));
+  background: rgba(255, 255, 255, 0.16);
 }
 body.dark-mode .modal-body .accordion-btn {
   color: #d9ebe4;
@@ -19833,7 +19786,6 @@ body.dark-mode #tab-duas.dua-library-mode-ruqyah .dua-arabic {
   font-size: clamp(1.08rem, 2vw, 1.3rem);
   font-style: italic;
   line-height: 1.78;
-  text-wrap: pretty;
 }
 #tab-support .support-note-footer {
   position: relative;
@@ -19969,7 +19921,7 @@ body.dark-mode #tab-duas.dua-library-mode-ruqyah .dua-arabic {
   touch-action: manipulation;
 }
 #tab-support .support-contact-option:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--contact-accent) 24%, transparent);
+  outline: 3px solid var(--contact-accent);
   outline-offset: 3px;
 }
 body.dark-mode #tab-support .support-hero {
@@ -20548,7 +20500,6 @@ body.dark-mode #tab-support .support-action-status i {
     font-size: 0.64rem !important;
     line-height: 1.62 !important;
     overflow-wrap: anywhere;
-    text-wrap: pretty;
   }
   :is(.info-popup-content, .modal-body .panel-content, .calendar-details-panel)
     p:last-child {
@@ -20568,7 +20519,6 @@ body.dark-mode #tab-support .support-action-status i {
     color: var(--primary-dark);
     font-size: 0.73rem;
     line-height: 1.35;
-    text-wrap: balance;
   }
   :is(.info-popup-content, .modal-body .panel-content)
     :is(h3, h4, h5):first-child {
@@ -20615,7 +20565,6 @@ body.dark-mode #tab-support .support-action-status i {
     font-size: 0.59rem;
     line-height: 1.55;
     overflow-wrap: anywhere;
-    text-wrap: pretty;
   }
   body.dark-mode
     :is(.info-popup-content, .modal-body .panel-content)
@@ -20981,7 +20930,6 @@ header .brand-copy .brand-kicker {
   color: var(--text-sub);
   font-size: 0.67rem;
   line-height: 1.58;
-  text-wrap: pretty;
 }
 body.dark-mode #sunnah-card .section-header > .sunnah-note > summary {
   color: #ede9fe;
@@ -21342,7 +21290,7 @@ body.dark-mode #sunnah-card .sunnah-item {
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 body.dark-mode #sunnah-card .sunnah-item .tile-icon {
-  color: color-mix(in srgb, rgb(var(--sunnah-rgb)) 70%, white);
+  color: var(--sunnah-rgb);
   border-color: rgba(var(--sunnah-rgb), 0.2);
   background: linear-gradient(
     145deg,
@@ -21357,7 +21305,7 @@ body.dark-mode #sunnah-card .sunnah-label {
   color: #e9e5ff;
 }
 body.dark-mode #sunnah-card .sunnah-val {
-  color: color-mix(in srgb, rgb(var(--sunnah-rgb)) 64%, white);
+  color: var(--sunnah-rgb);
 }
 body.dark-mode #sunnah-card .sunnah-context {
   color: #cbd5e1;
@@ -24354,7 +24302,6 @@ body.dark-mode #tab-duas .desktop-page-heading {
 .reflection-translation,
 .tasbih-save-note {
   overflow-wrap: anywhere;
-  text-wrap: pretty;
 }
 .companion-modal {
   padding: clamp(10px, 2vw, 22px);
@@ -26722,7 +26669,7 @@ body.dark-mode #tab-companion .companion-menu-label small {
 }
 .floating-nav .nav-item.active::before,
 .floating-nav .nav-item[aria-current="page"]::before {
-  border-color: color-mix(in srgb, var(--nav-accent) 18%, transparent);
+  border-color: var(--nav-accent);
   background:
     radial-gradient(
       circle at 50% -10%,
@@ -26731,7 +26678,7 @@ body.dark-mode #tab-companion .companion-menu-label small {
     ),
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--nav-accent) 9%, white),
+      var(--nav-accent),
       rgba(255, 255, 255, 0.58)
     );
   box-shadow:
@@ -26772,7 +26719,7 @@ body.dark-mode #tab-companion .companion-menu-label small {
   z-index: 1;
   aspect-ratio: 1;
   color: var(--nav-accent);
-  border: 1px solid color-mix(in srgb, var(--nav-accent) 17%, transparent);
+  border: 1px solid var(--nav-accent);
   border-radius: 11px;
   background:
     radial-gradient(
@@ -26782,11 +26729,11 @@ body.dark-mode #tab-companion .companion-menu-label small {
     ),
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--nav-accent) 8%, white),
+      var(--nav-accent),
       rgba(255, 255, 255, 0.82)
     );
   box-shadow:
-    0 7px 16px color-mix(in srgb, var(--nav-accent) 14%, transparent),
+    0 7px 16px var(--nav-accent),
     inset 0 1px 0 rgba(255, 255, 255, 0.96);
   filter: none;
   transition:
@@ -26814,7 +26761,7 @@ body.dark-mode #tab-companion .companion-menu-label small {
     ),
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--nav-accent) 76%, white),
+      var(--nav-accent),
       var(--nav-accent)
     );
   box-shadow:
@@ -26842,12 +26789,8 @@ body.dark-mode #tab-companion .companion-menu-label small {
     transform: translateY(-2px);
   }
   .floating-nav .nav-item:not(.active):hover::before {
-    border-color: color-mix(in srgb, var(--nav-accent) 12%, transparent);
-    background: color-mix(
-      in srgb,
-      var(--nav-accent) 6%,
-      rgba(255, 255, 255, 0.78)
-    );
+    border-color: var(--nav-accent);
+    background: var(--nav-accent);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
     opacity: 1;
     transform: scale(1);
@@ -26864,7 +26807,7 @@ body.dark-mode #tab-companion .companion-menu-label small {
   }
 }
 .floating-nav .nav-item:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--nav-accent) 34%, transparent);
+  outline: 3px solid var(--nav-accent);
   outline-offset: 2px;
 }
 .floating-nav .nav-item:active {
@@ -26893,15 +26836,15 @@ body.dark-mode .floating-nav .nav-item {
 }
 body.dark-mode .floating-nav .nav-item.active,
 body.dark-mode .floating-nav .nav-item[aria-current="page"] {
-  color: color-mix(in srgb, var(--nav-accent) 60%, white);
+  color: var(--nav-accent);
 }
 body.dark-mode .floating-nav .nav-item.active::before,
 body.dark-mode .floating-nav .nav-item[aria-current="page"]::before {
-  border-color: color-mix(in srgb, var(--nav-accent) 25%, transparent);
+  border-color: var(--nav-accent);
   background: linear-gradient(
     145deg,
     rgba(255, 255, 255, 0.09),
-    color-mix(in srgb, var(--nav-accent) 12%, transparent)
+    var(--nav-accent)
   );
   box-shadow:
     0 10px 25px rgba(0, 0, 0, 0.26),
@@ -26909,11 +26852,11 @@ body.dark-mode .floating-nav .nav-item[aria-current="page"]::before {
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 body.dark-mode .floating-nav .nav-item .nav-tile i {
-  color: color-mix(in srgb, var(--nav-accent) 66%, white);
-  border-color: color-mix(in srgb, var(--nav-accent) 22%, transparent);
+  color: var(--nav-accent);
+  border-color: var(--nav-accent);
   background: linear-gradient(
     145deg,
-    color-mix(in srgb, var(--nav-accent) 13%, rgba(255, 255, 255, 0.06)),
+    var(--nav-accent),
     rgba(255, 255, 255, 0.025)
   );
   box-shadow:
@@ -27842,7 +27785,6 @@ body.dark-mode #schedule-card .prayer-item:not(.prayer-alarm).active {
   overscroll-behavior: contain;
   scroll-behavior: smooth;
   scroll-padding-block: 12px 28px;
-  scrollbar-width: thin;
   scrollbar-color: rgba(5, 150, 105, 0.38) transparent;
 }
 .guide-modal .modal-body > .accordion-item > .accordion-btn {
@@ -27882,8 +27824,50 @@ body.dark-mode #schedule-card .prayer-item:not(.prayer-alarm).active {
   overflow-y: auto !important;
 }
 @media (min-width: 700px) {
-  .guide-modal .modal-body {
-    scrollbar-gutter: stable;
+}
+
+/* Keep the Ruqyah toolbar cards at one readable, non-clipping height. */
+@media (min-width: 1024px) {
+  #tab-duas.active.dua-library-mode-ruqyah {
+    --ruqyah-toolbar-height: 96px;
+  }
+
+  #tab-duas.active.dua-library-mode-ruqyah > .dua-library-switcher,
+  #tab-duas.active.dua-library-mode-ruqyah > .ruqyah-library-intro,
+  #tab-duas.active.dua-library-mode-ruqyah > .search-row,
+  #tab-duas.active.dua-library-mode-ruqyah > .search-row .search-wrapper {
+    min-height: var(--ruqyah-toolbar-height);
+    height: var(--ruqyah-toolbar-height);
+  }
+
+  #tab-duas.active.dua-library-mode-ruqyah > .ruqyah-library-intro {
+    align-items: center;
+    padding: 14px 16px;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro > div {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro strong {
+    display: block;
+    margin: 0 0 4px;
+    font-size: 0.78rem;
+    line-height: 1.25;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro p {
+    margin: 0;
+    font-size: 0.66rem;
+    line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 @media (max-width: 600px) {
@@ -28633,7 +28617,6 @@ html:has(body.guide-reading-open) {
   backdrop-filter: none;
 }
 .quran-reader-page .quran-reader-scroll {
-  scrollbar-gutter: stable;
   touch-action: pan-y;
 }
 .quran-reader-page .quran-reader-audio-wrap {
@@ -29232,7 +29215,6 @@ body.dark-mode #quran-player-speed option {
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 2px;
-  scrollbar-width: thin;
 }
 #quran-speed-list .quran-surah-badge {
   flex-basis: 44px;
@@ -29448,7 +29430,6 @@ body.dark-mode .quran-speed-trigger > i:first-child {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
   padding: 2px;
 }
 .adhan-voice-copy {
@@ -29526,7 +29507,6 @@ body.dark-mode .adhan-voice-copy small {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
   padding: 2px;
 }
 .quran-surah-option-copy {
@@ -29580,7 +29560,6 @@ body.dark-mode .quran-surah-arabic {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
   padding: 2px;
   scroll-padding: 4px;
 }
