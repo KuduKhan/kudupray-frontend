@@ -30571,3 +30571,111 @@ body.dark-mode .nav-item[aria-current="page"] {
   }
 }
 
+/* Final polish: quiet navigation surfaces and a stronger, cleaner brand lockup. */
+.brand-logo-mark {
+  width: 62px;
+  height: 62px;
+  flex-basis: 62px;
+  border-radius: 18px;
+  border: 1px solid rgba(246, 201, 104, 0.42);
+  background: linear-gradient(145deg, rgba(2, 47, 36, 0.94), rgba(7, 88, 65, 0.72));
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.brand-logo-mark img {
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+}
+.brand-wordmark {
+  width: clamp(148px, 18vw, 210px);
+  height: 48px;
+  filter: brightness(2.15) saturate(1.18) contrast(1.08) drop-shadow(0 3px 7px rgba(0, 0, 0, 0.32));
+}
+body.dark-mode .brand-logo-mark {
+  border-color: rgba(246, 201, 104, 0.58);
+  background: linear-gradient(145deg, rgba(2, 29, 22, 0.98), rgba(4, 67, 49, 0.9));
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 20px rgba(246, 201, 104, 0.12);
+}
+body.dark-mode .brand-logo-mark img {
+  filter: brightness(1.28) saturate(1.14) drop-shadow(0 3px 7px rgba(0, 0, 0, 0.46));
+}
+body.dark-mode .brand-wordmark {
+  filter: brightness(2.45) saturate(1.16) contrast(1.08) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
+}
+
+/* Keep the dock legible by removing the glossy white hover fill. */
+.floating-nav {
+  background: rgba(248, 252, 249, 0.9) !important;
+  border-color: rgba(6, 78, 59, 0.14) !important;
+  box-shadow: 0 18px 42px rgba(6, 78, 59, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
+  backdrop-filter: blur(20px) saturate(115%);
+}
+.floating-nav::before,
+.floating-nav::after {
+  opacity: 0 !important;
+}
+.floating-nav .nav-item:not(.active):not([aria-current="page"]):hover::before {
+  border-color: rgba(6, 78, 59, 0.16) !important;
+  background: rgba(6, 78, 59, 0.045) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+.floating-nav .nav-item:not(.active):not([aria-current="page"]):hover .nav-tile i {
+  background: rgba(6, 78, 59, 0.07) !important;
+  border-color: currentColor !important;
+  box-shadow: 0 5px 12px rgba(6, 78, 59, 0.1) !important;
+  transform: translateY(-1px) scale(1.02);
+}
+.floating-nav .nav-item.active::before,
+.floating-nav .nav-item[aria-current="page"]::before {
+  border-color: rgba(16, 120, 88, 0.3) !important;
+  background: rgba(16, 120, 88, 0.08) !important;
+  box-shadow: none !important;
+}
+.floating-nav .nav-item .nav-tile i,
+.floating-nav .nav-item.active .nav-tile i,
+.floating-nav .nav-item[aria-current="page"] .nav-tile i {
+  background: rgba(16, 120, 88, 0.07) !important;
+  border-color: rgba(16, 120, 88, 0.24) !important;
+  box-shadow: 0 5px 12px rgba(6, 78, 59, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.42) !important;
+}
+body.dark-mode .floating-nav {
+  background: rgba(9, 27, 21, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+body.dark-mode .floating-nav .nav-item:not(.active):not([aria-current="page"]):hover::before {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+}
+body.dark-mode .floating-nav .nav-item:not(.active):not([aria-current="page"]):hover .nav-tile i {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.24) !important;
+}
+body.dark-mode .floating-nav .nav-item .nav-tile i,
+body.dark-mode .floating-nav .nav-item.active .nav-tile i,
+body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
+  background: rgba(110, 231, 183, 0.1) !important;
+  border-color: rgba(110, 231, 183, 0.32) !important;
+  box-shadow: 0 5px 13px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+@media (max-width: 599px) {
+  .brand-logo-mark {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+    border-radius: 16px;
+  }
+  .brand-logo-mark img {
+    width: 45px;
+    height: 45px;
+  }
+  .brand-wordmark {
+    width: clamp(132px, 45vw, 176px);
+    height: 40px;
+  }
+}
+
+
