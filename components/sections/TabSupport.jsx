@@ -277,7 +277,7 @@ export default function TabSupport() {
                     <span>{"Founder & Lead Developer"}</span>
                   </div>
                   <span className="support-note-avatar" aria-hidden="true">
-                    <span className="support-note-monogram">{"MK"}</span>
+                    <img src="/brand/developer-profile.png" alt="" />
                     <i className="fa-solid fa-star support-note-avatar-star"></i>
                   </span>
                 </div>
