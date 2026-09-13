@@ -5,7 +5,7 @@ import { dispatch } from "../runtime-events";
 export default function AppFooter() {
   return (
     <footer className="app-footer" aria-label="KuduPray credits">
-      <div className="footer-brand-mark" aria-hidden="true">
+      <div className="footer-brand-mark brand-logo-mark" aria-hidden="true">
         <img src="/brand/kudupray-emblem.png" alt="" />
       </div>
       <div className="footer-copy">
