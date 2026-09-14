@@ -5725,7 +5725,97 @@
 
     document.addEventListener('click', () => closeDuaOptions());
 
+    function syncDuaCategoryPicker() {
+        const select = document.getElementById('dua-category-select');
+        if (!select) return;
+        let trigger = document.getElementById('dua-category-trigger');
+        if (!trigger) {
+            trigger = document.createElement('button');
+            trigger.id = 'dua-category-trigger';
+            trigger.type = 'button';
+            trigger.setAttribute('aria-haspopup', 'listbox');
+            trigger.setAttribute('aria-expanded', 'false');
+            trigger.setAttribute('aria-controls', 'dua-category-list');
+            select.hidden = true;
+            select.after(trigger);
+            const panel = document.createElement('div');
+            panel.id = 'dua-category-picker';
+            panel.className = 'quran-reciter-picker';
+            panel.hidden = true;
+            panel.innerHTML = '<div class="quran-reciter-picker-heading">Choose a category</div><div id="dua-category-list" role="listbox" aria-label="Dua categories"></div>';
+            const list = panel.lastElementChild;
+            const close = (restore = false) => {
+                panel.hidden = true;
+                trigger.setAttribute('aria-expanded', 'false');
+                if (restore) trigger.focus({ preventScroll: true });
+            };
+            for (const item of select.options) {
+                const option = document.createElement('button');
+                option.type = 'button';
+                option.className = 'quran-reciter-option';
+                option.setAttribute('role', 'option');
+                option.dataset.value = item.value;
+                option.tabIndex = -1;
+                const label = document.createElement('span');
+                label.className = 'quran-reciter-name';
+                label.textContent = item.textContent;
+                const check = document.createElement('span');
+                check.className = 'quran-reciter-check';
+                check.textContent = '✓';
+                check.setAttribute('aria-hidden', 'true');
+                option.append(label, check);
+                option.addEventListener('click', () => {
+                    select.value = item.value;
+                    window.filterDuaBySelect();
+                    close(true);
+                });
+                list.append(option);
+            }
+            document.body.append(panel);
+            const open = () => {
+                panel.hidden = false;
+                trigger.setAttribute('aria-expanded', 'true');
+                positionQuranPicker(panel, trigger, 300);
+                const selected = list.querySelector('[aria-selected="true"]');
+                selected?.focus({ preventScroll: true });
+                selected?.scrollIntoView({ block: 'nearest' });
+            };
+            trigger.addEventListener('click', () => panel.hidden ? open() : close(true));
+            trigger.addEventListener('keydown', event => {
+                if (['ArrowDown', 'ArrowUp'].includes(event.key)) { event.preventDefault(); open(); }
+            });
+            let typed = '', typedAt = 0;
+            panel.addEventListener('keydown', event => {
+                if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(true); return; }
+                if (event.key === 'Tab') { close(true); return; }
+                const options = [...list.children];
+                const index = options.indexOf(document.activeElement);
+                let next = -1;
+                if (event.key === 'ArrowDown') next = (index + 1) % options.length;
+                if (event.key === 'ArrowUp') next = (index - 1 + options.length) % options.length;
+                if (event.key === 'Home') next = 0;
+                if (event.key === 'End') next = options.length - 1;
+                if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+                    typed = Date.now() - typedAt > 700 ? event.key : typed + event.key;
+                    typedAt = Date.now();
+                    next = options.findIndex(option => option.textContent.toLowerCase().startsWith(typed.toLowerCase()));
+                }
+                if (next >= 0) { event.preventDefault(); options[next].focus({ preventScroll: true }); options[next].scrollIntoView({ block: 'nearest' }); }
+            });
+            document.addEventListener('pointerdown', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) close(); });
+            document.addEventListener('focusin', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) close(); });
+            document.addEventListener('scroll', event => { if (!panel.contains(event.target)) close(); }, true);
+            window.addEventListener('resize', () => close());
+        }
+        trigger.textContent = select.selectedOptions[0]?.textContent || 'All Categories';
+        trigger.setAttribute('aria-label', `Choose a dua category: ${trigger.textContent}`);
+        document.querySelectorAll('#dua-category-list [role="option"]').forEach(option => {
+            option.setAttribute('aria-selected', String(option.dataset.value === select.value));
+        });
+    }
+
     function renderDuas(list) {
+        syncDuaCategoryPicker();
         const container = document.getElementById('dua-container');
         const summary = document.getElementById('dua-result-summary');
         const pagination = document.getElementById('dua-pagination');
@@ -6165,4 +6255,3 @@ function(event) { showIslamicCalendarToday() }
     // Start once per document, after all React sections have hydrated.
     init();
     window.kuduprayReady = true;
-
