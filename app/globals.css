@@ -18410,7 +18410,7 @@ body.dark-mode .footer-primary strong {
     transform 0.24s var(--polish-ease),
     box-shadow 0.24s ease;
 }
-.app-footer:hover .footer-brand-mark {
+.app-footer:hover .footer-brand-mark:not(.brand-logo-mark) {
   transform: translateY(-2px) rotate(-1deg);
   box-shadow:
     0 16px 34px rgba(6, 78, 59, 0.18),
@@ -18560,7 +18560,7 @@ body.dark-mode .footer-company {
   .footer-brand-mark {
     transition: none !important;
   }
-  .app-footer:hover .footer-brand-mark {
+  .app-footer:hover .footer-brand-mark:not(.brand-logo-mark) {
     transform: none;
   }
 }
@@ -18914,7 +18914,7 @@ body.dark-mode .footer-brand-mark {
     inset 0 1px 0 rgba(255, 255, 255, 0.22),
     inset 0 0 0 5px rgba(255, 255, 255, 0.035);
 }
-.app-footer:hover .footer-brand-mark {
+.app-footer:hover .footer-brand-mark:not(.brand-logo-mark) {
   box-shadow:
     0 17px 36px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
@@ -31125,7 +31125,10 @@ body.dark-mode #schedule-card .prayer-photo-credit:focus-visible {
 }
 
 /* Match the KuduPray emblem to the premium developer-avatar treatment. */
-.brand-logo-mark {
+.brand-logo-mark, .footer-brand-mark.brand-logo-mark {
+  position: relative;
+  isolation: isolate;
+  transform: none;
   overflow: visible;
   border-radius: 20px;
   border-color: rgba(246, 201, 104, 0.62);
