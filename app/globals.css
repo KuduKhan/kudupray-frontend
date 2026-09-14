@@ -29515,6 +29515,24 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
     box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 }
+@media (max-width: 720px) {
+  .quran-player {
+    grid-template-columns: minmax(32px, 1fr) minmax(32px, 1fr) minmax(112px, auto) minmax(32px, 1fr) minmax(62px, auto);
+    justify-content: stretch;
+    width: 100%;
+  }
+  .quran-player-transport {
+    justify-self: center;
+  }
+  #quran-player-autoplay,
+  #quran-player-repeat,
+  #quran-player-mute {
+    justify-self: center;
+  }
+  #quran-speed-trigger {
+    justify-self: end;
+  }
+}
 /* Portrait picker: a compact pill with a viewport-bounded floating list. */
 #quran-reader-surah[hidden],
 #quran-reader-reciter[hidden],
