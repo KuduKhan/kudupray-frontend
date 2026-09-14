@@ -30721,8 +30721,8 @@ body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
+    text-overflow: clip;
     white-space: nowrap;
     line-height: 1.08;
     font-size: 0.59rem;
