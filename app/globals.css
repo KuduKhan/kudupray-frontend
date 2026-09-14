@@ -29550,16 +29550,17 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
   }
   .quran-player-transport button,
   .quran-player-options button {
-    width: 34px;
-    height: 36px;
+    width: 30px;
+    height: 34px;
   }
   .quran-player-transport .quran-player-play {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
   .quran-player-options .quran-speed-trigger {
-    width: 62px;
-    height: 36px;
+    width: 56px;
+    height: 34px;
+    padding-inline: 5px;
   }
   .quran-player-transport {
     justify-self: center;
@@ -29584,16 +29585,16 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
   }
   .quran-player-transport button,
   .quran-player-options button {
-    width: 28px;
-    height: 32px;
+    width: 26px;
+    height: 30px;
   }
   .quran-player-transport .quran-player-play {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
   .quran-player-options .quran-speed-trigger {
-    width: 54px;
-    height: 32px;
+    width: 50px;
+    height: 30px;
     padding-inline: 5px;
   }
 }
