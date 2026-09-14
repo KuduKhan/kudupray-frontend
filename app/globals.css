@@ -29550,17 +29550,23 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
   }
   .quran-player-transport button,
   .quran-player-options button {
-    width: 30px;
+    width: 34px;
     height: 34px;
+    border-radius: 50%;
   }
   .quran-player-transport .quran-player-play {
     width: 36px;
     height: 36px;
   }
   .quran-player-options .quran-speed-trigger {
-    width: 56px;
+    width: 34px;
     height: 34px;
-    padding-inline: 5px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+  }
+  .quran-player-options .quran-speed-trigger > i:last-child {
+    display: none;
   }
   .quran-player-transport {
     justify-self: center;
@@ -29587,15 +29593,16 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
   .quran-player-options button {
     width: 26px;
     height: 30px;
+    border-radius: 50%;
   }
   .quran-player-transport .quran-player-play {
     width: 32px;
     height: 32px;
   }
   .quran-player-options .quran-speed-trigger {
-    width: 50px;
+    width: 30px;
     height: 30px;
-    padding-inline: 5px;
+    padding: 0;
   }
 }
 /* Portrait picker: a compact pill with a viewport-bounded floating list. */
