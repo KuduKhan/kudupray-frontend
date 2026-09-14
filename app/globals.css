@@ -29517,9 +29517,49 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
 }
 @media (max-width: 720px) {
   .quran-player {
-    grid-template-columns: minmax(32px, 1fr) minmax(32px, 1fr) minmax(112px, auto) minmax(32px, 1fr) minmax(62px, auto);
-    justify-content: stretch;
+    grid-template-columns: auto minmax(34px, 1fr) auto;
+    grid-template-rows: 1fr;
+    justify-content: initial;
     width: 100%;
+  }
+  .quran-player-timeline {
+    grid-column: 2;
+    grid-row: 1;
+    order: initial;
+  }
+  .quran-player-transport {
+    grid-column: 1;
+    grid-row: 1;
+    order: initial;
+  }
+  .quran-player-options {
+    display: inline-flex;
+    grid-column: 3;
+    grid-row: 1;
+    order: initial;
+    justify-content: flex-end;
+    width: auto;
+  }
+  #quran-player-autoplay,
+  #quran-player-repeat,
+  #quran-player-mute,
+  #quran-speed-trigger {
+    grid-column: auto;
+    grid-row: auto;
+    order: initial;
+  }
+  .quran-player-transport button,
+  .quran-player-options button {
+    width: 34px;
+    height: 36px;
+  }
+  .quran-player-transport .quran-player-play {
+    width: 40px;
+    height: 40px;
+  }
+  .quran-player-options .quran-speed-trigger {
+    width: 62px;
+    height: 36px;
   }
   .quran-player-transport {
     justify-self: center;
@@ -29531,6 +29571,30 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
   }
   #quran-speed-trigger {
     justify-self: end;
+  }
+}
+@media (max-width: 360px) {
+  .quran-player {
+    gap: 4px;
+    padding: 6px;
+  }
+  .quran-player-transport,
+  .quran-player-options {
+    gap: 3px;
+  }
+  .quran-player-transport button,
+  .quran-player-options button {
+    width: 28px;
+    height: 32px;
+  }
+  .quran-player-transport .quran-player-play {
+    width: 36px;
+    height: 36px;
+  }
+  .quran-player-options .quran-speed-trigger {
+    width: 54px;
+    height: 32px;
+    padding-inline: 5px;
   }
 }
 /* Portrait picker: a compact pill with a viewport-bounded floating list. */
