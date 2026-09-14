@@ -29459,12 +29459,12 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
 .quran-player {
   position: relative;
   isolation: isolate;
-  padding: 10px 12px;
+  padding: 6px 12px;
   border-radius: 30px;
   border-color: rgba(19, 105, 76, 0.2);
-  background:
-    radial-gradient(circle at 8% -20%, rgba(255, 255, 255, 0.95), transparent 38%),
-    linear-gradient(145deg, rgba(250, 255, 252, 0.98), rgba(229, 244, 236, 0.92));
+  background: rgba(255, 255, 255, 0.68);
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
+  backdrop-filter: blur(14px) saturate(135%);
   box-shadow:
     0 12px 30px rgba(8, 70, 46, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.92),
@@ -29481,9 +29481,7 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
 }
 body.dark-mode .quran-player {
   border-color: rgba(167, 243, 208, 0.2);
-  background:
-    radial-gradient(circle at 8% -20%, rgba(52, 211, 153, 0.13), transparent 38%),
-    linear-gradient(145deg, rgba(13, 42, 31, 0.98), rgba(7, 25, 19, 0.98));
+  background: rgba(15, 38, 29, 0.78);
   box-shadow:
     0 14px 34px rgba(0, 0, 0, 0.34),
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
@@ -29496,12 +29494,10 @@ body.dark-mode .quran-player::before {
   .quran-player {
     width: min(100%, 520px);
     margin-inline: auto;
-    padding: 10px;
+    padding: 7px 10px;
     border-radius: 26px;
     border-color: rgba(19, 105, 76, 0.18);
-    background:
-      radial-gradient(circle at 10% 0, rgba(255, 255, 255, 0.92), transparent 42%),
-      linear-gradient(145deg, rgba(250, 255, 252, 0.98), rgba(229, 244, 236, 0.94));
+    background: rgba(255, 255, 255, 0.68);
     box-shadow: 0 12px 28px rgba(8, 70, 46, 0.11), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
   .quran-player-timeline {
@@ -29534,9 +29530,7 @@ body.dark-mode .quran-player::before {
   }
   body.dark-mode .quran-player {
     border-color: rgba(167, 243, 208, 0.16);
-    background:
-      radial-gradient(circle at 12% 0, rgba(52, 211, 153, 0.12), transparent 42%),
-      linear-gradient(145deg, rgba(13, 42, 31, 0.98), rgba(7, 25, 19, 0.98));
+    background: rgba(15, 38, 29, 0.78);
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
   .quran-player::before {
