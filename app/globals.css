@@ -29456,6 +29456,65 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
   border-color: #d8fbea;
   background: #54d6a0;
 }
+@media (max-width: 599px) {
+  .quran-player {
+    width: min(100%, 520px);
+    margin-inline: auto;
+    padding: 8px;
+    border-radius: 22px;
+    border-color: rgba(19, 105, 76, 0.18);
+    background:
+      radial-gradient(circle at 10% 0, rgba(255, 255, 255, 0.92), transparent 42%),
+      linear-gradient(145deg, rgba(250, 255, 252, 0.98), rgba(229, 244, 236, 0.94));
+    box-shadow: 0 12px 28px rgba(8, 70, 46, 0.11), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+  .quran-player-timeline {
+    padding: 0 3px 2px;
+  }
+  .quran-player-times {
+    padding-inline: 1px;
+    color: #4e6e60;
+    font-size: 0.62rem;
+    font-weight: 700;
+  }
+  .quran-player-transport,
+  .quran-player-options {
+    align-items: center;
+  }
+  .quran-player-transport button,
+  .quran-player-options button {
+    border-color: rgba(19, 105, 76, 0.16);
+    background: rgba(255, 255, 255, 0.62);
+    color: #256b53;
+    box-shadow: 0 3px 9px rgba(8, 70, 46, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  .quran-player-transport .quran-player-play {
+    box-shadow: 0 6px 14px rgba(8, 84, 62, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .quran-player-options .quran-speed-trigger {
+    border-color: rgba(19, 105, 76, 0.16);
+    background: rgba(255, 255, 255, 0.7);
+    color: #256b53;
+  }
+  body.dark-mode .quran-player {
+    border-color: rgba(167, 243, 208, 0.16);
+    background:
+      radial-gradient(circle at 12% 0, rgba(52, 211, 153, 0.12), transparent 42%),
+      linear-gradient(145deg, rgba(13, 42, 31, 0.98), rgba(7, 25, 19, 0.98));
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+  body.dark-mode .quran-player-times {
+    color: #a9cdbb;
+  }
+  body.dark-mode .quran-player-transport button,
+  body.dark-mode .quran-player-options button,
+  body.dark-mode .quran-player-options .quran-speed-trigger {
+    border-color: rgba(167, 243, 208, 0.16);
+    background: rgba(151, 219, 184, 0.08);
+    color: #b7e8ce;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+}
 /* Portrait picker: a compact pill with a viewport-bounded floating list. */
 #quran-reader-surah[hidden],
 #quran-reader-reciter[hidden],
