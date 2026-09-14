@@ -29329,6 +29329,55 @@ body.dark-mode .quran-player-options button.is-active {
   border-color: rgba(110, 231, 183, 0.32);
   background: rgba(52, 211, 153, 0.14);
 }
+
+/* Qur’an verse cards share the Duas card language: calm emerald surfaces, soft lift, and a clear active rail. */
+.quran-reader-verse {
+  padding: 16px 17px;
+  gap: 10px;
+  border-color: rgba(255, 255, 255, 0.82);
+  border-radius: 18px;
+  background-image:
+    radial-gradient(circle at 100% 0, rgba(11, 107, 80, 0.07), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(249, 252, 250, 0.82));
+  box-shadow: var(--glass-shadow);
+}
+.quran-reader-verse:hover,
+.quran-reader-verse:focus-visible {
+  border-color: rgba(11, 107, 80, 0.28);
+  background-image:
+    radial-gradient(circle at 100% 0, rgba(11, 107, 80, 0.1), transparent 36%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(242, 250, 245, 0.9));
+  box-shadow: 0 14px 30px rgba(7, 60, 49, 0.11), inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  transform: translateY(-2px);
+}
+.quran-reader-verse.is-active {
+  border-color: rgba(11, 107, 80, 0.34);
+  background-image:
+    radial-gradient(circle at 100% 0, rgba(11, 107, 80, 0.12), transparent 38%),
+    linear-gradient(145deg, rgba(237, 248, 242, 0.96), rgba(249, 252, 250, 0.9));
+  box-shadow: 0 16px 34px rgba(7, 60, 49, 0.13), inset 4px 0 0 #0b6b50, inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+body.dark-mode .quran-reader-verse {
+  border-color: rgba(255, 255, 255, 0.11);
+  background-image:
+    radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.1), transparent 34%),
+    linear-gradient(145deg, rgba(16, 39, 31, 0.96), rgba(7, 24, 18, 0.92));
+}
+body.dark-mode .quran-reader-verse:hover,
+body.dark-mode .quran-reader-verse:focus-visible {
+  border-color: rgba(52, 211, 153, 0.24);
+  background-image:
+    radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.12), transparent 36%),
+    linear-gradient(145deg, rgba(20, 49, 39, 0.96), rgba(9, 29, 22, 0.94));
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+body.dark-mode .quran-reader-verse.is-active {
+  border-color: rgba(52, 211, 153, 0.32);
+  background-image:
+    radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.16), transparent 38%),
+    linear-gradient(145deg, rgba(16, 54, 40, 0.96), rgba(7, 24, 18, 0.94));
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3), inset 4px 0 0 #34d399, inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
 @media (max-width: 720px) {
   .quran-player {
     grid-template-columns: auto auto auto auto auto;
