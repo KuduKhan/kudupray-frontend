@@ -196,16 +196,24 @@ export default function TabQuranReader() {
               aria-label="Qur’an audio player"
               hidden={true}
             >
-              <button
-                type="button"
-                className="quran-player-play"
-                id="quran-player-play"
-                aria-label="Play recitation"
-                title="Play recitation"
-                disabled={true}
-              >
-                <i className="fa-solid fa-play" aria-hidden="true"></i>
-              </button>
+              <div className="quran-player-transport" role="group" aria-label="Surah and ayah navigation">
+                <button type="button" id="quran-player-previous" aria-label="Previous surah" title="Previous surah" disabled={true}>
+                  <i className="fa-solid fa-backward-step" aria-hidden="true"></i>
+                </button>
+                <button
+                  type="button"
+                  className="quran-player-play"
+                  id="quran-player-play"
+                  aria-label="Play recitation"
+                  title="Play recitation"
+                  disabled={true}
+                >
+                  <i className="fa-solid fa-play" aria-hidden="true"></i>
+                </button>
+                <button type="button" id="quran-player-next" aria-label="Next surah" title="Next surah" disabled={true}>
+                  <i className="fa-solid fa-forward-step" aria-hidden="true"></i>
+                </button>
+              </div>
               <div className="quran-player-timeline">
                 <input
                   id="quran-player-seek"
@@ -223,15 +231,16 @@ export default function TabQuranReader() {
                   <span id="quran-player-duration">{"—:—"}</span>
                 </div>
               </div>
-              <button
-                type="button"
-                id="quran-player-mute"
-                aria-label="Mute recitation"
-                title="Mute recitation"
-                aria-pressed="false"
-              >
-                <i className="fa-solid fa-volume-high" aria-hidden="true"></i>
-              </button>
+              <div className="quran-player-options" role="group" aria-label="Playback options">
+                <button type="button" id="quran-player-mute" aria-label="Mute recitation" title="Mute recitation" aria-pressed="false">
+                  <i className="fa-solid fa-volume-high" aria-hidden="true"></i>
+                </button>
+                <button type="button" id="quran-player-repeat" aria-label="Repeat surah off" title="Repeat surah" aria-pressed="false">
+                  <i className="fa-solid fa-repeat" aria-hidden="true"></i>
+                </button>
+                <button type="button" id="quran-player-autoplay" aria-label="Autoplay next surah off" title="Autoplay next surah" aria-pressed="false">
+                  <i className="fa-solid fa-forward" aria-hidden="true"></i>
+                </button>
               <select
                 id="quran-player-speed"
                 aria-label="Playback speed"
@@ -259,6 +268,7 @@ export default function TabQuranReader() {
                 <span id="quran-speed-label">{"1×"}</span>
                 <i className="fa-solid fa-chevron-up" aria-hidden="true"></i>
               </button>
+              </div>
             </div>
             <audio
               className="quran-reader-audio"
