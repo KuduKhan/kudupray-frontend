@@ -29335,24 +29335,39 @@ body.dark-mode .quran-player-options button.is-active {
     gap: 7px;
     border-radius: 25px;
   }
-  .quran-player-options {
+  .quran-player-timeline {
     grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .quran-player-transport {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .quran-player-options {
+    grid-column: 2;
+    grid-row: 2;
     justify-content: flex-end;
+    justify-self: end;
     width: 100%;
   }
 }
 @media (max-width: 430px) {
+  .quran-player {
+    gap: 5px;
+    padding: 6px;
+  }
   .quran-player-transport button,
   .quran-player-options button {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 34px;
   }
   .quran-player-transport .quran-player-play {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
   }
   .quran-player-options .quran-speed-trigger {
-    width: 72px;
+    width: 62px;
+    height: 34px;
     padding-inline: 7px;
   }
 }
