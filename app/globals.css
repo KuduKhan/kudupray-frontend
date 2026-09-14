@@ -31234,3 +31234,59 @@ body.dark-mode #dua-category-trigger { color: #d1fae5; }
 @media (max-width: 599px) {
   #dua-category-trigger { padding-left: 11px; font-size: .69rem; }
 }
+
+/* Support's How to help icon treatment, sized for the navigation dock.
+   The ID keeps the shared appearance consistent across legacy state rules. */
+#primary-navigation .icon-emerald { --nav-icon-rgb: 5, 150, 105; }
+#primary-navigation .icon-indigo { --nav-icon-rgb: 79, 70, 229; }
+#primary-navigation .icon-cyan { --nav-icon-rgb: 8, 145, 178; }
+#primary-navigation .icon-amber { --nav-icon-rgb: 217, 119, 6; }
+#primary-navigation .icon-rose { --nav-icon-rgb: 225, 29, 72; }
+#primary-navigation .icon-purple { --nav-icon-rgb: 147, 51, 234; }
+#primary-navigation .nav-item .nav-tile {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transform: none;
+}
+#primary-navigation .nav-tile::before,
+#primary-navigation .nav-tile::after { content: none; }
+#primary-navigation .nav-item .nav-tile i {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, .38) !important;
+  border-radius: 11px;
+  color: #fff !important;
+  background: linear-gradient(145deg, rgba(var(--nav-icon-rgb), .78), rgb(var(--nav-icon-rgb))) !important;
+  box-shadow: 0 6px 14px rgba(var(--nav-icon-rgb), .2), inset 0 1px 0 rgba(255, 255, 255, .28) !important;
+  font-size: 1rem;
+  filter: none;
+  transform: none;
+  transition: transform .2s ease;
+}
+#primary-navigation .nav-item:is(.active, [aria-current="page"]) .nav-tile i {
+  transform: translateY(-1px);
+}
+@media (hover: hover) and (pointer: fine) {
+  #primary-navigation .nav-item:hover .nav-tile i { transform: translateY(-2px); }
+}
+body.dark-mode #primary-navigation .nav-item .nav-tile i {
+  border-color: rgba(255, 255, 255, .14) !important;
+  background: linear-gradient(145deg, rgba(var(--nav-icon-rgb), .82), rgb(var(--nav-icon-rgb))) !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .2) !important;
+}
+@media (max-width: 599px) {
+  #primary-navigation .nav-item .nav-tile i {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: .9rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #primary-navigation .nav-item .nav-tile i { transition: none; transform: none; }
+}

@@ -4,7 +4,7 @@ import { dispatch } from "../runtime-events";
 
 export default function AppNavigation() {
   return (
-    <nav className="floating-nav" aria-label="Primary navigation">
+    <nav id="primary-navigation" className="floating-nav" aria-label="Primary navigation">
       <button
         type="button"
         className="nav-item active"
