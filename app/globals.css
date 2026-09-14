@@ -30678,6 +30678,62 @@ body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
   }
 }
 
+/* Desktop menu items now use the same contained proportions as the phone dock. */
+@media (min-width: 600px) {
+  #primary-navigation {
+    align-items: center;
+  }
+  #primary-navigation .nav-item,
+  #primary-navigation .nav-item.active,
+  #primary-navigation .nav-item[aria-current="page"] {
+    box-sizing: border-box;
+    height: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    min-width: 0;
+    padding: 5px 8px 6px;
+    gap: 3px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  #primary-navigation .nav-item::before {
+    inset: 2px;
+    border-radius: 14px;
+  }
+  #primary-navigation .nav-item .nav-tile,
+  #primary-navigation .nav-item.active .nav-tile,
+  #primary-navigation .nav-item[aria-current="page"] .nav-tile {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    margin: 0;
+    border-radius: 11px;
+  }
+  #primary-navigation .nav-item .nav-tile i {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+  }
+  #primary-navigation .nav-item span,
+  #primary-navigation .nav-item.active span,
+  #primary-navigation .nav-item[aria-current="page"] span {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.08;
+    font-size: 0.59rem;
+  }
+  #primary-navigation .nav-item::after {
+    bottom: 2px;
+    width: 18px;
+    height: 2px;
+  }
+}
+
 /* Match the supplied premium dock: color-led accents, a clear active rail, and no glossy fill. */
 .floating-nav {
   padding: 8px 10px !important;
