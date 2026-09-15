@@ -31946,10 +31946,31 @@ body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-wi
 .quran-reader-arabic.is-active {
   border-color: rgba(8, 120, 87, 0.42);
   background: radial-gradient(circle at 100% 0, rgba(16, 185, 129, 0.16), transparent 38%), linear-gradient(145deg, #edf8f2, #f9fcfa);
-  box-shadow: 0 16px 34px rgba(7, 60, 49, 0.14), inset 4px 0 0 #0b6b50, inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  box-shadow: 0 14px 32px rgba(7, 60, 49, 0.14), 0 0 0 2px rgba(11, 107, 80, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.96);
 }
 body.dark-mode .quran-reader-arabic.is-active {
   border-color: rgba(52, 211, 153, 0.4);
   background: radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.2), transparent 38%), linear-gradient(145deg, #103628, #071812);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32), inset 4px 0 0 #34d399, inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32), 0 0 0 2px rgba(52, 211, 153, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* Keep the marker at the ayah's leading edge without changing the Arabic line box. */
+.quran-reader-arabic {
+  padding-left: 17px;
+}
+.quran-reader-arabic .quran-reader-ayah-number {
+  position: static;
+  display: inline-flex;
+  width: 2.4em;
+  min-width: 2.4em;
+  height: 2.4em;
+  margin: 0 0.24em 0 0;
+  vertical-align: middle;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+@media (max-width: 599px) {
+  .quran-reader-arabic {
+    padding-left: 17px;
+  }
 }
