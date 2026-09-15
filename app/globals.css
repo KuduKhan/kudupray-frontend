@@ -35121,6 +35121,17 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Final container parity: keep a small, even 5px gap around the More trigger. */
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  box-sizing: border-box;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin: 5px;
+}
+
 /* Final player-parity geometry: 6px vertical and 12px horizontal double inset. */
 .quran-reader-toolbar .quran-reader-more>summary,
 .quran-reader-toolbar .quran-reader-more>summary:hover,
