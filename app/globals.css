@@ -35121,6 +35121,16 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Match the toolbar's 5px container padding and keep the inset stable in every state. */
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin: 5px;
+}
+
 /* Let the resting trigger fill its segment; keep the existing inset while interacting. */
 .quran-reader-toolbar .quran-reader-more:not([open])>summary:not(:hover):not(:focus-visible) {
   width: 100%;
