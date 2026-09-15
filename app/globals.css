@@ -32411,3 +32411,22 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more > summary:focus-visible 
     font-size: 0.7rem;
   }
 }
+
+/* Restore the calm More trigger: opening or hovering it does not change its surface. */
+.quran-reader-toolbar .quran-reader-more > summary:hover,
+.quran-reader-toolbar .quran-reader-more[open] > summary,
+.quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  border-color: transparent;
+  color: var(--text-main);
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+body.dark-mode .quran-reader-toolbar .quran-reader-more > summary:hover,
+body.dark-mode .quran-reader-toolbar .quran-reader-more[open] > summary,
+body.dark-mode .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  border-color: transparent;
+  color: #f4f4f5;
+  background: transparent;
+  box-shadow: none;
+}
