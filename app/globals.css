@@ -32079,6 +32079,24 @@ body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-wi
   }
 }
 
+/* Keep the More trigger visually steady; opening it should not add a bright fill. */
+.quran-reader-toolbar .quran-reader-more > summary:hover,
+.quran-reader-toolbar .quran-reader-more[open] > summary,
+.quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  border-color: transparent;
+  color: var(--text-main);
+  background: transparent;
+  box-shadow: none;
+}
+body.dark-mode .quran-reader-toolbar .quran-reader-more > summary:hover,
+body.dark-mode .quran-reader-toolbar .quran-reader-more[open] > summary,
+body.dark-mode .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  border-color: transparent;
+  color: #f4f4f5;
+  background: transparent;
+  box-shadow: none;
+}
+
 /* Speed choices use the same circular numeric language as the Surah selector. */
 #quran-speed-list .quran-surah-badge {
   flex: 0 0 40px;
