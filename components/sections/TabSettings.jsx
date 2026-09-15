@@ -41,20 +41,6 @@ export default function TabSettings() {
             </div>
           </details>
         </div>
-        <div className="settings-auto-save" aria-label="Preference save status">
-          <span>
-            <i className="fa-solid fa-circle-check" aria-hidden="true"></i>
-            {"Saved automatically on this device"}
-          </span>
-          <span
-            className="settings-summary"
-            id="settings-summary"
-            role="status"
-            aria-live="polite"
-          >
-            {"Loading your preferences…"}
-          </span>
-        </div>
         <div className="settings-menu-grid">
           <div className="settings-menu-group">
             <div className="group-title" style={{ marginTop: "0" }}>
