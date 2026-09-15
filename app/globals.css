@@ -29713,6 +29713,35 @@ body.dark-mode .quran-player::before {
     padding: 0;
   }
 }
+
+/* Compact More panel: preserve the picker language without wasting vertical space. */
+.quran-reader-more-panel {
+  width: min(248px, calc(100vw - 30px));
+  padding: 5px;
+  border-radius: 18px;
+}
+.quran-reader-more-panel .quran-reader-preferences {
+  gap: 2px;
+}
+.quran-reader-more-panel .quran-reader-preferences > span {
+  padding: 5px 9px 3px;
+  line-height: 1.2;
+}
+.quran-reader-more-panel .quran-reader-preferences label {
+  min-height: 34px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  line-height: 1.2;
+}
+.quran-reader-more-panel .quran-reader-numbering-heading {
+  margin-top: 2px;
+  padding-top: 6px !important;
+}
+@media (max-width: 599px) {
+  .quran-reader-more-panel {
+    width: min(236px, calc(100vw - 28px));
+  }
+}
 /* Portrait picker: a compact pill with a viewport-bounded floating list. */
 #quran-reader-surah[hidden],
 #quran-reader-reciter[hidden],
