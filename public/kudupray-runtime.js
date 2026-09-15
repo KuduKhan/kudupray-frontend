@@ -2028,12 +2028,8 @@
         const playback = audio.play();
         const background = downloadQuranSurah();
         const intent = ++quranDownload.intent;
-        const downloadKey = quranDownload.key;
-        void background.catch(() => {
-            if (downloadKey === quranDownload.key && intent === quranDownload.intent) {
-                setQuranReaderStatus('Background download paused. Playback can continue online; missing ayahs will retry when you press play again.');
-            }
-        });
+        // Keep background caching silent; playback continues from the online stream when needed.
+        void background.catch(() => {});
         try {
             await playback;
         } catch (error) {
