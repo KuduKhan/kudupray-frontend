@@ -32355,3 +32355,59 @@ body.dark-mode #tab-settings .lang-select:focus-visible {
     font-size: 0.72rem;
   }
 }
+
+/* Match the More trigger to the inset Surah/Reciter selector pill. */
+.quran-reader-toolbar .quran-reader-more > summary {
+  box-sizing: border-box;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  min-height: 34px;
+  margin: 5px;
+  padding: 0 14px;
+  border: 1px solid rgba(8, 145, 178, 0.2);
+  border-radius: 999px;
+  color: #14556a;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 3px 10px rgba(7, 60, 49, 0.05);
+  font-size: 0.78rem;
+  font-weight: 780;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.quran-reader-toolbar .quran-reader-more > summary:hover,
+.quran-reader-toolbar .quran-reader-more[open] > summary,
+.quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  border-color: rgba(8, 145, 178, 0.48);
+  border-radius: 999px;
+  color: #0e7490;
+  background: rgba(236, 254, 255, 0.96);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.96), 0 5px 14px rgba(7, 60, 49, 0.08);
+  outline: none;
+}
+.quran-reader-toolbar .quran-reader-more > summary i {
+  flex: 0 0 auto;
+  color: #0e7490;
+}
+body.dark-mode .quran-reader-toolbar .quran-reader-more > summary {
+  border-color: rgba(34, 211, 238, 0.22);
+  color: #a5f3fc;
+  background: rgba(6, 182, 212, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+body.dark-mode .quran-reader-toolbar .quran-reader-more > summary:hover,
+body.dark-mode .quran-reader-toolbar .quran-reader-more[open] > summary,
+body.dark-mode .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  border-color: rgba(34, 211, 238, 0.48);
+  color: #cffafe;
+  background: rgba(6, 182, 212, 0.18);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 5px 14px rgba(0, 0, 0, 0.24);
+}
+@media (max-width: 599px) {
+  .quran-reader-toolbar .quran-reader-more > summary {
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    min-height: 32px;
+    margin: 4px;
+    padding: 0 10px;
+    font-size: 0.7rem;
+  }
+}
