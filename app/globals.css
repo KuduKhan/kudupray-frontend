@@ -32005,6 +32005,43 @@ body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-wi
   .quran-reader-more-panel .quran-reader-preferences > label:last-child { grid-column: 1 / -1; }
 }
 
+/* Desktop More menu: use the same generous picker surface as Surah and Reciter. */
+@media (min-width: 600px) {
+  .quran-reader-more-panel {
+    width: min(292px, calc(100vw - 34px));
+    padding: 7px;
+    border: 1px solid rgba(4, 120, 87, 0.16);
+    border-radius: 22px;
+    background: #fcfefc;
+    color: #163d30;
+    box-shadow: 0 20px 60px rgba(6, 40, 28, 0.22), 0 3px 12px rgba(6, 40, 28, 0.08);
+  }
+
+  .quran-reader-more-panel .quran-reader-preferences {
+    gap: 4px;
+  }
+
+  .quran-reader-more-panel .quran-reader-preferences > span {
+    padding: 8px 12px 6px;
+    font-size: 0.71rem;
+    font-weight: 750;
+  }
+
+  .quran-reader-more-panel .quran-reader-preferences label {
+    min-height: 40px;
+    padding: 7px 10px;
+    border-radius: 15px;
+    font-size: 0.78rem;
+  }
+
+  body.dark-mode .quran-reader-more-panel {
+    background: #10291f;
+    color: #e5f2ec;
+    border-color: #355347;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+}
+
 /* Speed choices use the same circular numeric language as the Surah selector. */
 #quran-speed-list .quran-surah-badge {
   flex: 0 0 40px;
