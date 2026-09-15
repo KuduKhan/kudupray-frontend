@@ -2242,7 +2242,7 @@
         audios.forEach(audio => {
             audio.addEventListener('playing', () => {
                 if (audio === getQuranReaderActiveAudio() && document.getElementById('quran-reader-status')?.classList.contains('is-error')) {
-                    setQuranReaderStatus('Tap any ayah to begin there, or press play in the bottom player to follow from the first ayah.');
+                    setQuranReaderStatus('');
                 }
             });
             ['loadedmetadata', 'durationchange', 'timeupdate', 'progress', 'play', 'playing', 'pause', 'ended', 'waiting', 'canplay', 'seeking', 'seeked', 'emptied', 'error', 'volumechange', 'ratechange'].forEach(event => {
@@ -2507,7 +2507,7 @@
             renderQuranReaderSurah(payload, translationInfo);
             updateQuranReaderAudio({ play });
             try { localStorage.setItem('kudu_quran_reader_surah', String(normalizedNumber)); } catch (error) { /* Optional device preference. */ }
-            setQuranReaderStatus('Tap any ayah to begin there, or press play in the bottom player to follow from the first ayah.');
+            setQuranReaderStatus('');
         } catch (error) {
             if (requestId !== quranReaderState.requestId) return;
             const verses = document.getElementById('quran-reader-verses');

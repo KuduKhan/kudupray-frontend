@@ -180,9 +180,6 @@ export default function TabQuranReader() {
               role="status"
               aria-live="polite"
             >
-              {
-                "Tap any ayah to begin there, or press play in the bottom player to follow from the first ayah."
-              }
             </p>
             <div
               className="quran-player"
