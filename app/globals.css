@@ -35121,6 +35121,35 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Remove the resting inset; restore the selector-style inset only while interacting. */
+.quran-reader-toolbar .quran-reader-more>summary {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin: 5px;
+  padding: 0 14px;
+}
+
+@media (max-width: 599px) {
+
+  .quran-reader-toolbar .quran-reader-more>summary:hover,
+  .quran-reader-toolbar .quran-reader-more[open]>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    margin: 4px;
+    padding: 0 10px;
+  }
+}
+
 /* Desktop More mirrors the phone interaction in reverse: highlighted at rest, quiet on hover/open. */
 @media (min-width: 600px) {
   .quran-reader-toolbar .quran-reader-more>summary {
