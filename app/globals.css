@@ -30213,8 +30213,16 @@ body.dark-mode .quran-reciter-check {
   line-height: 2;
   text-align: right;
 }
-/* Keep the ayah badge in the Arabic reading flow, before the first word. */
-.quran-reader-arabic .quran-reader-ayah-number {
+/* Anchor the badge at the card's left edge beside the Arabic panel. */
+.quran-reader-ayah-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  direction: ltr;
+  min-width: 0;
+}
+.quran-reader-ayah-row .quran-reader-ayah-number {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -30222,7 +30230,8 @@ body.dark-mode .quran-reciter-check {
   min-width: 2.4em;
   height: 2.4em;
   padding-inline: 0.4em;
-  margin-inline: 0 0.2em;
+  margin: 0;
+  justify-self: start;
   vertical-align: middle;
   unicode-bidi: isolate;
   font-family: Arial, sans-serif;
@@ -30236,7 +30245,7 @@ body.dark-mode .quran-reciter-check {
   background: rgba(11, 107, 80, 0.08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
-body.dark-mode .quran-reader-arabic .quran-reader-ayah-number {
+body.dark-mode .quran-reader-ayah-row .quran-reader-ayah-number {
   color: #a7f3d0;
   border-color: rgba(52, 211, 153, 0.25);
   background: rgba(52, 211, 153, 0.12);

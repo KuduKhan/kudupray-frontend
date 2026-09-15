@@ -2431,14 +2431,16 @@
             arabicText.lang = 'ar';
             arabicText.dir = 'rtl';
             arabicText.textContent = String(ayah.text || '').replace(/^\uFEFF/, '');
-            arabicText.prepend(verseNumber, '\u00a0');
+            const ayahRow = document.createElement('div');
+            ayahRow.className = 'quran-reader-ayah-row';
+            ayahRow.append(verseNumber, arabicText);
             const transliterationText = document.createElement('p');
             transliterationText.className = 'quran-reader-transliteration transliteration-layer';
             transliterationText.textContent = transliteration.ayahs[index]?.text || '—';
             const translationText = document.createElement('p');
             translationText.className = 'quran-reader-translation translation-layer';
             translationText.textContent = translation.ayahs[index]?.text || '—';
-            verse.append(arabicText, transliterationText, translationText);
+            verse.append(ayahRow, transliterationText, translationText);
             verses.append(verse);
         });
         syncQuranReaderVisibility();
