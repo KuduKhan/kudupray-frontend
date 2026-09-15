@@ -35146,6 +35146,26 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   }
 }
 
+/* Match the reciter profile trigger's compact asymmetric padding and gap. */
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  gap: clamp(5px, 0.4vw, 7px);
+  padding: clamp(3px, 0.25vw, 5px) clamp(7px, 0.6vw, 11px) clamp(3px, 0.25vw, 5px) clamp(4px, 0.35vw, 7px);
+}
+
+@media (max-width: 599px) {
+
+  .quran-reader-toolbar .quran-reader-more>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:hover,
+  .quran-reader-toolbar .quran-reader-more[open]>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    gap: 5px;
+    padding: 3px 7px 3px 4px;
+  }
+}
+
 /* Give More the player's double-inset rhythm: a stable outer gap and inner control surface. */
 .quran-reader-toolbar .quran-reader-more>summary,
 .quran-reader-toolbar .quran-reader-more>summary:hover,
