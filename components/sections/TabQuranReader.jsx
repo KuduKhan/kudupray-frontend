@@ -161,21 +161,6 @@ export default function TabQuranReader() {
         </div>
         <div className="quran-reader-body" id="quran-reader-body">
           <div className="quran-reader-scroll" id="quran-reader-scroll">
-            <div className="quran-reader-source-row">
-              <a
-                className="quran-reader-source"
-                id="quran-reader-source"
-                href="https://alquran.cloud/api"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span>{"Source"}</span>
-                <i
-                  className="fa-solid fa-arrow-up-right-from-square"
-                  aria-hidden="true"
-                ></i>
-              </a>
-            </div>
             <div
               className="quran-reader-verses"
               id="quran-reader-verses"

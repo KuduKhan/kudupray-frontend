@@ -32004,6 +32004,23 @@ body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-wi
   .quran-reader-more-panel .quran-reader-preferences > label:last-child { grid-column: 1 / -1; }
 }
 
+/* Speed choices use the same circular numeric language as the Surah selector. */
+#quran-speed-list .quran-surah-badge {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  line-height: 1;
+}
+@media (max-width: 599px) {
+  #quran-speed-list .quran-surah-badge {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .quran-reader-current-surah p {
   display: flex;
   flex-wrap: wrap;
