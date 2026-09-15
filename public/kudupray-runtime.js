@@ -1536,7 +1536,7 @@
         const surah = getQuranReaderSurah(quranReaderState.surahNumber);
         const trigger = document.getElementById('quran-surah-trigger');
         if (!surah || !trigger) return;
-        document.getElementById('quran-surah-selected-number').textContent = String(surah.number);
+        document.getElementById('quran-surah-selected-number').textContent = formatQuranReaderAyahNumber(surah.number);
         document.getElementById('quran-surah-selected-name').textContent = surah.englishName;
         trigger.title = formatQuranReaderSurah(surah);
         trigger.setAttribute('aria-label', `Select a surah: ${formatQuranReaderSurah(surah)}`);
@@ -1567,7 +1567,7 @@
             option.setAttribute('role', 'option');
             option.setAttribute('aria-selected', String(surah.number === quranReaderState.surahNumber));
             option.setAttribute('aria-label', formatQuranReaderSurah(surah));
-            const badge = document.createElement('span'); badge.className = 'quran-surah-badge'; badge.textContent = String(surah.number); badge.setAttribute('aria-hidden', 'true');
+            const badge = document.createElement('span'); badge.className = 'quran-surah-badge'; badge.textContent = formatQuranReaderAyahNumber(surah.number); badge.setAttribute('aria-hidden', 'true');
             const copy = document.createElement('span'); copy.className = 'quran-surah-option-copy';
             const name = document.createElement('span'); name.textContent = surah.englishName;
             const detail = document.createElement('small'); detail.textContent = [surah.englishNameTranslation, surah.numberOfAyahs ? `${surah.numberOfAyahs} ayahs` : ''].filter(Boolean).join(' · ');
@@ -1844,6 +1844,9 @@
         document.querySelectorAll('.quran-reader-ayah-number[data-number]').forEach(marker => {
             marker.textContent = formatQuranReaderAyahNumber(marker.dataset.number);
         });
+        syncQuranSurahPicker();
+        const surahPicker = document.getElementById('quran-surah-picker');
+        if (surahPicker && !surahPicker.hidden) renderQuranSurahPickerList();
         try { localStorage.setItem('kudu_quran_reader_numbering', quranReaderState.arabicNumbers ? 'arabic' : 'english'); } catch (error) { /* Optional device preference. */ }
     };
 
@@ -2426,7 +2429,16 @@
         const verses = document.getElementById('quran-reader-verses');
         const selected = getQuranReaderSurah(surah.number);
         if (title) title.textContent = `${surah.number}. ${surah.englishName || selected?.englishName || 'Surah'}`;
-        if (meta) meta.textContent = `${surah.englishNameTranslation || selected?.englishNameTranslation || 'Qur’an'} · ${surah.numberOfAyahs} ayahs · ${translationInfo.label} translation`;
+        if (meta) {
+            meta.replaceChildren();
+            const summary = document.createElement('span');
+            summary.className = 'quran-reader-meta-summary';
+            summary.textContent = `${surah.englishNameTranslation || selected?.englishNameTranslation || 'Qur’an'} · ${surah.numberOfAyahs} ayahs`;
+            const translation = document.createElement('span');
+            translation.className = 'quran-reader-meta-translation';
+            translation.textContent = `${translationInfo.label} translation`;
+            meta.append(summary, translation);
+        }
         if (source) {
             source.href = `${QURAN_READER_API_ROOT}/surah/${surah.number}/editions/quran-uthmani,en.transliteration,${translationInfo.edition}`;
             source.title = `Open ${formatQuranReaderSurah(surah)} in AlQuran Cloud`;

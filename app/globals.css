@@ -31999,6 +31999,21 @@ body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-wi
 }
 @media (max-width: 599px) {
   .quran-reader-more-panel { width: min(214px, calc(100vw - 22px)); }
+  .quran-reader-more-panel .quran-reader-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .quran-reader-more-panel .quran-reader-numbering-heading,
+  .quran-reader-more-panel .quran-reader-preferences > label:last-child { grid-column: 1 / -1; }
+}
+
+.quran-reader-current-surah p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 5px;
+}
+.quran-reader-meta-translation { color: inherit; }
+@media (max-width: 599px) {
+  .quran-reader-current-surah p { row-gap: 2px; }
+  .quran-reader-meta-translation { flex-basis: 100%; }
 }
 
 /* The active state belongs to the Arabic reading surface, not the surrounding verse card. */
