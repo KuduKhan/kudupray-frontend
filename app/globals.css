@@ -30274,6 +30274,89 @@ body.dark-mode .quran-reader-arabic .quran-reader-ayah-number {
     inset 0 0 0 2px rgba(255, 255, 255, 0.08),
     inset 0 0 0 3px rgba(245, 215, 125, 0.14);
 }
+/* Give More the same calm, rounded picker language as the reciter selector. */
+.quran-reader-more-panel {
+  padding: 7px;
+  border: 1px solid rgba(4, 120, 87, 0.16);
+  border-radius: 22px;
+  background: #fcfefc;
+  color: #163d30;
+  box-shadow: 0 20px 60px rgba(6, 40, 28, 0.22), 0 3px 12px rgba(6, 40, 28, 0.08);
+}
+.quran-reader-more-panel .quran-reader-preferences {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+.quran-reader-more-panel .quran-reader-preferences > span {
+  padding: 8px 12px 6px;
+  color: #526e62;
+  font-size: 0.71rem;
+  font-weight: 750;
+}
+.quran-reader-more-panel .quran-reader-preferences label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.quran-reader-more-panel .quran-reader-preferences label:hover,
+.quran-reader-more-panel .quran-reader-preferences label:focus-within {
+  border-color: #c8e4d6;
+  background: #f0f6f2;
+}
+.quran-reader-more-panel .quran-reader-preferences input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #087654;
+}
+.quran-reader-more-panel .quran-reader-numbering-heading {
+  margin-top: 4px;
+  padding-top: 9px !important;
+  border-top: 1px solid rgba(7, 60, 49, 0.08);
+}
+body.dark-mode .quran-reader-more-panel {
+  background: #10291f;
+  color: #e5f2ec;
+  border-color: #355347;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences > span {
+  color: #a9c3b8;
+}
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:hover,
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-within {
+  border-color: #426953;
+  background: #18392b;
+}
+/* Keep the verse marker in a reserved side rail so Arabic line wrapping never shifts. */
+.quran-reader-arabic {
+  position: relative;
+  padding-left: 64px;
+}
+.quran-reader-arabic .quran-reader-ayah-number {
+  position: absolute;
+  left: 17px;
+  top: 17px;
+  margin: 0;
+}
+@media (max-width: 599px) {
+  .quran-reader-arabic {
+    padding-left: 56px;
+  }
+  .quran-reader-arabic .quran-reader-ayah-number {
+    left: 14px;
+    top: 14px;
+  }
+}
 /* With both language layers hidden, let the Arabic surface become the complete card. */
 body.hide-trans.hide-eng .quran-reader-verse {
   gap: 0;
@@ -31818,4 +31901,55 @@ body.dark-mode #primary-navigation .nav-item .nav-tile i {
 }
 @media (prefers-reduced-motion: reduce) {
   #primary-navigation .nav-item .nav-tile i { transition: none; transform: none; }
+}
+
+/* Final More panel alignment with the reciter picker. */
+.quran-reader-more-panel {
+  padding: 7px;
+  border: 1px solid rgba(4, 120, 87, 0.16);
+  border-radius: 22px;
+  background: #fcfefc;
+  color: #163d30;
+  box-shadow: 0 20px 60px rgba(6, 40, 28, 0.22), 0 3px 12px rgba(6, 40, 28, 0.08);
+}
+.quran-reader-more-panel .quran-reader-preferences { grid-template-columns: 1fr; gap: 4px; }
+.quran-reader-more-panel .quran-reader-preferences > span {
+  padding: 8px 12px 6px;
+  color: #526e62;
+  font-size: 0.71rem;
+  font-weight: 750;
+}
+.quran-reader-more-panel .quran-reader-preferences label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.quran-reader-more-panel .quran-reader-preferences label:hover,
+.quran-reader-more-panel .quran-reader-preferences label:focus-within { border-color: #c8e4d6; background: #f0f6f2; }
+.quran-reader-more-panel .quran-reader-preferences input { width: 17px; height: 17px; margin: 0; accent-color: #087654; }
+.quran-reader-more-panel .quran-reader-numbering-heading { margin-top: 4px; padding-top: 9px !important; border-top: 1px solid rgba(7, 60, 49, 0.08); }
+body.dark-mode .quran-reader-more-panel { background: #10291f; color: #e5f2ec; border-color: #355347; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences > span { color: #a9c3b8; }
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:hover,
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-within { border-color: #426953; background: #18392b; }
+
+/* The active state belongs to the Arabic reading surface, not the surrounding verse card. */
+.quran-reader-arabic.is-active {
+  border-color: rgba(8, 120, 87, 0.42);
+  background: radial-gradient(circle at 100% 0, rgba(16, 185, 129, 0.16), transparent 38%), linear-gradient(145deg, #edf8f2, #f9fcfa);
+  box-shadow: 0 16px 34px rgba(7, 60, 49, 0.14), inset 4px 0 0 #0b6b50, inset 0 1px 0 rgba(255, 255, 255, 0.96);
+}
+body.dark-mode .quran-reader-arabic.is-active {
+  border-color: rgba(52, 211, 153, 0.4);
+  background: radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.2), transparent 38%), linear-gradient(145deg, #103628, #071812);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32), inset 4px 0 0 #34d399, inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
