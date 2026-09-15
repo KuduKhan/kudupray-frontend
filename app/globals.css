@@ -31974,3 +31974,51 @@ body.dark-mode .quran-reader-arabic.is-active {
     padding-left: 17px;
   }
 }
+
+/* Phone player controls use true profile-style circles at every breakpoint. */
+@media (max-width: 720px) {
+  .quran-player-transport button,
+  .quran-player-options button,
+  .quran-player-options .quran-speed-trigger {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    flex: 0 0 34px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .quran-player-transport .quran-player-play {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    flex-basis: 38px;
+  }
+  .quran-player-options .quran-speed-trigger {
+    justify-content: center;
+    gap: 0;
+  }
+  .quran-player-options .quran-speed-trigger > i:first-child,
+  .quran-player-options .quran-speed-trigger > i:last-child {
+    display: none;
+  }
+}
+@media (max-width: 360px) {
+  .quran-player-transport button,
+  .quran-player-options button,
+  .quran-player-options .quran-speed-trigger {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    flex-basis: 30px;
+  }
+  .quran-player-transport .quran-player-play {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    flex-basis: 34px;
+  }
+}
