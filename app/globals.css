@@ -35121,6 +35121,13 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Let the resting trigger fill its segment; keep the existing inset while interacting. */
+.quran-reader-toolbar .quran-reader-more:not([open])>summary:not(:hover):not(:focus-visible) {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
 /* Remove the cyan resting border; interaction states keep their existing highlight. */
 .quran-reader-toolbar .quran-reader-more:not([open])>summary:not(:hover):not(:focus-visible) {
   border-color: transparent;
