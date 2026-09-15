@@ -35121,6 +35121,31 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Final player-parity geometry: 6px vertical and 12px horizontal double inset. */
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  margin: 6px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 599px) {
+
+  .quran-reader-toolbar .quran-reader-more>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:hover,
+  .quran-reader-toolbar .quran-reader-more[open]>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+    padding: 0 10px;
+  }
+}
+
 /* Give More the player's double-inset rhythm: a stable outer gap and inner control surface. */
 .quran-reader-toolbar .quran-reader-more>summary,
 .quran-reader-toolbar .quran-reader-more>summary:hover,
