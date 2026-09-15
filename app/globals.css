@@ -31971,6 +31971,36 @@ body.dark-mode .quran-reader-more-panel .quran-reader-preferences > span { color
 body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:hover,
 body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-within { border-color: #426953; background: #18392b; }
 
+/* Extra-tight More spacing for the compact reader toolbar. */
+.quran-reader-more-panel {
+  width: min(220px, calc(100vw - 24px));
+  padding: 3px;
+  border-radius: 17px;
+}
+.quran-reader-more-panel .quran-reader-preferences { gap: 1px; }
+.quran-reader-more-panel .quran-reader-preferences > span {
+  padding: 4px 7px 2px;
+  line-height: 1.05;
+}
+.quran-reader-more-panel .quran-reader-preferences label {
+  min-height: 29px;
+  padding: 2px 6px;
+  gap: 7px;
+  border-radius: 10px;
+  line-height: 1.05;
+}
+.quran-reader-more-panel .quran-reader-preferences input {
+  width: 15px;
+  height: 15px;
+}
+.quran-reader-more-panel .quran-reader-numbering-heading {
+  margin-top: 1px;
+  padding-top: 5px !important;
+}
+@media (max-width: 599px) {
+  .quran-reader-more-panel { width: min(214px, calc(100vw - 22px)); }
+}
+
 /* The active state belongs to the Arabic reading surface, not the surrounding verse card. */
 .quran-reader-arabic.is-active {
   border-color: rgba(8, 120, 87, 0.42);
