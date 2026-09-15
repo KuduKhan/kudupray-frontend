@@ -35121,6 +35121,42 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Desktop More mirrors the phone interaction in reverse: highlighted at rest, quiet on hover/open. */
+@media (min-width: 600px) {
+  .quran-reader-toolbar .quran-reader-more>summary {
+    border-color: rgba(8, 145, 178, 0.48);
+    color: #0e7490;
+    background: rgba(236, 254, 255, 0.96);
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.96), 0 5px 14px rgba(7, 60, 49, 0.08);
+  }
+
+  .quran-reader-toolbar .quran-reader-more>summary:hover,
+  .quran-reader-toolbar .quran-reader-more[open]>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    border-color: transparent;
+    color: var(--text-main);
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+  }
+
+  body.dark-mode .quran-reader-toolbar .quran-reader-more>summary {
+    border-color: rgba(34, 211, 238, 0.48);
+    color: #cffafe;
+    background: rgba(6, 182, 212, 0.18);
+    box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 5px 14px rgba(0, 0, 0, 0.24);
+  }
+
+  body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:hover,
+  body.dark-mode .quran-reader-toolbar .quran-reader-more[open]>summary,
+  body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    border-color: transparent;
+    color: #f4f4f5;
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
 /* Keep desktop Quran controls in the same compact selector rhythm, scaled to the viewport. */
 @media (min-width: 600px) {
   #tab-quran-reader .quran-reader-toolbar-shell {
