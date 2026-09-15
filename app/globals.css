@@ -35121,6 +35121,28 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Give More the player's double-inset rhythm: a stable outer gap and inner control surface. */
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  margin: 6px;
+}
+
+@media (max-width: 599px) {
+
+  .quran-reader-toolbar .quran-reader-more>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:hover,
+  .quran-reader-toolbar .quran-reader-more[open]>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    margin: 5px;
+  }
+}
+
 /* Match the toolbar's 5px container padding and keep the inset stable in every state. */
 .quran-reader-toolbar .quran-reader-more>summary,
 .quran-reader-toolbar .quran-reader-more>summary:hover,
