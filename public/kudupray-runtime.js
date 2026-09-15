@@ -2423,7 +2423,7 @@
             verse.addEventListener('click', () => window.playQuranReaderAyah(index));
             const verseNumber = document.createElement('span');
             verseNumber.className = 'quran-reader-ayah-number';
-            verseNumber.textContent = String(ayah.numberInSurah);
+            verseNumber.textContent = String(ayah.numberInSurah).replace(/[0-9]/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
             verseNumber.dir = 'ltr';
             verseNumber.setAttribute('aria-hidden', 'true');
             const arabicText = document.createElement('p');
