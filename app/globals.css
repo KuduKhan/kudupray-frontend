@@ -35339,6 +35339,26 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary i {
   color: #cffafe;
 }
 
+/* Keep the clicked appearance at rest, then swap to the quiet appearance on interaction. */
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  border-color: transparent;
+  color: var(--text-main);
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+}
+
+body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:hover,
+body.dark-mode .quran-reader-toolbar .quran-reader-more[open]>summary,
+body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  border-color: transparent;
+  color: #f4f4f5;
+  background: transparent;
+  box-shadow: none;
+}
+
 /* The active state belongs to the Arabic reading surface, not the surrounding verse card. */
 .quran-reader-arabic.is-active {
   border-color: rgba(8, 120, 87, 0.42);
