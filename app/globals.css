@@ -35121,31 +35121,31 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
-/* Keep desktop Quran controls in the same compact phone-sized selector rhythm. */
+/* Keep desktop Quran controls in the same compact selector rhythm, scaled to the viewport. */
 @media (min-width: 600px) {
   #tab-quran-reader .quran-reader-toolbar-shell {
-    min-height: 48px;
-    gap: 5px;
-    padding: 5px;
-    border-radius: 18px;
+    min-height: clamp(48px, 3.2vw, 56px);
+    gap: clamp(5px, 0.45vw, 8px);
+    padding: clamp(5px, 0.45vw, 8px);
+    border-radius: clamp(18px, 1.2vw, 22px);
   }
 
   #tab-quran-reader .quran-reader-toolbar-segment {
-    min-height: 38px;
-    border-radius: 14px;
+    min-height: clamp(38px, 2.5vw, 46px);
+    border-radius: clamp(14px, 0.9vw, 18px);
   }
 
   #tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger {
-    min-height: 38px;
-    gap: 5px;
-    padding: 3px 7px 3px 4px;
-    font-size: 0.68rem;
+    min-height: clamp(38px, 2.5vw, 46px);
+    gap: clamp(5px, 0.4vw, 7px);
+    padding: clamp(3px, 0.25vw, 5px) clamp(7px, 0.6vw, 11px) clamp(3px, 0.25vw, 5px) clamp(4px, 0.35vw, 7px);
+    font-size: clamp(0.68rem, 0.18vw + 0.57rem, 0.78rem);
   }
 
   #tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger .quran-reciter-avatar {
-    width: 28px;
-    height: 28px;
-    flex-basis: 28px;
+    width: clamp(28px, 2.1vw, 36px);
+    height: clamp(28px, 2.1vw, 36px);
+    flex-basis: clamp(28px, 2.1vw, 36px);
     border-width: 1px;
   }
 
@@ -35157,19 +35157,19 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   }
 
   #tab-quran-reader .quran-reader-toolbar .quran-reader-more>summary {
-    min-height: 38px;
-    padding: 0 8px;
-    font-size: 0.65rem;
-    gap: 5px;
+    min-height: clamp(38px, 2.5vw, 46px);
+    padding: 0 clamp(8px, 0.7vw, 13px);
+    font-size: clamp(0.65rem, 0.16vw + 0.55rem, 0.75rem);
+    gap: clamp(5px, 0.4vw, 7px);
   }
 
   #tab-quran-reader .quran-reader-toolbar .quran-reader-more>summary i {
-    font-size: 0.7rem;
+    font-size: clamp(0.7rem, 0.18vw + 0.58rem, 0.82rem);
   }
 
   #tab-quran-reader .quran-reader-toolbar .quran-reader-more-panel {
-    width: min(280px, calc(100vw - 34px));
-    max-height: min(360px, calc(100dvh - 120px));
+    width: min(clamp(260px, 22vw, 320px), calc(100vw - 34px));
+    max-height: min(clamp(340px, 42dvh, 460px), calc(100dvh - 120px));
   }
 }
 
