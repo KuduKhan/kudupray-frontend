@@ -35121,6 +35121,28 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Remove the cyan resting border; interaction states keep their existing highlight. */
+.quran-reader-toolbar .quran-reader-more:not([open])>summary:not(:hover):not(:focus-visible) {
+  border-color: transparent;
+}
+
+body.dark-mode .quran-reader-toolbar .quran-reader-more:not([open])>summary:not(:hover):not(:focus-visible) {
+  border-color: transparent;
+}
+
+/* Remove the blue halo around the More trigger without changing its surface. */
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96), 0 5px 14px rgba(7, 60, 49, 0.08);
+}
+
+body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:hover,
+body.dark-mode .quran-reader-toolbar .quran-reader-more[open]>summary,
+body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 5px 14px rgba(0, 0, 0, 0.24);
+}
+
 /* Keep the More trigger geometry fixed so hover and open never resize the control. */
 .quran-reader-toolbar .quran-reader-more>summary,
 .quran-reader-toolbar .quran-reader-more>summary:hover,
