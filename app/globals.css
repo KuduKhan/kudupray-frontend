@@ -30213,6 +30213,35 @@ body.dark-mode .quran-reciter-check {
   line-height: 2;
   text-align: right;
 }
+/* Keep the ayah badge in the Arabic reading flow, before the first word. */
+.quran-reader-arabic .quran-reader-ayah-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 2.4em;
+  height: 2.4em;
+  padding-inline: 0.4em;
+  margin-inline: 0 0.2em;
+  vertical-align: middle;
+  unicode-bidi: isolate;
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 750;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: #0b6b50;
+  border: 1px solid rgba(11, 107, 80, 0.22);
+  border-radius: 10px;
+  background: rgba(11, 107, 80, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+body.dark-mode .quran-reader-arabic .quran-reader-ayah-number {
+  color: #a7f3d0;
+  border-color: rgba(52, 211, 153, 0.25);
+  background: rgba(52, 211, 153, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
 .quran-reader-transliteration {
   margin: 0;
   padding: 0 2px;
