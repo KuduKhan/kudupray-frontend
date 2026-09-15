@@ -130,6 +130,16 @@ export default function TabQuranReader() {
                       />
                       {" Translation"}
                     </label>
+                    <span className="quran-reader-numbering-heading">{"Ayah numbering"}</span>
+                    <label>
+                      <input
+                        id="quran-reader-arabic-numbering"
+                        type="checkbox"
+                        defaultChecked={true}
+                        onChange={(event) => window.setQuranReaderNumbering?.(event.target.checked)}
+                      />
+                      {" Arabic numerals"}
+                    </label>
                   </div>
                 </div>
               </details>

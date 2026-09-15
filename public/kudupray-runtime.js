@@ -1475,6 +1475,7 @@
         reciter: 'ar.alafasy-2',
         repeatSurah: false,
         autoplayNextSurah: false,
+        arabicNumbers: true,
         ayahs: [],
         activeAyahIndex: 0,
         audioEventsBound: false,
@@ -1827,7 +1828,24 @@
         const translation = document.getElementById('quran-reader-show-translation');
         if (transliteration) transliteration.checked = !document.body.classList.contains('hide-trans');
         if (translation) translation.checked = !document.body.classList.contains('hide-eng');
+        const numbering = document.getElementById('quran-reader-arabic-numbering');
+        if (numbering) numbering.checked = quranReaderState.arabicNumbers;
     }
+
+    function formatQuranReaderAyahNumber(number) {
+        const value = String(number ?? '');
+        return quranReaderState.arabicNumbers
+            ? value.replace(/[0-9]/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)])
+            : value;
+    }
+
+    window.setQuranReaderNumbering = function(useArabic) {
+        quranReaderState.arabicNumbers = Boolean(useArabic);
+        document.querySelectorAll('.quran-reader-ayah-number[data-number]').forEach(marker => {
+            marker.textContent = formatQuranReaderAyahNumber(marker.dataset.number);
+        });
+        try { localStorage.setItem('kudu_quran_reader_numbering', quranReaderState.arabicNumbers ? 'arabic' : 'english'); } catch (error) { /* Optional device preference. */ }
+    };
 
     function hydrateQuranReader() {
         if (quranReaderState.hydrated) return;
@@ -1839,6 +1857,8 @@
             if (QURAN_READER_RECITERS.some(reciter => reciter.identifier === savedReciter)) quranReaderState.reciter = savedReciter;
             quranReaderState.repeatSurah = localStorage.getItem('kudu_quran_reader_repeat') === 'true';
             quranReaderState.autoplayNextSurah = localStorage.getItem('kudu_quran_reader_autoplay') === 'true';
+            const savedNumbering = localStorage.getItem('kudu_quran_reader_numbering');
+            if (savedNumbering === 'arabic' || savedNumbering === 'english') quranReaderState.arabicNumbers = savedNumbering === 'arabic';
         } catch (error) {
             // The reader remains fully usable when device storage is unavailable.
         }
@@ -1863,7 +1883,8 @@
         const activeVerse = document.querySelector(`.quran-reader-verse[data-ayah-index="${safeIndex}"]`);
         document.querySelectorAll('.quran-reader-verse').forEach(verse => {
             const isActive = Number(verse.dataset.ayahIndex) === safeIndex;
-            verse.classList.toggle('is-active', isActive);
+            verse.classList.remove('is-active');
+            verse.querySelector('.quran-reader-arabic')?.classList.toggle('is-active', isActive);
             if (isActive) verse.setAttribute('aria-current', 'location');
             else verse.removeAttribute('aria-current');
         });
@@ -2423,7 +2444,8 @@
             verse.addEventListener('click', () => window.playQuranReaderAyah(index));
             const verseNumber = document.createElement('span');
             verseNumber.className = 'quran-reader-ayah-number';
-            verseNumber.textContent = String(ayah.numberInSurah).replace(/[0-9]/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
+            verseNumber.dataset.number = String(ayah.numberInSurah);
+            verseNumber.textContent = formatQuranReaderAyahNumber(ayah.numberInSurah);
             verseNumber.dir = 'ltr';
             verseNumber.setAttribute('aria-hidden', 'true');
             const arabicText = document.createElement('p');
