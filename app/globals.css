@@ -31941,7 +31941,7 @@ body.dark-mode #primary-navigation .nav-item .nav-tile i {
   color: #163d30;
   box-shadow: 0 20px 60px rgba(6, 40, 28, 0.22), 0 3px 12px rgba(6, 40, 28, 0.08);
 }
-.quran-reader-more-panel .quran-reader-preferences { grid-template-columns: 1fr; gap: 4px; }
+.quran-reader-more-panel .quran-reader-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
 .quran-reader-more-panel .quran-reader-preferences > span {
   padding: 8px 12px 6px;
   color: #526e62;
@@ -31966,6 +31966,7 @@ body.dark-mode #primary-navigation .nav-item .nav-tile i {
 .quran-reader-more-panel .quran-reader-preferences label:focus-within { border-color: #c8e4d6; background: #f0f6f2; }
 .quran-reader-more-panel .quran-reader-preferences input { width: 17px; height: 17px; margin: 0; accent-color: #087654; }
 .quran-reader-more-panel .quran-reader-numbering-heading { margin-top: 4px; padding-top: 9px !important; border-top: 1px solid rgba(7, 60, 49, 0.08); }
+.quran-reader-more-panel .quran-reader-preferences > label:last-child { grid-column: 1 / -1; }
 body.dark-mode .quran-reader-more-panel { background: #10291f; color: #e5f2ec; border-color: #355347; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
 body.dark-mode .quran-reader-more-panel .quran-reader-preferences > span { color: #a9c3b8; }
 body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:hover,
@@ -31977,7 +31978,7 @@ body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-wi
   padding: 3px;
   border-radius: 17px;
 }
-.quran-reader-more-panel .quran-reader-preferences { gap: 1px; }
+.quran-reader-more-panel .quran-reader-preferences { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; }
 .quran-reader-more-panel .quran-reader-preferences > span {
   padding: 4px 7px 2px;
   line-height: 1.05;
