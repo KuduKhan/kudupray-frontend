@@ -35121,6 +35121,30 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-shadow: none;
 }
 
+/* Keep the More trigger geometry fixed so hover and open never resize the control. */
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin: 5px;
+  padding: 0 14px;
+}
+
+@media (max-width: 599px) {
+
+  .quran-reader-toolbar .quran-reader-more>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:hover,
+  .quran-reader-toolbar .quran-reader-more[open]>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    margin: 4px;
+    padding: 0 10px;
+  }
+}
+
 /* Remove the resting inset; restore the selector-style inset only while interacting. */
 .quran-reader-toolbar .quran-reader-more>summary {
   width: 100%;
