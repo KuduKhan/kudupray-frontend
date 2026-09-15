@@ -1,0 +1,11 @@
+{
+  "remoteName": "origin",
+  "projects": [
+    {
+      "id": "prj_DjY8uDRCbt0RHPI3mgf7FgAloAfY",
+      "name": "kudupray-frontend",
+      "directory": ".",
+      "orgId": "team_utXlPGefy9VdaCrnjByHqQVL"
+    }
+  ]
+}
