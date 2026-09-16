@@ -17,8 +17,9 @@ export default function TabQuranReader() {
       >
         <div className="modal-header-row quran-reader-header">
           <div className="quran-reader-heading">
-            <div className="quran-reader-heading-icon" aria-hidden="true">
-              <i className="fa-solid fa-book-quran"></i>
+            <div className="quran-reader-heading-icon quran-reader-premium-emblem" aria-hidden="true">
+              <i className="fa-solid fa-book-open-reader quran-reader-emblem-book"></i>
+              <i className="fa-solid fa-kaaba quran-reader-emblem-mark"></i>
             </div>
             <div className="quran-reader-heading-copy">
               <div className="quran-reader-title-stack">
