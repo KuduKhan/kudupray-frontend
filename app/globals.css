@@ -35939,6 +35939,15 @@ body.dark-mode :is(.lang-select option, .glass-select option, .tasbih-select opt
   background: #1d1d1f;
 }
 
+/* Keep the Adhan selector calm at rest: no upper glow until hover or focus. */
+#schedule-card .alarm-select-shell:not(:hover):not(:focus-within) {
+  box-shadow: none;
+}
+
+body.dark-mode #schedule-card .alarm-select-shell:not(:hover):not(:focus-within) {
+  box-shadow: none;
+}
+
 /* More trigger and Settings language selector now share the Surah/Reciter interaction states. */
 .quran-reader-toolbar .quran-reader-more>summary {
   min-height: 34px;
