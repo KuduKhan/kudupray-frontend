@@ -894,6 +894,8 @@ export default function TabHome() {
             type="button"
             onClick={(event) => dispatch(33, event)}
             className="icon-btn"
+            aria-label="Use entered location"
+            title="Use entered location"
             style={{
               width: "36px",
               height: "36px",

@@ -3,7 +3,11 @@ const vm = require('vm');
 const assert = require('assert/strict');
 const html = fs.readFileSync('public/kudupray-runtime.js', 'utf8');
 for (const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)) new Function(match[1]);
-const code = html.slice(html.indexOf('    const quranDownload ='), html.indexOf('    function getQuranReaderActiveAudio()'));
+const codeStart = html.indexOf('const quranDownload =');
+const codeEnd = html.indexOf('function getQuranReaderActiveAudio()');
+assert.notEqual(codeStart, -1, 'Qur\u2019an download state was not found in the runtime.');
+assert.notEqual(codeEnd, -1, 'Qur\u2019an audio accessor was not found in the runtime.');
+const code = html.slice(codeStart, codeEnd);
 let completed = 0, calls = 0, fail = false, plays = 0, source = '', statuses = [];
 const audio = { dataset: {}, paused: false, readyState: 4, currentTime: 0, duration: 10, playbackRate: 1,
     buffered: { length: 1, start: () => 0, end: () => 10 },
@@ -46,7 +50,7 @@ const run = s => vm.runInContext(s,context);
     assert.equal(plays,3); assert.equal(completed,0);
     await run('quranDownload.promise').catch(()=>{});
     assert.equal(run('quranDownload.ready'),false);
-    assert.match(statuses.at(-1),/Playback can continue online/);
+    assert.match(statuses.at(-1), /^Preparing audio in the background/);
     const beforeRetry=calls; fail=false;
     const missing=7-run('quranDownload.urls.size');
     await run('startQuranDownloadedPlayback()'); await run('quranDownload.promise');
