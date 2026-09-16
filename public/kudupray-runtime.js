@@ -1576,7 +1576,7 @@ function renderQuranSurahPickerList() {
         const arabic = document.createElement('span'); arabic.className = 'quran-surah-arabic'; arabic.lang = 'ar'; arabic.dir = 'rtl'; arabic.textContent = surah.name || ''; arabic.setAttribute('aria-hidden', 'true');
         const check = document.createElement('span'); check.className = 'quran-reciter-check'; check.textContent = '✓'; check.setAttribute('aria-hidden', 'true');
         option.append(badge, copy, arabic, check);
-        option.addEventListener('click', () => { window.selectQuranReaderSurah(surah.number); closeQuranSurahPicker(true); });
+        option.addEventListener('click', () => { window.selectQuranReaderSurah(surah.number); renderQuranSurahPickerList(); });
         list.append(option);
     });
 }
@@ -1599,8 +1599,6 @@ function initQuranSurahPicker() {
         else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
     };
     const open = (keyboard = false) => {
-        closeQuranReciterPicker();
-        document.querySelector('.quran-reader-more')?.removeAttribute('open');
         search.value = ''; renderQuranSurahPickerList(); panel.hidden = false;
         trigger.setAttribute('aria-expanded', 'true'); position();
         if (keyboard) search.focus({ preventScroll: true });
@@ -1610,13 +1608,13 @@ function initQuranSurahPicker() {
     trigger.addEventListener('keydown', event => { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); open(true); } });
     search.addEventListener('input', () => { renderQuranSurahPickerList(); position(); });
     panel.addEventListener('keydown', event => {
-        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeQuranSurahPicker(true); return; }
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
         const options = [...list.children], index = options.indexOf(document.activeElement);
         if (event.key === 'Tab') {
             event.preventDefault();
             if (document.activeElement === search && !event.shiftKey && options.length) focusOption(list.querySelector('[aria-selected="true"]') || options[0]);
             else if (index >= 0 && event.shiftKey) search.focus({ preventScroll: true });
-            else closeQuranSurahPicker(true);
+            else if (options.length) focusOption(options[0]);
             return;
         }
         if (!options.length) return;
@@ -1627,8 +1625,6 @@ function initQuranSurahPicker() {
         else if (document.activeElement !== search && event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) { event.preventDefault(); search.value = event.key; search.focus({ preventScroll: true }); renderQuranSurahPickerList(); }
     });
     document.addEventListener('pointerdown', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranSurahPicker(); });
-    document.addEventListener('focusin', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranSurahPicker(); });
-    document.addEventListener('scroll', event => { if (!panel.contains(event.target)) closeQuranSurahPicker(); }, true);
     window.addEventListener('resize', position);
     window.visualViewport?.addEventListener('resize', position);
     window.visualViewport?.addEventListener('scroll', position);
@@ -1749,7 +1745,7 @@ function initQuranReciterPicker() {
         option.append(createQuranReciterAvatar(reciter), name, check);
         option.addEventListener('click', () => {
             window.selectQuranReaderReciter(reciter.identifier);
-            closeQuranReciterPicker(true);
+            syncQuranReciterPicker();
         });
         list.append(option);
     });
@@ -1764,8 +1760,6 @@ function initQuranReciterPicker() {
         else if (itemRect.bottom > listRect.bottom) list.scrollTop += itemRect.bottom - listRect.bottom;
     };
     const open = () => {
-        closeQuranSurahPicker();
-        document.querySelector('.quran-reader-more')?.removeAttribute('open');
         panel.hidden = false;
         syncQuranReciterPicker();
         trigger.setAttribute('aria-expanded', 'true');
@@ -1780,8 +1774,7 @@ function initQuranReciterPicker() {
     });
     let typed = '', typedAt = 0;
     panel.addEventListener('keydown', event => {
-        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeQuranReciterPicker(true); return; }
-        if (event.key === 'Tab') { closeQuranReciterPicker(true); return; }
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
         const options = [...list.children];
         const index = options.indexOf(document.activeElement);
         let next = -1;
@@ -1799,14 +1792,8 @@ function initQuranReciterPicker() {
     document.addEventListener('pointerdown', event => {
         if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranReciterPicker();
     });
-    document.addEventListener('focusin', event => {
-        if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranReciterPicker();
-    });
     window.addEventListener('resize', positionQuranReciterPicker);
     window.visualViewport?.addEventListener('resize', positionQuranReciterPicker);
-    document.addEventListener('scroll', event => {
-        if (!panel.contains(event.target)) closeQuranReciterPicker();
-    }, true);
     syncQuranReciterPicker();
 }
 
@@ -2118,6 +2105,29 @@ function closeQuranSpeedPicker(restoreFocus = false) {
     if (restoreFocus) trigger.focus({ preventScroll: true });
 }
 
+function closeQuranReaderMoreMenu() {
+    const menu = document.querySelector('.quran-reader-more');
+    if (menu) menu.open = false;
+}
+
+function bindQuranReaderMoreMenu() {
+    const menu = document.querySelector('.quran-reader-more');
+    if (!menu || menu.dataset.bound) return;
+    menu.dataset.bound = 'true';
+    const summary = menu.querySelector('summary');
+    menu.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
+    document.addEventListener('pointerdown', event => {
+        if (!menu.open) return;
+        if (menu.contains(event.target) || summary?.contains(event.target)) return;
+        closeQuranReaderMoreMenu();
+    });
+}
+
 function syncQuranSpeedPicker() {
     const rate = getQuranReaderActiveAudio()?.playbackRate || 1;
     const trigger = document.getElementById('quran-speed-trigger');
@@ -2145,7 +2155,7 @@ function initQuranSpeedPicker() {
         option.addEventListener('click', () => {
             const select = document.getElementById('quran-player-speed');
             select.value = String(rate); select.dispatchEvent(new Event('change', { bubbles: true }));
-            syncQuranSpeedPicker(); closeQuranSpeedPicker(true);
+            syncQuranSpeedPicker();
         });
         list.append(option);
     });
@@ -2158,16 +2168,13 @@ function initQuranSpeedPicker() {
         else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
     };
     const open = () => {
-        closeQuranSurahPicker(); closeQuranReciterPicker(); closeAdhanPicker();
-        document.querySelector('.quran-reader-more')?.removeAttribute('open');
         panel.hidden = false; trigger.setAttribute('aria-expanded', 'true'); syncQuranSpeedPicker(); position();
         focusOption(list.querySelector('[aria-selected="true"]'));
     };
     trigger.addEventListener('click', () => panel.hidden ? open() : closeQuranSpeedPicker(true));
     trigger.addEventListener('keydown', event => { if (event.key === 'ArrowUp' || event.key === 'ArrowDown') { event.preventDefault(); open(); } });
     panel.addEventListener('keydown', event => {
-        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeQuranSpeedPicker(true); return; }
-        if (event.key === 'Tab') { closeQuranSpeedPicker(true); return; }
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
         const options = [...list.children], index = options.indexOf(document.activeElement);
         let next = -1;
         if (event.key === 'ArrowDown') next = (index + 1) % options.length;
@@ -2177,8 +2184,6 @@ function initQuranSpeedPicker() {
         if (next >= 0) { event.preventDefault(); focusOption(options[next]); }
     });
     document.addEventListener('pointerdown', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranSpeedPicker(); });
-    document.addEventListener('focusin', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranSpeedPicker(); });
-    document.addEventListener('scroll', event => { if (!panel.contains(event.target)) closeQuranSpeedPicker(); }, true);
     window.addEventListener('resize', position);
     window.visualViewport?.addEventListener('resize', position);
 }
@@ -2236,6 +2241,7 @@ function bindQuranPlayer() {
         syncQuranSpeedPicker();
     });
     initQuranSpeedPicker();
+    bindQuranReaderMoreMenu();
     audios.forEach(audio => {
         audio.addEventListener('playing', () => {
             if (audio === getQuranReaderActiveAudio() && document.getElementById('quran-reader-status')?.classList.contains('is-error')) {
@@ -2600,6 +2606,7 @@ window.closeQuranReader = function () {
     closeQuranSpeedPicker();
     closeQuranSurahPicker();
     closeQuranReciterPicker();
+    closeQuranReaderMoreMenu();
     getQuranReaderActiveAudio()?.pause();
     quranReaderState.standbyAudio?.pause();
     setQuranReaderTriggerState(false);
@@ -4186,8 +4193,7 @@ window.toggleAdhanPicker = function () {
         const position = () => positionQuranPicker(panel, document.getElementById('adhan-picker-trigger'), 350);
         let typed = '', typedAt = 0;
         panel.addEventListener('keydown', event => {
-            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeAdhanPicker(true); return; }
-            if (event.key === 'Tab') { closeAdhanPicker(true); return; }
+            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
             const options = [...panel.querySelectorAll('[role="option"]')];
             if (!options.length) return;
             const index = options.indexOf(document.activeElement);
@@ -4203,8 +4209,6 @@ window.toggleAdhanPicker = function () {
             if (next >= 0) { event.preventDefault(); focusAdhanOption(options[next]); }
         });
         document.addEventListener('pointerdown', event => { if (!panel.contains(event.target) && !document.getElementById('adhan-picker-trigger')?.contains(event.target)) closeAdhanPicker(); });
-        document.addEventListener('focusin', event => { if (!panel.contains(event.target) && !document.getElementById('adhan-picker-trigger')?.contains(event.target)) closeAdhanPicker(); });
-        document.addEventListener('scroll', event => { if (!panel.contains(event.target)) closeAdhanPicker(); }, true);
         window.addEventListener('resize', position);
         window.visualViewport?.addEventListener('resize', position);
     }
@@ -4221,10 +4225,9 @@ window.toggleAdhanPicker = function () {
         copy.append(name, location);
         const check = document.createElement('span'); check.className = 'quran-reciter-check'; check.textContent = '✓'; check.setAttribute('aria-hidden', 'true');
         option.append(createAdhanVoiceAvatar(adhan), copy, check);
-        option.addEventListener('click', () => { window.setAdhanSelection(adhan.id); closeAdhanPicker(true); });
+        option.addEventListener('click', () => { window.setAdhanSelection(adhan.id); syncAdhanPicker(); });
         list.append(option);
     });
-    closeQuranSurahPicker(); closeQuranReciterPicker();
     panel.hidden = false; trigger.setAttribute('aria-expanded', 'true');
     positionQuranPicker(panel, trigger, 350);
     focusAdhanOption(list.querySelector('[aria-selected="true"]') || list.firstElementChild);
@@ -5896,7 +5899,7 @@ function syncDuaCategoryPicker() {
             option.addEventListener('click', () => {
                 select.value = item.value;
                 window.filterDuaBySelect();
-                close(true);
+                syncDuaCategoryPicker();
             });
             list.append(option);
         }
@@ -5915,8 +5918,7 @@ function syncDuaCategoryPicker() {
         });
         let typed = '', typedAt = 0;
         panel.addEventListener('keydown', event => {
-            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(true); return; }
-            if (event.key === 'Tab') { close(true); return; }
+            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
             const options = [...list.children];
             const index = options.indexOf(document.activeElement);
             let next = -1;
@@ -5932,9 +5934,7 @@ function syncDuaCategoryPicker() {
             if (next >= 0) { event.preventDefault(); options[next].focus({ preventScroll: true }); options[next].scrollIntoView({ block: 'nearest' }); }
         });
         document.addEventListener('pointerdown', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) close(); });
-        document.addEventListener('focusin', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) close(); });
-        document.addEventListener('scroll', event => { if (!panel.contains(event.target)) close(); }, true);
-        window.addEventListener('resize', () => close());
+        window.addEventListener('resize', () => { if (!panel.hidden) positionQuranPicker(panel, trigger, 300); });
     }
     trigger.textContent = select.selectedOptions[0]?.textContent || 'All Categories';
     trigger.setAttribute('aria-label', `Choose a dua category: ${trigger.textContent}`);

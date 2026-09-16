@@ -36522,3 +36522,384 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
     font-size: 0.72rem;
   }
 }
+
+/* Balanced dropdown tightening: compact enough to save space, large enough to keep every feature visible. */
+:is(#tab-settings .lang-select, .glass-select, .tasbih-select, #schedule-card .alarm-select-shell, .quran-reader-player-surah, .quran-reader-player-reciter, .quran-reader-toolbar .quran-reader-more.quran-reader-toolbar-segment) {
+  min-height: 42px;
+  border-radius: 17px;
+}
+
+:is(#tab-settings .lang-select, .glass-select, .tasbih-select) {
+  padding-block: 4px;
+  font-size: 0.76rem;
+  line-height: 1.2;
+}
+
+#tab-settings .lang-select {
+  min-height: 42px;
+  padding: 4px 34px 4px 14px;
+}
+
+#tab-duas .glass-select,
+#dua-category-trigger {
+  min-height: 42px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#schedule-card .alarm-controls-row,
+#schedule-card .alarm-select-shell,
+.tasbih-select-wrap {
+  min-height: 42px;
+  height: 42px;
+}
+
+#schedule-card .alarm-preview-button {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+}
+
+#schedule-card .adhan-picker-trigger {
+  gap: 6px;
+  min-height: 40px;
+  padding-inline: 10px 12px;
+}
+
+.quran-reader-toolbar-shell {
+  min-height: 50px;
+  gap: 5px;
+  padding: 5px;
+}
+
+.quran-reader-toolbar .quran-reciter-trigger,
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  min-height: 38px;
+  padding: 4px 10px 4px 6px;
+  gap: 7px;
+  font-size: 0.74rem;
+}
+
+.quran-reader-toolbar .quran-reader-more>summary,
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more[open]>summary,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.quran-reader-toolbar .quran-reciter-avatar,
+.quran-reciter-avatar {
+  width: 30px;
+  height: 30px;
+  flex-basis: 30px;
+}
+
+.quran-surah-badge {
+  min-width: 31px;
+  height: 31px;
+  padding-inline: 7px;
+  font-size: 0.7rem;
+}
+
+.quran-reciter-picker,
+.quran-reader-more-panel {
+  width: min(276px, calc(100vw - 26px));
+  max-height: min(400px, calc(100dvh - 96px));
+  padding: 6px;
+  border-radius: 20px;
+}
+
+.quran-reciter-picker-heading,
+.quran-reader-more-panel .quran-reader-preferences>span {
+  padding: 7px 10px 6px;
+  font-size: 0.7rem;
+  line-height: 1.16;
+}
+
+#quran-reciter-list,
+#quran-surah-list,
+#quran-speed-list,
+#adhan-voice-list,
+#dua-category-list {
+  padding: 2px;
+}
+
+.quran-reciter-option,
+#dua-category-list .quran-reciter-option,
+#quran-speed-list .quran-reciter-option {
+  min-height: 48px;
+  margin-bottom: 2px;
+  padding: 6px 9px;
+  gap: 9px;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  line-height: 1.26;
+}
+
+.quran-reciter-option .quran-reciter-avatar,
+#adhan-voice-list .quran-reciter-option .quran-reciter-avatar {
+  width: 36px;
+  height: 36px;
+  flex-basis: 36px;
+}
+
+.quran-reciter-option .quran-reciter-name {
+  line-height: 1.3;
+}
+
+#quran-surah-picker .quran-surah-search {
+  min-height: 40px;
+  margin: 0 0 5px;
+  padding: 6px 9px;
+  border-radius: 14px;
+}
+
+#quran-surah-picker .quran-surah-search input {
+  min-height: 28px;
+  font-size: 0.75rem;
+}
+
+.quran-reader-more-panel {
+  width: min(260px, calc(100vw - 26px));
+}
+
+.quran-reader-more-panel .quran-reader-preferences {
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.quran-reader-more-panel .quran-reader-preferences label {
+  min-height: 35px;
+  padding: 5px 8px;
+  gap: 7px;
+  border-radius: 13px;
+  font-size: 0.75rem;
+  line-height: 1.14;
+}
+
+.quran-reader-more-panel .quran-reader-preferences input {
+  width: 15px;
+  height: 15px;
+}
+
+.quran-reader-more-panel .quran-reader-numbering-heading {
+  margin-top: 2px;
+  padding-top: 6px !important;
+}
+
+@media (max-width: 599px) {
+  :is(#tab-settings .lang-select, .glass-select, .tasbih-select, #schedule-card .alarm-select-shell, .quran-reader-player-surah, .quran-reader-player-reciter, .quran-reader-toolbar .quran-reader-more.quran-reader-toolbar-segment) {
+    min-height: 40px;
+  }
+
+  .quran-reader-toolbar-shell {
+    min-height: 46px;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .quran-reader-toolbar .quran-reciter-trigger,
+  .quran-reader-toolbar .quran-reader-more>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:hover,
+  .quran-reader-toolbar .quran-reader-more[open]>summary,
+  .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
+    min-height: 36px;
+    padding: 3px 8px 3px 5px;
+    gap: 5px;
+    font-size: 0.7rem;
+  }
+
+  .quran-reader-toolbar .quran-reciter-avatar,
+  .quran-reciter-avatar {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+
+  .quran-surah-badge {
+    min-width: 30px;
+    height: 30px;
+    padding-inline: 6px;
+    font-size: 0.67rem;
+  }
+
+  .quran-reciter-picker,
+  .quran-reader-more-panel {
+    width: min(252px, calc(100vw - 20px));
+    max-height: min(370px, calc(100dvh - 88px));
+    padding: 5px;
+  }
+
+  .quran-reciter-option,
+  #dua-category-list .quran-reciter-option,
+  #quran-speed-list .quran-reciter-option {
+    min-height: 44px;
+    padding: 5px 8px;
+    gap: 8px;
+    font-size: 0.74rem;
+  }
+
+  .quran-reciter-option .quran-reciter-avatar,
+  #adhan-voice-list .quran-reciter-option .quran-reciter-avatar {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+  }
+
+  .quran-reader-more-panel .quran-reader-preferences label {
+    min-height: 33px;
+    padding: 4px 7px;
+    font-size: 0.72rem;
+  }
+}
+
+/* Qur'an Reader More menu: balanced-tight spacing to match the refined dropdown rhythm. */
+.quran-reader-toolbar .quran-reader-more-panel {
+  width: min(244px, calc(100vw - 24px));
+  max-height: min(372px, calc(100dvh - 92px));
+  padding: 4px 5px;
+  border-radius: 17px;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences {
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences>span,
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-numbering-heading {
+  padding: 3px 9px 2px;
+  font-size: 0.69rem;
+  line-height: 1.08;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-numbering-heading {
+  margin-top: 1px;
+  padding-top: 4px !important;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences label {
+  min-height: 29px;
+  padding: 2px 8px;
+  gap: 7px;
+  border-radius: 11px;
+  font-size: 0.73rem;
+  line-height: 1.08;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences input {
+  width: 15px;
+  height: 15px;
+}
+
+@media (max-width: 599px) {
+  .quran-reader-toolbar .quran-reader-more-panel {
+    width: min(236px, calc(100vw - 18px));
+    max-height: min(352px, calc(100dvh - 84px));
+    padding: 4px;
+  }
+
+  .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences label {
+    min-height: 28px;
+    padding: 2px 7px;
+    font-size: 0.71rem;
+  }
+}
+
+/* Surah picker polish: slimmer search field and clearer numbering badges. */
+#quran-surah-picker .quran-surah-search {
+  min-height: 34px;
+  height: 34px;
+  margin: 0 0 4px;
+  padding: 3px 8px;
+  gap: 7px;
+  border-radius: 13px;
+}
+
+#quran-surah-search,
+#quran-surah-picker .quran-surah-search input {
+  height: 26px;
+  min-height: 26px;
+  font-size: 0.74rem;
+  line-height: 1;
+}
+
+#quran-surah-search::placeholder {
+  font-size: 0.74rem;
+}
+
+#quran-surah-list .quran-surah-badge,
+#quran-surah-picker .quran-surah-badge {
+  min-width: 34px;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  padding: 0;
+  border: 1px solid rgba(148, 107, 25, 0.34);
+  border-radius: 50%;
+  color: #8a6116;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.9), transparent 42%),
+    linear-gradient(145deg, #fff8db, #e8f4ed);
+  box-shadow:
+    0 5px 12px rgba(148, 107, 25, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  font-size: 0.74rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+#quran-surah-list .quran-reciter-option[aria-selected="true"] .quran-surah-badge,
+#quran-surah-list .quran-reciter-option:hover .quran-surah-badge {
+  border-color: rgba(8, 120, 87, 0.42);
+  color: #0f6a50;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.95), transparent 42%),
+    linear-gradient(145deg, #f4f7df, #d9f1e5);
+}
+
+body.dark-mode #quran-surah-list .quran-surah-badge,
+body.dark-mode #quran-surah-picker .quran-surah-badge {
+  border-color: rgba(245, 215, 125, 0.28);
+  color: #f6d980;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.08), transparent 42%),
+    linear-gradient(145deg, rgba(99, 75, 26, 0.5), rgba(23, 74, 55, 0.48));
+  box-shadow:
+    0 5px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 599px) {
+  #quran-surah-picker .quran-surah-search {
+    min-height: 32px;
+    height: 32px;
+    padding-block: 2px;
+  }
+
+  #quran-surah-search,
+  #quran-surah-picker .quran-surah-search input {
+    height: 24px;
+    min-height: 24px;
+    font-size: 0.72rem;
+  }
+
+  #quran-surah-list .quran-surah-badge,
+  #quran-surah-picker .quran-surah-badge {
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    font-size: 0.7rem;
+  }
+}
