@@ -37471,3 +37471,33 @@ body.dark-mode #quran-surah-picker .quran-surah-badge {
     font-size: 0.82rem;
   }
 }
+
+/* Surah selector panel: number badges match reciter profile avatar size. */
+#quran-surah-list .quran-surah-badge {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 599px) {
+  #quran-surah-list .quran-surah-badge {
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    font-size: 0.82rem;
+  }
+}
+
+/* Keep Surah selector panel numbering consistent on phone and desktop. */
+@media (max-width: 599px) {
+  #quran-surah-list .quran-surah-badge {
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+    font-size: 0.9rem;
+  }
+}
