@@ -37366,52 +37366,32 @@ body.dark-mode #tab-quran-reader .quran-reader-premium-emblem .quran-reader-embl
   }
 }
 
-/* Qur'an selector panels: give Surah numerals and reciter portraits a little more presence. */
-#quran-surah-picker .quran-surah-badge {
-  min-width: 38px;
-  width: 38px;
-  height: 38px;
-  flex-basis: 38px;
-  font-size: 0.78rem;
-}
-
-#quran-reciter-picker .quran-reciter-option,
-#quran-surah-picker .quran-reciter-option {
-  min-height: 52px;
-}
-
-#quran-reciter-picker .quran-reciter-option .quran-reciter-avatar {
-  width: 40px;
-  height: 40px;
-  flex-basis: 40px;
-}
-
+/* Mobile selector controls: let the active Surah and reciter marks fill their panels with an even inset. */
 @media (max-width: 599px) {
-  #quran-reciter-picker,
-  #quran-surah-picker {
-    width: min(276px, calc(100vw - 20px));
-    padding: 6px;
+  #tab-quran-reader .quran-reader-toolbar-shell {
+    min-height: 50px;
+    padding: 4px;
+    gap: 4px;
   }
 
-  #quran-surah-picker .quran-surah-badge {
-    min-width: 38px;
-    width: 38px;
-    height: 38px;
-    flex-basis: 38px;
-    font-size: 0.78rem;
+  #tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger {
+    min-height: 42px;
+    padding: 4px 8px 4px 5px;
+    gap: 6px;
   }
 
-  #quran-reciter-picker .quran-reciter-option,
-  #quran-surah-picker .quran-reciter-option {
-    min-height: 52px;
-    padding: 6px 9px;
-    gap: 9px;
-    font-size: 0.78rem;
+  #tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
+    min-width: 34px;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    padding: 0;
+    font-size: 0.72rem;
   }
 
-  #quran-reciter-picker .quran-reciter-option .quran-reciter-avatar {
-    width: 40px;
-    height: 40px;
-    flex-basis: 40px;
+  #tab-quran-reader #quran-reciter-selected-avatar.quran-reciter-avatar {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
   }
 }
