@@ -32878,19 +32878,22 @@ body.dark-mode .quran-reciter-check {
   display: grid;
   gap: 11px;
   padding: 18px 19px;
-  border: 1px solid rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(18, 104, 77, 0.24);
   border-radius: var(--radius-lg);
   color: inherit;
   background:
-    radial-gradient(circle at 100% 0, rgba(11, 107, 80, 0.07), transparent 34%),
+    radial-gradient(circle at 100% 0, rgba(11, 107, 80, 0.1), transparent 34%),
     linear-gradient(145deg,
-      rgba(255, 255, 255, 0.94),
-      rgba(249, 252, 250, 0.82));
+      rgba(255, 255, 255, 0.96),
+      rgba(249, 252, 250, 0.88));
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
+  box-shadow:
+    0 16px 34px rgba(23, 66, 52, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.68),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -32903,9 +32906,10 @@ body.dark-mode .quran-reciter-check {
 
 .quran-reader-verse:hover,
 .quran-reader-verse:focus-visible {
-  border-color: rgba(8, 145, 178, 0.34);
+  border-color: rgba(9, 128, 93, 0.3);
   box-shadow:
-    0 16px 34px rgba(8, 145, 178, 0.11),
+    0 18px 38px rgba(23, 66, 52, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.78),
     inset 0 1px 0 rgba(255, 255, 255, 0.94);
   outline: none;
   transform: translateY(-3px);
@@ -32944,13 +32948,15 @@ body.dark-mode .quran-reciter-check {
 .quran-reader-arabic {
   margin: 0;
   padding: 15px 17px;
-  border: 1px solid rgba(11, 107, 80, 0.1);
+  border: 1px solid rgba(18, 104, 77, 0.2);
   border-radius: 18px;
   color: #103b2f;
   background: linear-gradient(145deg,
-      rgba(237, 248, 242, 0.94),
-      rgba(255, 252, 242, 0.9));
+      rgba(237, 248, 242, 0.98),
+      rgba(255, 252, 242, 0.94));
   box-shadow:
+    0 8px 20px rgba(47, 81, 64, 0.075),
+    0 0 0 1px rgba(255, 255, 255, 0.62),
     inset 0 1px 0 rgba(255, 255, 255, 0.88),
     inset 0 0 24px rgba(11, 107, 80, 0.035);
   font-family: "Noto Naskh Arabic", "Amiri", serif;
@@ -33130,9 +33136,11 @@ body.dark-mode.hide-trans.hide-eng .quran-reader-verse .quran-reader-arabic.is-a
 .quran-reader-transliteration {
   margin: 0;
   padding: 0 2px;
-  color: #397361;
+  color: #168563;
   font-size: 0.83rem;
+  font-weight: 680;
   font-style: italic;
+  letter-spacing: 0.004em;
   line-height: 1.6;
 }
 
@@ -33399,18 +33407,21 @@ body.dark-mode .quran-reader-current-surah p {
 }
 
 body.dark-mode .quran-reader-verse {
-  border-color: rgba(255, 255, 255, 0.11);
+  border-color: rgba(52, 211, 153, 0.22);
   background:
-    radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.1), transparent 34%),
-    linear-gradient(145deg, rgba(16, 39, 31, 0.96), rgba(7, 24, 18, 0.92));
-  box-shadow: var(--frost-shadow);
+    radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.14), transparent 34%),
+    linear-gradient(145deg, rgba(16, 39, 31, 0.98), rgba(7, 24, 18, 0.94));
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
 body.dark-mode .quran-reader-verse:hover,
 body.dark-mode .quran-reader-verse:focus-visible {
-  border-color: rgba(34, 211, 238, 0.28);
+  border-color: rgba(52, 211, 153, 0.3);
   background: linear-gradient(145deg,
-      rgba(6, 182, 212, 0.13),
+      rgba(52, 211, 153, 0.13),
       rgba(255, 255, 255, 0.045));
   box-shadow:
     0 16px 34px rgba(0, 0, 0, 0.28),
@@ -33436,16 +33447,20 @@ body.dark-mode .quran-reader-ayah-number {
 }
 
 body.dark-mode .quran-reader-arabic {
-  border-color: rgba(255, 255, 255, 0.11);
+  border-color: rgba(52, 211, 153, 0.16);
   color: #f4f4f5;
   background: linear-gradient(145deg,
       rgba(51, 51, 55, 0.86),
       rgba(22, 22, 24, 0.88));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 body.dark-mode .quran-reader-transliteration {
-  color: #a7dfc4;
+  color: #34d399;
+  font-weight: 700;
 }
 
 body.dark-mode .quran-reader-translation {
