@@ -37365,3 +37365,44 @@ body.dark-mode #tab-quran-reader .quran-reader-premium-emblem .quran-reader-embl
     font-size: 0.42rem;
   }
 }
+
+/* Qur'an selector panels: give Surah numerals and reciter portraits a little more presence. */
+#quran-surah-picker .quran-surah-badge {
+  min-width: 38px;
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
+  font-size: 0.78rem;
+}
+
+#quran-reciter-picker .quran-reciter-option,
+#quran-surah-picker .quran-reciter-option {
+  min-height: 52px;
+}
+
+#quran-reciter-picker .quran-reciter-option .quran-reciter-avatar {
+  width: 40px;
+  height: 40px;
+  flex-basis: 40px;
+}
+
+@media (max-width: 599px) {
+  #quran-surah-picker .quran-surah-badge {
+    min-width: 35px;
+    width: 35px;
+    height: 35px;
+    flex-basis: 35px;
+    font-size: 0.73rem;
+  }
+
+  #quran-reciter-picker .quran-reciter-option,
+  #quran-surah-picker .quran-reciter-option {
+    min-height: 48px;
+  }
+
+  #quran-reciter-picker .quran-reciter-option .quran-reciter-avatar {
+    width: 35px;
+    height: 35px;
+    flex-basis: 35px;
+  }
+}
