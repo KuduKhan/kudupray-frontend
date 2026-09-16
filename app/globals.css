@@ -35587,8 +35587,10 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   box-sizing: border-box;
   width: calc(100% - 10px);
   height: calc(100% - 10px);
+  min-height: 0;
   margin: 5px;
   padding: 0 10px;
+  border-radius: 12px;
 }
 
 @media (max-width: 599px) {
@@ -35599,8 +35601,10 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
     width: calc(100% - 8px);
     height: calc(100% - 8px);
+    min-height: 0;
     margin: 4px;
     padding: 0 8px;
+    border-radius: 10px;
   }
 }
 
