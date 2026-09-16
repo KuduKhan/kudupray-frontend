@@ -36543,3 +36543,122 @@ body.dark-mode #schedule-card .adhan-picker-trigger>i {
     border-radius: 9px !important;
   }
 }
+
+/* Final breathing-room pass: nav icons and labels fit as separate, padded layers. */
+#primary-navigation .nav-item,
+#primary-navigation .nav-item.active,
+#primary-navigation .nav-item[aria-current="page"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px !important;
+  min-height: 64px;
+  padding: 7px 8px !important;
+}
+
+#primary-navigation .nav-item .nav-tile,
+#primary-navigation .nav-item.active .nav-tile,
+#primary-navigation .nav-item[aria-current="page"] .nav-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+#primary-navigation .nav-item .nav-tile i,
+#primary-navigation .nav-item.active .nav-tile i,
+#primary-navigation .nav-item[aria-current="page"] .nav-tile i {
+  width: 38px !important;
+  height: 36px !important;
+  border-radius: 12px !important;
+}
+
+#primary-navigation .nav-item span,
+#primary-navigation .nav-item.active span,
+#primary-navigation .nav-item[aria-current="page"] span {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#schedule-card .alarm-select-shell,
+#schedule-card .alarm-select-shell:hover,
+#schedule-card .alarm-select-shell:focus-within {
+  border-color: rgba(167, 243, 208, 0.36);
+  background:
+    linear-gradient(145deg,
+      rgba(16, 185, 129, 0.18),
+      rgba(4, 120, 87, 0.12));
+  box-shadow:
+    0 4px 12px rgba(2, 44, 34, 0.12),
+    inset 0 1px 0 rgba(209, 250, 229, 0.18);
+}
+
+#schedule-card .adhan-picker-trigger,
+#schedule-card .adhan-picker-trigger:hover,
+#schedule-card .adhan-picker-trigger:focus-visible {
+  color: #ecfdf5;
+}
+
+#schedule-card .alarm-search-icon,
+#schedule-card .alarm-select-arrow,
+#schedule-card .adhan-picker-trigger>i {
+  color: rgba(209, 250, 229, 0.84);
+}
+
+@media (max-width: 599px) {
+  #primary-navigation.floating-nav {
+    padding: 6px 5px !important;
+    gap: 3px !important;
+  }
+
+  #primary-navigation .nav-item,
+  #primary-navigation .nav-item.active,
+  #primary-navigation .nav-item[aria-current="page"] {
+    height: 62px;
+    min-height: 62px;
+    gap: 3px !important;
+    padding: 6px 2px 5px !important;
+  }
+
+  #primary-navigation .nav-item .nav-tile i,
+  #primary-navigation .nav-item.active .nav-tile i,
+  #primary-navigation .nav-item[aria-current="page"] .nav-tile i {
+    width: 32px !important;
+    height: 31px !important;
+    border-radius: 10px !important;
+  }
+
+  #primary-navigation .nav-item span,
+  #primary-navigation .nav-item.active span,
+  #primary-navigation .nav-item[aria-current="page"] span {
+    font-size: clamp(0.39rem, 1.52vw, 0.5rem);
+    line-height: 1;
+  }
+}
+
+@media (max-width: 360px) {
+  #primary-navigation .nav-item,
+  #primary-navigation .nav-item.active,
+  #primary-navigation .nav-item[aria-current="page"] {
+    height: 60px;
+    min-height: 60px;
+    padding-block: 5px !important;
+  }
+
+  #primary-navigation .nav-item .nav-tile i,
+  #primary-navigation .nav-item.active .nav-tile i,
+  #primary-navigation .nav-item[aria-current="page"] .nav-tile i {
+    width: 30px !important;
+    height: 29px !important;
+    border-radius: 9px !important;
+  }
+
+  #primary-navigation .nav-item span,
+  #primary-navigation .nav-item.active span,
+  #primary-navigation .nav-item[aria-current="page"] span {
+    font-size: clamp(0.36rem, 1.43vw, 0.46rem);
+  }
+}
