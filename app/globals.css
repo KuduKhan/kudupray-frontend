@@ -36445,3 +36445,101 @@ body.dark-mode #primary-navigation .nav-item[aria-current="page"] .nav-tile i {
     height: 28px !important;
   }
 }
+
+/* Final fit pass: rounded-square nav icons, no active underline, calm Adhan selector. */
+#primary-navigation .nav-item::after,
+#primary-navigation .nav-item.active::after,
+#primary-navigation .nav-item[aria-current="page"]::after {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+#primary-navigation .nav-item .nav-tile i,
+#primary-navigation .nav-item.active .nav-tile i,
+#primary-navigation .nav-item[aria-current="page"] .nav-tile i {
+  border-radius: 11px !important;
+}
+
+#primary-navigation .nav-item span,
+#primary-navigation .nav-item.active span,
+#primary-navigation .nav-item[aria-current="page"] span {
+  display: block;
+  overflow: visible;
+  text-overflow: clip;
+  font-size: clamp(0.54rem, 0.72vw, 0.6rem);
+  letter-spacing: 0;
+}
+
+#schedule-card .alarm-select-shell,
+#schedule-card .alarm-select-shell:hover,
+#schedule-card .alarm-select-shell:focus-within {
+  border-color: rgba(4, 120, 87, 0.18);
+  background: rgba(255, 255, 255, 0.64);
+  box-shadow:
+    0 4px 12px rgba(6, 78, 59, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+#schedule-card .adhan-picker-trigger,
+#schedule-card .adhan-picker-trigger:hover,
+#schedule-card .adhan-picker-trigger:focus-visible {
+  color: #174c3b;
+  outline: none;
+  box-shadow: none;
+}
+
+#schedule-card .alarm-search-icon,
+#schedule-card .alarm-select-arrow,
+#schedule-card .adhan-picker-trigger>i {
+  color: rgba(15, 94, 71, 0.72);
+}
+
+body.dark-mode #schedule-card .alarm-select-shell,
+body.dark-mode #schedule-card .alarm-select-shell:hover,
+body.dark-mode #schedule-card .alarm-select-shell:focus-within {
+  border-color: rgba(167, 243, 208, 0.14);
+  background: rgba(15, 38, 29, 0.66);
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode #schedule-card .adhan-picker-trigger,
+body.dark-mode #schedule-card .adhan-picker-trigger:hover,
+body.dark-mode #schedule-card .adhan-picker-trigger:focus-visible {
+  color: #e8fff5;
+}
+
+body.dark-mode #schedule-card .alarm-search-icon,
+body.dark-mode #schedule-card .alarm-select-arrow,
+body.dark-mode #schedule-card .adhan-picker-trigger>i {
+  color: rgba(209, 250, 229, 0.72);
+}
+
+@media (max-width: 599px) {
+  #primary-navigation .nav-item .nav-tile i,
+  #primary-navigation .nav-item.active .nav-tile i,
+  #primary-navigation .nav-item[aria-current="page"] .nav-tile i {
+    border-radius: 10px !important;
+  }
+
+  #primary-navigation .nav-item span,
+  #primary-navigation .nav-item.active span,
+  #primary-navigation .nav-item[aria-current="page"] span {
+    font-size: clamp(0.43rem, 1.75vw, 0.53rem);
+  }
+}
+
+@media (max-width: 360px) {
+  #primary-navigation .nav-item span,
+  #primary-navigation .nav-item.active span,
+  #primary-navigation .nav-item[aria-current="page"] span {
+    font-size: clamp(0.39rem, 1.65vw, 0.48rem);
+  }
+
+  #primary-navigation .nav-item .nav-tile i,
+  #primary-navigation .nav-item.active .nav-tile i,
+  #primary-navigation .nav-item[aria-current="page"] .nav-tile i {
+    border-radius: 9px !important;
+  }
+}
