@@ -33903,6 +33903,174 @@ body.dark-mode .quran-reader-empty {
   }
 }
 
+/* Refined More trigger: calm, tactile, and consistent with the round selector controls. */
+.quran-reader-toolbar .quran-reader-more {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.quran-reader-toolbar .quran-reader-more>summary {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  height: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(8, 145, 178, 0.18);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(240, 250, 252, 0.82));
+  color: var(--text-main);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96), 0 5px 14px rgba(7, 60, 49, 0.08);
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  list-style: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
+}
+
+.quran-reader-toolbar .quran-reader-more>summary::-webkit-details-marker {
+  display: none;
+}
+
+.quran-reader-toolbar .quran-reader-more>summary i {
+  font-size: 0.74rem;
+  opacity: 0.9;
+}
+
+.quran-reader-toolbar .quran-reader-more>summary:hover,
+.quran-reader-toolbar .quran-reader-more>summary:focus-visible,
+.quran-reader-toolbar .quran-reader-more[open]>summary {
+  border-color: rgba(8, 145, 178, 0.38);
+  background: linear-gradient(180deg, rgba(236, 254, 255, 0.98), rgba(220, 247, 255, 0.9));
+  color: #0a6a7c;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96), 0 0 0 3px rgba(8, 145, 178, 0.08), 0 8px 18px rgba(8, 145, 178, 0.12);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.quran-reader-toolbar .quran-reader-more[open]>summary {
+  border-color: rgba(8, 145, 178, 0.5);
+}
+
+.quran-reader-toolbar .quran-reader-more-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 100;
+  width: min(292px, calc(100vw - 34px));
+  padding: 7px;
+  border: 1px solid rgba(8, 145, 178, 0.15);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.98);
+  color: #163d30;
+  box-shadow: 0 18px 42px rgba(6, 40, 28, 0.18), 0 5px 16px rgba(6, 40, 28, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.quran-reader-more-panel .quran-reader-preferences {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.quran-reader-more-panel .quran-reader-preferences>span {
+  padding: 8px 12px 6px;
+  color: #526e62;
+  font-size: 0.71rem;
+  font-weight: 750;
+}
+
+.quran-reader-more-panel .quran-reader-preferences label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.quran-reader-more-panel .quran-reader-preferences label:hover,
+.quran-reader-more-panel .quran-reader-preferences label:focus-within {
+  border-color: rgba(8, 145, 178, 0.18);
+  background: rgba(8, 145, 178, 0.04);
+  transform: translateY(-1px);
+}
+
+.quran-reader-more-panel .quran-reader-preferences input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #087654;
+}
+
+.quran-reader-more-panel .quran-reader-numbering-heading {
+  margin-top: 4px;
+  padding-top: 9px !important;
+  border-top: 1px solid rgba(7, 60, 49, 0.08);
+}
+
+.quran-reader-more-panel .quran-reader-preferences>label:last-child {
+  grid-column: 1 / -1;
+}
+
+body.dark-mode .quran-reader-toolbar .quran-reader-more>summary {
+  border-color: rgba(107, 229, 192, 0.18);
+  background: linear-gradient(180deg, rgba(18, 44, 35, 0.92), rgba(14, 31, 25, 0.9));
+  color: #dffaf0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 5px 14px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:hover,
+body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible,
+body.dark-mode .quran-reader-toolbar .quran-reader-more[open]>summary {
+  border-color: rgba(110, 231, 183, 0.34);
+  background: linear-gradient(180deg, rgba(19, 62, 48, 0.96), rgba(12, 40, 31, 0.94));
+  color: #baf7da;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 3px rgba(110, 231, 183, 0.08), 0 8px 18px rgba(0, 0, 0, 0.24);
+}
+
+body.dark-mode .quran-reader-more-panel {
+  background: rgba(16, 41, 31, 0.98);
+  color: #e5f2ec;
+  border-color: rgba(110, 231, 183, 0.18);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.44), 0 5px 16px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences>span {
+  color: #a9c3b8;
+}
+
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:hover,
+body.dark-mode .quran-reader-more-panel .quran-reader-preferences label:focus-within {
+  background: rgba(110, 231, 183, 0.08);
+  border-color: rgba(110, 231, 183, 0.18);
+}
+
+@media (max-width: 599px) {
+  .quran-reader-toolbar .quran-reader-more>summary {
+    min-height: 38px;
+    padding: 0 10px;
+    gap: 5px;
+    font-size: 0.67rem;
+  }
+
+  .quran-reader-toolbar .quran-reader-more-panel {
+    width: min(260px, calc(100vw - 24px));
+    right: 0;
+  }
+}
+
 /* Brand and navigation contrast: calm surfaces with clear dark-theme legibility. */
 .brand-logo-mark {
   overflow: hidden;
