@@ -36662,3 +36662,113 @@ body.dark-mode #schedule-card .adhan-picker-trigger>i {
     font-size: clamp(0.36rem, 1.43vw, 0.46rem);
   }
 }
+
+/* Shared-player navbar: one continuous padded surface, with transparent menu controls inside it. */
+#primary-navigation.floating-nav {
+  padding: 9px 11px !important;
+  gap: 4px !important;
+}
+
+#primary-navigation.floating-nav::before {
+  inset: 4px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    inset 0 0 0 1px rgba(19, 105, 76, 0.07);
+}
+
+#primary-navigation .nav-item,
+#primary-navigation .nav-item.active,
+#primary-navigation .nav-item[aria-current="page"] {
+  min-height: 62px;
+  padding: 6px 6px !important;
+  border-radius: 18px !important;
+  background: transparent !important;
+}
+
+#primary-navigation .nav-item::before,
+#primary-navigation .nav-item.active::before,
+#primary-navigation .nav-item[aria-current="page"]::before {
+  display: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#primary-navigation .nav-item .nav-tile,
+#primary-navigation .nav-item.active .nav-tile,
+#primary-navigation .nav-item[aria-current="page"] .nav-tile {
+  flex: 0 0 auto;
+}
+
+#primary-navigation .nav-item span,
+#primary-navigation .nav-item.active span,
+#primary-navigation .nav-item[aria-current="page"] span {
+  flex: 0 0 auto;
+  font-size: clamp(0.52rem, 0.68vw, 0.59rem);
+  line-height: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #primary-navigation .nav-item:not(.active):not([aria-current="page"]):hover {
+    background: rgba(255, 255, 255, 0.28) !important;
+    box-shadow: inset 0 0 0 1px rgba(19, 105, 76, 0.08) !important;
+  }
+}
+
+body.dark-mode #primary-navigation.floating-nav::before {
+  background: rgba(151, 219, 184, 0.045);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(167, 243, 208, 0.07);
+}
+
+@media (max-width: 599px) {
+  #primary-navigation.floating-nav {
+    padding: 7px 6px !important;
+    gap: 1px !important;
+  }
+
+  #primary-navigation.floating-nav::before {
+    inset: 3px;
+    border-radius: 22px;
+  }
+
+  #primary-navigation .nav-item,
+  #primary-navigation .nav-item.active,
+  #primary-navigation .nav-item[aria-current="page"] {
+    height: 60px;
+    min-height: 60px;
+    gap: 4px !important;
+    padding: 5px 1px !important;
+  }
+
+  #primary-navigation .nav-item span,
+  #primary-navigation .nav-item.active span,
+  #primary-navigation .nav-item[aria-current="page"] span {
+    font-size: clamp(0.38rem, 1.42vw, 0.49rem);
+    line-height: 1;
+  }
+}
+
+@media (max-width: 360px) {
+  #primary-navigation.floating-nav {
+    padding: 6px 4px !important;
+    gap: 0 !important;
+  }
+
+  #primary-navigation .nav-item,
+  #primary-navigation .nav-item.active,
+  #primary-navigation .nav-item[aria-current="page"] {
+    height: 58px;
+    min-height: 58px;
+    gap: 3px !important;
+    padding-inline: 0 !important;
+  }
+
+  #primary-navigation .nav-item span,
+  #primary-navigation .nav-item.active span,
+  #primary-navigation .nav-item[aria-current="page"] span {
+    font-size: clamp(0.35rem, 1.35vw, 0.45rem);
+  }
+}
