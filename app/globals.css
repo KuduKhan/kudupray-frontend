@@ -35647,6 +35647,41 @@ body.dark-mode .quran-reader-toolbar .quran-reader-more>summary:focus-visible {
   text-align: right;
 }
 
+/* Give the navigation dock the Qur'an player's double-padding rhythm. */
+.floating-nav {
+  box-sizing: border-box;
+  padding: 6px;
+  gap: 6px;
+}
+
+.floating-nav .nav-item {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 5px 6px;
+}
+
+@media (max-width: 599px) {
+  .floating-nav {
+    padding: 5px;
+    gap: 4px;
+  }
+
+  .floating-nav .nav-item {
+    padding: 4px 3px 5px;
+  }
+}
+
+@media (max-width: 350px) {
+  .floating-nav {
+    padding: 4px 3px;
+    gap: 3px;
+  }
+
+  .floating-nav .nav-item {
+    padding-inline: 2px;
+  }
+}
+
 @media (max-width: 599px) {
   .quran-reader-current-surah {
     text-align: right;
