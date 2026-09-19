@@ -115,10 +115,11 @@ export default function TabQuranReader() {
                     aria-label="Qur’an Reader display preferences"
                   >
                     <span>{"Reading layers"}</span>
-                    <label className="quran-reader-preference-select-row">
+                    <div className="quran-reader-preference-select-row quran-reader-translation-select">
                       <span>{"Translation"}</span>
                       <select
                         id="quran-reader-translation-edition"
+                        hidden={true}
                         aria-label="Choose Qur’an translation"
                         defaultValue="en.asad"
                         onChange={(event) => window.setQuranReaderTranslation?.(event.target.value)}
@@ -131,11 +132,24 @@ export default function TabQuranReader() {
                         <option value="fr.hamidullah">{"Muhammad Hamidullah translation"}</option>
                         <option value="id.indonesian">{"Bahasa Indonesia translation"}</option>
                       </select>
-                    </label>
-                    <label className="quran-reader-preference-select-row">
+                      <button
+                        type="button"
+                        id="quran-reader-translation-trigger"
+                        className="quran-reader-preference-trigger"
+                        aria-label="Choose Qur’an translation"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-controls="quran-reader-translation-picker"
+                      >
+                        <span>{"Muhammad Asad translation"}</span>
+                        <i className="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                    <div className="quran-reader-preference-select-row quran-reader-arabic-style-select">
                       <span>{"Arabic text style"}</span>
                       <select
                         id="quran-reader-arabic-style"
+                        hidden={true}
                         aria-label="Choose Arabic text style"
                         defaultValue="naskh"
                         onChange={(event) => window.setQuranReaderArabicStyle?.(event.target.value)}
@@ -143,7 +157,19 @@ export default function TabQuranReader() {
                         <option value="naskh">{"Naskh reading"}</option>
                         <option value="uthmani">{"Uthmani display"}</option>
                       </select>
-                    </label>
+                      <button
+                        type="button"
+                        id="quran-reader-arabic-style-trigger"
+                        className="quran-reader-preference-trigger"
+                        aria-label="Choose Arabic text style"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-controls="quran-reader-arabic-style-picker"
+                      >
+                        <span>{"Naskh reading"}</span>
+                        <i className="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                      </button>
+                    </div>
                     <label>
                       <input
                         id="quran-reader-show-transliteration"

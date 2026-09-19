@@ -1846,6 +1846,211 @@ function setQuranReaderTriggerState(isOpen) {
     });
 }
 
+const QURAN_READER_PREFERENCE_PICKERS = [
+    { key: 'translation', selectId: 'quran-reader-translation-edition', triggerId: 'quran-reader-translation-trigger', panelId: 'quran-reader-translation-picker', label: 'Choose Qur’an translation', apply: value => window.setQuranReaderTranslation(value) },
+    { key: 'arabic-style', selectId: 'quran-reader-arabic-style', triggerId: 'quran-reader-arabic-style-trigger', panelId: 'quran-reader-arabic-style-picker', label: 'Choose Arabic text style', apply: value => window.setQuranReaderArabicStyle(value) }
+];
+
+function closeQuranReaderPreferencePickers({ except = '', restoreFocus = false } = {}) {
+    QURAN_READER_PREFERENCE_PICKERS.forEach(config => {
+        if (config.key === except) return;
+        const panel = document.getElementById(config.panelId);
+        const trigger = document.getElementById(config.triggerId);
+        if (panel) panel.hidden = true;
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    });
+    if (restoreFocus) document.getElementById(restoreFocus)?.focus({ preventScroll: true });
+}
+
+function syncQuranReaderPreferencePickers() {
+    QURAN_READER_PREFERENCE_PICKERS.forEach(config => {
+        const select = document.getElementById(config.selectId);
+        const trigger = document.getElementById(config.triggerId);
+        const panel = document.getElementById(config.panelId);
+        const selected = select?.selectedOptions?.[0];
+        if (!select || !trigger || !selected) return;
+        const value = selected.textContent.trim();
+        trigger.querySelector('span').textContent = value;
+        trigger.setAttribute('aria-label', `${config.label}: ${value}`);
+        trigger.title = value;
+        panel?.querySelectorAll('[role="option"]').forEach(option => {
+            option.setAttribute('aria-selected', String(option.dataset.value === select.value));
+        });
+    });
+}
+
+function initQuranReaderPreferencePickers() {
+    if (document.getElementById('quran-reader-translation-picker')) return;
+    QURAN_READER_PREFERENCE_PICKERS.forEach(config => {
+        const select = document.getElementById(config.selectId);
+        const trigger = document.getElementById(config.triggerId);
+        if (!select || !trigger) return;
+        const panel = document.createElement('div');
+        panel.id = config.panelId;
+        panel.className = 'quran-reciter-picker quran-reader-preference-options';
+        panel.hidden = true;
+        panel.setAttribute('role', 'listbox');
+        panel.setAttribute('aria-label', config.label);
+        [...select.options].forEach(option => {
+            const choice = document.createElement('button');
+            choice.type = 'button';
+            choice.className = 'quran-reciter-option quran-reader-preference-option';
+            choice.dataset.value = option.value;
+            choice.tabIndex = -1;
+            choice.setAttribute('role', 'option');
+            const text = document.createElement('span');
+            text.textContent = option.textContent;
+            const check = document.createElement('span');
+            check.className = 'quran-reciter-check';
+            check.textContent = '✓';
+            check.setAttribute('aria-hidden', 'true');
+            choice.append(text, check);
+            choice.addEventListener('click', () => {
+                select.value = option.value;
+                config.apply(option.value);
+                syncQuranReaderPreferencePickers();
+                closeQuranReaderPreferencePickers();
+            });
+            panel.append(choice);
+        });
+        document.body.append(panel);
+        const open = keyboard => {
+            closeQuranReaderPreferencePickers({ except: config.key });
+            panel.hidden = false;
+            trigger.setAttribute('aria-expanded', 'true');
+            syncQuranReaderPreferencePickers();
+            positionQuranPicker(panel, trigger, 304);
+            const selected = panel.querySelector('[aria-selected="true"]');
+            if (keyboard) selected?.focus({ preventScroll: true });
+        };
+        trigger.addEventListener('click', event => panel.hidden ? open(event.detail === 0) : closeQuranReaderPreferencePickers({ restoreFocus: config.triggerId }));
+        trigger.addEventListener('keydown', event => {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); open(true); }
+        });
+        panel.addEventListener('keydown', event => {
+            if (event.key === 'Escape') { event.preventDefault(); closeQuranReaderPreferencePickers({ restoreFocus: config.triggerId }); }
+        });
+    });
+    document.addEventListener('pointerdown', event => {
+        const clickedPicker = QURAN_READER_PREFERENCE_PICKERS.some(config => document.getElementById(config.panelId)?.contains(event.target) || document.getElementById(config.triggerId)?.contains(event.target));
+        if (!clickedPicker) closeQuranReaderPreferencePickers();
+    });
+    const positionOpenPickers = () => QURAN_READER_PREFERENCE_PICKERS.forEach(config => {
+        const panel = document.getElementById(config.panelId);
+        if (panel && !panel.hidden) positionQuranPicker(panel, document.getElementById(config.triggerId), 304);
+    });
+    window.addEventListener('resize', positionOpenPickers);
+    window.visualViewport?.addEventListener('resize', positionOpenPickers);
+    syncQuranReaderPreferencePickers();
+}
+
+function initAppSelectPickers(root = document) {
+    const selects = [...root.querySelectorAll('select:not([hidden]):not([data-app-picker-enhanced])')];
+    selects.forEach((select, index) => {
+        if (select.disabled) return;
+        const pickerId = `app-select-picker-${select.id || index}-${Date.now()}`;
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = `app-select-trigger ${select.className}`.trim();
+        trigger.setAttribute('aria-haspopup', 'listbox');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.setAttribute('aria-controls', pickerId);
+        const value = document.createElement('span');
+        const chevron = document.createElement('i');
+        chevron.className = 'fa-solid fa-chevron-down';
+        chevron.setAttribute('aria-hidden', 'true');
+        trigger.append(value, chevron);
+        const panel = document.createElement('div');
+        panel.id = pickerId;
+        panel.className = 'quran-reciter-picker app-select-options';
+        panel.hidden = true;
+        panel.setAttribute('role', 'listbox');
+        panel.setAttribute('aria-label', select.getAttribute('aria-label') || 'Choose an option');
+        [...select.options].forEach(option => {
+            const choice = document.createElement('button');
+            choice.type = 'button';
+            choice.className = 'quran-reciter-option app-select-option';
+            choice.dataset.value = option.value;
+            choice.tabIndex = -1;
+            choice.disabled = option.disabled;
+            choice.setAttribute('role', 'option');
+            const copy = document.createElement('span');
+            copy.textContent = option.textContent;
+            const check = document.createElement('span');
+            check.className = 'quran-reciter-check';
+            check.textContent = '✓';
+            check.setAttribute('aria-hidden', 'true');
+            choice.append(copy, check);
+            choice.addEventListener('click', () => {
+                select.value = option.value;
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                sync();
+                close();
+            });
+            panel.append(choice);
+        });
+        const sync = () => {
+            const selected = select.selectedOptions[0];
+            value.textContent = selected?.textContent.trim() || 'Choose an option';
+            trigger.setAttribute('aria-label', `${select.getAttribute('aria-label') || 'Choose an option'}: ${value.textContent}`);
+            panel.querySelectorAll('[role="option"]').forEach(option => option.setAttribute('aria-selected', String(option.dataset.value === select.value)));
+        };
+        const close = () => {
+            panel.hidden = true;
+            trigger.setAttribute('aria-expanded', 'false');
+        };
+        const open = keyboard => {
+            closeAppSelectPickers(pickerId);
+            panel.hidden = false;
+            trigger.setAttribute('aria-expanded', 'true');
+            positionQuranPicker(panel, trigger, Math.max(276, Math.min(360, trigger.getBoundingClientRect().width)));
+            if (keyboard) panel.querySelector('[aria-selected="true"]')?.focus({ preventScroll: true });
+        };
+        trigger.addEventListener('click', event => panel.hidden ? open(event.detail === 0) : close());
+        trigger.addEventListener('keydown', event => {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); open(true); }
+        });
+        panel.addEventListener('keydown', event => {
+            if (event.key === 'Escape') { event.preventDefault(); close(); trigger.focus({ preventScroll: true }); }
+        });
+        select.addEventListener('change', sync);
+        select.dataset.appPickerEnhanced = pickerId;
+        select.hidden = true;
+        select.after(trigger);
+        document.body.append(panel);
+        sync();
+    });
+}
+
+function closeAppSelectPickers(except = '') {
+    document.querySelectorAll('.app-select-options:not([hidden])').forEach(panel => {
+        if (panel.id === except) return;
+        panel.hidden = true;
+        document.querySelector(`[aria-controls="${panel.id}"]`)?.setAttribute('aria-expanded', 'false');
+    });
+}
+
+function observeAppSelectPickers() {
+    if (document.documentElement.dataset.appSelectPickerObserver) return;
+    document.documentElement.dataset.appSelectPickerObserver = 'true';
+    document.addEventListener('pointerdown', event => {
+        if (!event.target.closest('.app-select-trigger, .app-select-options')) closeAppSelectPickers();
+    });
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.app-select-options:not([hidden])').forEach(panel => {
+            const trigger = document.querySelector(`[aria-controls="${panel.id}"]`);
+            if (trigger) positionQuranPicker(panel, trigger, Math.max(276, Math.min(360, trigger.getBoundingClientRect().width)));
+        });
+    });
+    new MutationObserver(records => {
+        records.forEach(record => record.addedNodes.forEach(node => {
+            if (node.nodeType !== Node.ELEMENT_NODE) return;
+            if (node.matches?.('select:not([hidden])')) initAppSelectPickers(node.parentElement);
+            else initAppSelectPickers(node);
+        }));
+    }).observe(document.body, { childList: true, subtree: true });
+}
+
 function syncQuranReaderVisibility() {
     const transliteration = document.getElementById('quran-reader-show-transliteration');
     const translation = document.getElementById('quran-reader-show-translation');
@@ -1856,6 +2061,7 @@ function syncQuranReaderVisibility() {
     const selectedTranslation = getQuranReaderTranslation();
     if (translationEdition) translationEdition.value = selectedTranslation.edition;
     if (arabicStyle) arabicStyle.value = quranReaderState.arabicTextStyle;
+    syncQuranReaderPreferencePickers();
     const numbering = document.getElementById('quran-reader-arabic-numbering');
     if (numbering) numbering.checked = quranReaderState.arabicNumbers;
 }
@@ -2672,6 +2878,7 @@ window.closeQuranReader = function () {
     closeQuranSpeedPicker();
     closeQuranSurahPicker();
     closeQuranReciterPicker();
+    closeQuranReaderPreferencePickers();
     closeQuranReaderMoreMenu();
     getQuranReaderActiveAudio()?.pause();
     quranReaderState.standbyAudio?.pause();
@@ -2739,9 +2946,12 @@ function init() {
     initArabicReview();
     loadSettings(); // NEW: Load user preferences
     initAdhanCatalog();
+    initQuranReaderPreferencePickers();
     initAccessibility();
     initInfoDisclosurePopups();
     initScrollAwareChrome();
+    initAppSelectPickers();
+    observeAppSelectPickers();
 
     // Date
     const today = new Date();
