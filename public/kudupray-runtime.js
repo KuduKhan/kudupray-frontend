@@ -1429,6 +1429,15 @@ const QURAN_READER_TRANSLATIONS = Object.freeze({
     fr: { edition: 'fr.hamidullah', label: 'Muhammad Hamidullah' },
     id: { edition: 'id.indonesian', label: 'Bahasa Indonesia' }
 });
+const QURAN_READER_TRANSLATION_OPTIONS = Object.freeze([
+    { edition: 'en.asad', label: 'Muhammad Asad' },
+    { edition: 'en.sahih', label: 'Saheeh International' },
+    { edition: 'en.pickthall', label: 'Pickthall' },
+    { edition: 'en.yusufali', label: 'Yusuf Ali' },
+    { edition: 'sw.barwani', label: 'Ali Muhsin Al-Barwani' },
+    { edition: 'fr.hamidullah', label: 'Muhammad Hamidullah' },
+    { edition: 'id.indonesian', label: 'Bahasa Indonesia' }
+]);
 const QURAN_READER_FALLBACK_CATALOG = Object.freeze(
     'Al-Faatiha|Al-Baqara|Aal-i-Imraan|An-Nisaa|Al-Maaida|Al-Anaam|Al-Araaf|Al-Anfaal|At-Tawba|Yunus|Hud|Yusuf|Ar-Rad|Ibrahim|Al-Hijr|An-Nahl|Al-Israa|Al-Kahf|Maryam|Taa-Haa|Al-Anbiyaa|Al-Hajj|Al-Muminoon|An-Noor|Al-Furqaan|Ash-Shuaraa|An-Naml|Al-Qasas|Al-Ankaboot|Ar-Room|Luqman|As-Sajda|Al-Ahzaab|Saba|Faatir|Yaseen|As-Saaffaat|Saad|Az-Zumar|Ghafir|Fussilat|Ash-Shura|Az-Zukhruf|Ad-Dukhaan|Al-Jaathiya|Al-Ahqaf|Muhammad|Al-Fath|Al-Hujuraat|Qaaf|Adh-Dhaariyat|At-Tur|An-Najm|Al-Qamar|Ar-Rahmaan|Al-Waaqia|Al-Hadid|Al-Mujaadila|Al-Hashr|Al-Mumtahana|As-Saff|Al-Jumua|Al-Munaafiqoon|At-Taghaabun|At-Talaaq|At-Tahrim|Al-Mulk|Al-Qalam|Al-Haaqqa|Al-Maarij|Nooh|Al-Jinn|Al-Muzzammil|Al-Muddaththir|Al-Qiyaama|Al-Insaan|Al-Mursalaat|An-Naba|An-Naaziaat|Abasa|At-Takwir|Al-Infitaar|Al-Mutaffifin|Al-Inshiqaaq|Al-Burooj|At-Taariq|Al-Alaa|Al-Ghaashiya|Al-Fajr|Al-Balad|Ash-Shams|Al-Lail|Ad-Dhuhaa|Ash-Sharh|At-Tin|Al-Alaq|Al-Qadr|Al-Bayyina|Az-Zalzala|Al-Aadiyaat|Al-Qaari-a|At-Takaathur|Al-Asr|Al-Humaza|Al-Fil|Quraish|Al-Maaun|Al-Kawthar|Al-Kaafiroon|An-Nasr|Al-Masad|Al-Ikhlaas|Al-Falaq|An-Naas'
         .split('|')
@@ -1476,6 +1485,8 @@ const quranReaderState = {
     repeatSurah: false,
     autoplayNextSurah: false,
     arabicNumbers: true,
+    translationEdition: 'en.asad',
+    arabicTextStyle: 'naskh',
     ayahs: [],
     activeAyahIndex: 0,
     audioEventsBound: false,
@@ -1489,7 +1500,8 @@ const quranReaderState = {
 
 function getQuranReaderTranslation() {
     const language = document.getElementById('lang-select')?.value || localStorage.getItem('kudu_lang') || 'en';
-    return QURAN_READER_TRANSLATIONS[language] || QURAN_READER_TRANSLATIONS.en;
+    const selected = QURAN_READER_TRANSLATION_OPTIONS.find(option => option.edition === quranReaderState.translationEdition);
+    return selected || QURAN_READER_TRANSLATIONS[language] || QURAN_READER_TRANSLATIONS.en;
 }
 
 function getQuranReaderSurah(number) {
@@ -1837,8 +1849,13 @@ function setQuranReaderTriggerState(isOpen) {
 function syncQuranReaderVisibility() {
     const transliteration = document.getElementById('quran-reader-show-transliteration');
     const translation = document.getElementById('quran-reader-show-translation');
+    const translationEdition = document.getElementById('quran-reader-translation-edition');
+    const arabicStyle = document.getElementById('quran-reader-arabic-style');
     if (transliteration) transliteration.checked = !document.body.classList.contains('hide-trans');
     if (translation) translation.checked = !document.body.classList.contains('hide-eng');
+    const selectedTranslation = getQuranReaderTranslation();
+    if (translationEdition) translationEdition.value = selectedTranslation.edition;
+    if (arabicStyle) arabicStyle.value = quranReaderState.arabicTextStyle;
     const numbering = document.getElementById('quran-reader-arabic-numbering');
     if (numbering) numbering.checked = quranReaderState.arabicNumbers;
 }
@@ -1862,6 +1879,26 @@ window.setQuranReaderNumbering = function (useArabic) {
     try { localStorage.setItem('kudu_quran_reader_numbering', quranReaderState.arabicNumbers ? 'arabic' : 'english'); } catch (error) { /* Optional device preference. */ }
 };
 
+window.setQuranReaderTranslation = function (edition) {
+    const translation = QURAN_READER_TRANSLATION_OPTIONS.find(option => option.edition === edition);
+    if (!translation || quranReaderState.translationEdition === translation.edition) return;
+    quranReaderState.translationEdition = translation.edition;
+    try { localStorage.setItem('kudu_quran_reader_translation', translation.edition); } catch (error) { /* Optional device preference. */ }
+    syncQuranReaderVisibility();
+    void loadQuranReaderSurah(quranReaderState.surahNumber);
+};
+
+window.setQuranReaderArabicStyle = function (style) {
+    const nextStyle = style === 'uthmani' ? 'uthmani' : 'naskh';
+    quranReaderState.arabicTextStyle = nextStyle;
+    document.querySelectorAll('.quran-reader-arabic').forEach(text => {
+        text.classList.toggle('quran-arabic-style-uthmani', nextStyle === 'uthmani');
+        text.classList.toggle('quran-arabic-style-naskh', nextStyle === 'naskh');
+    });
+    try { localStorage.setItem('kudu_quran_reader_arabic_style', nextStyle); } catch (error) { /* Optional device preference. */ }
+    syncQuranReaderVisibility();
+};
+
 function hydrateQuranReader() {
     if (quranReaderState.hydrated) return;
     quranReaderState.hydrated = true;
@@ -1874,6 +1911,10 @@ function hydrateQuranReader() {
         quranReaderState.autoplayNextSurah = localStorage.getItem('kudu_quran_reader_autoplay') === 'true';
         const savedNumbering = localStorage.getItem('kudu_quran_reader_numbering');
         if (savedNumbering === 'arabic' || savedNumbering === 'english') quranReaderState.arabicNumbers = savedNumbering === 'arabic';
+        const savedTranslation = localStorage.getItem('kudu_quran_reader_translation');
+        if (QURAN_READER_TRANSLATION_OPTIONS.some(option => option.edition === savedTranslation)) quranReaderState.translationEdition = savedTranslation;
+        const savedArabicStyle = localStorage.getItem('kudu_quran_reader_arabic_style');
+        if (savedArabicStyle === 'naskh' || savedArabicStyle === 'uthmani') quranReaderState.arabicTextStyle = savedArabicStyle;
     } catch (error) {
         // The reader remains fully usable when device storage is unavailable.
     }
@@ -2528,7 +2569,7 @@ function renderQuranReaderSurah(payload, translationInfo) {
         verseNumber.dir = 'ltr';
         verseNumber.setAttribute('aria-hidden', 'true');
         const arabicText = document.createElement('p');
-        arabicText.className = 'quran-reader-arabic';
+        arabicText.className = `quran-reader-arabic quran-arabic-style-${quranReaderState.arabicTextStyle}`;
         arabicText.lang = 'ar';
         arabicText.dir = 'rtl';
         arabicText.textContent = String(ayah.text || '').replace(/^\uFEFF/, '');

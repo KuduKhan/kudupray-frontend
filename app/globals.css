@@ -38210,3 +38210,341 @@ body.quran-reader-english-numerals #quran-surah-list .quran-surah-badge,
 body.quran-reader-english-numerals #quran-surah-picker .quran-surah-badge {
   font-size: 10px;
 }
+
+/* More menu selectors share the compact, softly outlined picker language. */
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(108px, 1.25fr);
+  align-items: center;
+  min-height: 31px;
+  padding: 3px 7px;
+  gap: 7px;
+}
+
+.quran-reader-preference-select-row > span {
+  min-width: 0;
+  padding: 0 !important;
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1.08;
+}
+
+.quran-reader-preference-select-row select {
+  width: 100%;
+  min-width: 0;
+  height: 25px;
+  padding: 0 24px 0 8px;
+  border: 1px solid rgba(7, 97, 72, 0.24);
+  border-radius: 10px;
+  outline: none;
+  color: #0b3f34;
+  background: rgba(255, 255, 255, 0.78);
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.quran-reader-preference-select-row select:hover,
+.quran-reader-preference-select-row select:focus-visible {
+  border-color: rgba(8, 120, 87, 0.52);
+  background: rgba(244, 252, 247, 0.98);
+  box-shadow: 0 0 0 2px rgba(110, 231, 183, 0.14);
+}
+
+.quran-reader-arabic.quran-arabic-style-uthmani {
+  font-family: "Amiri Quran", "Noto Naskh Arabic", "Amiri", serif;
+  letter-spacing: 0.012em;
+  line-height: 2.12;
+}
+
+.quran-reader-arabic.quran-arabic-style-naskh {
+  font-family: "Noto Naskh Arabic", "Amiri", serif;
+  letter-spacing: 0;
+}
+
+@media (max-width: 599px) {
+  .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row {
+    grid-template-columns: minmax(0, 0.94fr) minmax(106px, 1.22fr);
+    min-height: 30px;
+    padding: 2px 7px;
+  }
+}
+
+/* Keep Reading layers comfortably legible: preference pickers get a full row,
+   while the three reading-layer toggles retain their compact two-column rhythm. */
+.quran-reader-toolbar .quran-reader-more-panel {
+  width: min(304px, calc(100vw - 24px));
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(82px, 0.8fr) minmax(0, 1.7fr);
+  min-height: 36px !important;
+  height: 36px;
+  padding: 4px 8px !important;
+  gap: 9px;
+  border: 1px solid rgba(7, 97, 72, 0.14);
+  border-radius: 13px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(236, 247, 240, 0.72));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  white-space: normal;
+  overflow: visible;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences .quran-reader-preference-select-row {
+  white-space: normal;
+  overflow: visible;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row:hover,
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row:focus-within {
+  border-color: rgba(8, 120, 87, 0.42);
+  background: linear-gradient(135deg, #ffffff, #e8f6ee);
+  box-shadow: 0 5px 13px rgba(7, 97, 72, 0.1), inset 0 1px 0 #ffffff;
+}
+
+.quran-reader-preference-select-row > span {
+  overflow-wrap: anywhere;
+  color: #315d4f;
+  font-size: 0.72rem;
+  line-height: 1.16;
+}
+
+.quran-reader-preference-select-row select {
+  min-height: 28px !important;
+  height: 28px !important;
+  padding: 0 27px 0 9px;
+  border: 1px solid rgba(7, 97, 72, 0.2);
+  border-radius: 10px;
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.76);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='m3.25 5.25 3.5 3.5 3.5-3.5' stroke='%23076b51' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  background-size: 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.quran-reader-preference-select-row select:hover,
+.quran-reader-preference-select-row select:focus-visible {
+  border-color: rgba(8, 120, 87, 0.52);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(110, 231, 183, 0.14), inset 0 1px 0 #ffffff;
+}
+
+body.dark-mode .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row {
+  border-color: rgba(145, 207, 176, 0.2);
+  background: linear-gradient(135deg, rgba(30, 63, 50, 0.94), rgba(20, 48, 38, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+body.dark-mode .quran-reader-preference-select-row > span {
+  color: #cce7da;
+}
+
+body.dark-mode .quran-reader-preference-select-row select {
+  border-color: rgba(145, 207, 176, 0.26);
+  color: #edf8f1;
+  background-color: rgba(8, 28, 20, 0.6);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='m3.25 5.25 3.5 3.5 3.5-3.5' stroke='%23a7f3d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Reading preferences use the same selectable-row language as the reciter list. */
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-picker {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(82px, 0.8fr) minmax(0, 1.7fr);
+  align-items: start;
+  min-width: 0;
+  padding: 4px 8px;
+  gap: 9px;
+  border: 1px solid rgba(7, 97, 72, 0.14);
+  border-radius: 13px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(236, 247, 240, 0.72));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.quran-reader-preference-picker > span {
+  align-self: center;
+  min-width: 0;
+  color: #315d4f;
+  font-size: 0.72rem;
+  font-weight: 750;
+  line-height: 1.16;
+}
+
+.quran-reader-preference-menu {
+  min-width: 0;
+}
+
+.quran-reader-preference-menu > button {
+  width: 100%;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 9px;
+  border: 1px solid rgba(7, 97, 72, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.76);
+  color: #0b3f34;
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1;
+  cursor: pointer;
+  text-align: left;
+}
+
+.quran-reader-preference-menu > button > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quran-reader-preference-menu > button i {
+  flex: 0 0 auto;
+  color: #087654;
+  font-size: 0.64rem;
+  transition: transform 160ms ease;
+}
+
+.quran-reader-preference-menu > button[aria-expanded="true"],
+.quran-reader-preference-menu > button:hover,
+.quran-reader-preference-menu > button:focus-visible {
+  border-color: rgba(8, 120, 87, 0.52);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(110, 231, 183, 0.14), inset 0 1px 0 #ffffff;
+  outline: none;
+}
+
+.quran-reader-preference-menu > button[aria-expanded="true"] i {
+  transform: rotate(180deg);
+}
+
+.quran-reader-preference-options {
+  display: grid;
+  gap: 2px;
+  margin-top: 5px;
+  padding: 3px;
+  border: 1px solid rgba(4, 120, 87, 0.14);
+  border-radius: 13px;
+  background: #fcfefc;
+  box-shadow: 0 8px 18px rgba(6, 78, 59, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.quran-reader-preference-options button {
+  width: 100%;
+  min-height: 29px;
+  padding: 4px 7px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.quran-reader-preference-options button:hover,
+.quran-reader-preference-options button:focus-visible,
+.quran-reader-preference-options button[aria-selected="true"] {
+  border-color: rgba(4, 120, 87, 0.2);
+  background: #eef7f1;
+  outline: none;
+}
+
+.quran-reader-preference-options button[aria-selected="true"] {
+  color: #076847;
+  font-weight: 800;
+}
+
+body.dark-mode .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-picker {
+  border-color: rgba(145, 207, 176, 0.2);
+  background: linear-gradient(135deg, rgba(30, 63, 50, 0.94), rgba(20, 48, 38, 0.94));
+}
+
+body.dark-mode .quran-reader-preference-picker > span,
+body.dark-mode .quran-reader-preference-menu > button {
+  color: #d9f5e9;
+}
+
+body.dark-mode .quran-reader-preference-menu > button,
+body.dark-mode .quran-reader-preference-options {
+  border-color: rgba(145, 207, 176, 0.24);
+  background: rgba(8, 28, 20, 0.72);
+}
+
+body.dark-mode .quran-reader-preference-options button:hover,
+body.dark-mode .quran-reader-preference-options button:focus-visible,
+body.dark-mode .quran-reader-preference-options button[aria-selected="true"] {
+  border-color: rgba(145, 207, 176, 0.22);
+  background: rgba(110, 231, 183, 0.1);
+  color: #e6fff0;
+}
+
+/* The phone social chooser must sit above the floating Back to top control and footer glass. */
+@media (max-width: 599px) {
+  .app-footer,
+  .footer-copy,
+  .footer-signature,
+  .footer-partner-wrap {
+    overflow: visible;
+  }
+
+  .footer-social-popover:not([hidden]) {
+    z-index: 10060;
+  }
+}
+
+@media (max-width: 599px) {
+  .quran-reader-toolbar .quran-reader-more-panel {
+    width: min(282px, calc(100vw - 20px));
+  }
+
+  .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row {
+    grid-template-columns: minmax(78px, 0.78fr) minmax(0, 1.55fr);
+    min-height: 35px !important;
+    height: 35px;
+    padding: 3px 8px !important;
+    gap: 8px;
+  }
+
+  .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-picker {
+    grid-template-columns: minmax(78px, 0.78fr) minmax(0, 1.55fr);
+    padding: 3px 8px;
+    gap: 8px;
+  }
+}
+
+/* Keep the reading-layer toggles as compact as the two preference selectors. */
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences > label:not(.quran-reader-preference-select-row) {
+  min-height: 36px !important;
+  height: 36px;
+  padding: 3px 8px !important;
+  gap: 7px;
+}
+
+.quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences > label:not(.quran-reader-preference-select-row) input {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
+}
+
+@media (max-width: 599px) {
+  .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preferences > label:not(.quran-reader-preference-select-row) {
+    min-height: 35px !important;
+    height: 35px;
+    padding: 3px 7px !important;
+  }
+}

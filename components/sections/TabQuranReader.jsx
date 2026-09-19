@@ -115,6 +115,35 @@ export default function TabQuranReader() {
                     aria-label="Qur’an Reader display preferences"
                   >
                     <span>{"Reading layers"}</span>
+                    <label className="quran-reader-preference-select-row">
+                      <span>{"Translation"}</span>
+                      <select
+                        id="quran-reader-translation-edition"
+                        aria-label="Choose Qur’an translation"
+                        defaultValue="en.asad"
+                        onChange={(event) => window.setQuranReaderTranslation?.(event.target.value)}
+                      >
+                        <option value="en.asad">{"Muhammad Asad translation"}</option>
+                        <option value="en.sahih">{"Saheeh International translation"}</option>
+                        <option value="en.pickthall">{"Pickthall translation"}</option>
+                        <option value="en.yusufali">{"Yusuf Ali translation"}</option>
+                        <option value="sw.barwani">{"Ali Muhsin Al-Barwani translation"}</option>
+                        <option value="fr.hamidullah">{"Muhammad Hamidullah translation"}</option>
+                        <option value="id.indonesian">{"Bahasa Indonesia translation"}</option>
+                      </select>
+                    </label>
+                    <label className="quran-reader-preference-select-row">
+                      <span>{"Arabic text style"}</span>
+                      <select
+                        id="quran-reader-arabic-style"
+                        aria-label="Choose Arabic text style"
+                        defaultValue="naskh"
+                        onChange={(event) => window.setQuranReaderArabicStyle?.(event.target.value)}
+                      >
+                        <option value="naskh">{"Naskh reading"}</option>
+                        <option value="uthmani">{"Uthmani display"}</option>
+                      </select>
+                    </label>
                     <label>
                       <input
                         id="quran-reader-show-transliteration"
