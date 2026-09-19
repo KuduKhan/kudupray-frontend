@@ -31529,6 +31529,7 @@ html:has(body.guide-reading-open) {
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  transform: translateY(-6px);
   color: #587367;
   font-size: 0.66rem;
   font-weight: 650;
@@ -32089,7 +32090,7 @@ body.dark-mode #quran-player-seek::-moz-range-thumb {
 .quran-player {
   position: relative;
   isolation: isolate;
-  padding: 6px 12px;
+  padding: 4px 12px;
   border-radius: 30px;
   border-color: rgba(19, 105, 76, 0.2);
   background: rgba(255, 255, 255, 0.68);
@@ -32128,7 +32129,7 @@ body.dark-mode .quran-player::before {
   .quran-player {
     width: min(100%, 520px);
     margin-inline: auto;
-    padding: 7px 10px;
+    padding: 5px 10px;
     border-radius: 26px;
     border-color: rgba(19, 105, 76, 0.18);
     background: rgba(255, 255, 255, 0.68);
@@ -32273,7 +32274,7 @@ body.dark-mode .quran-player::before {
 @media (max-width: 360px) {
   .quran-player {
     gap: 4px;
-    padding: 6px;
+    padding: 4px 6px;
   }
 
   .quran-player-transport,
@@ -39604,4 +39605,62 @@ body.dark-mode .footer-partner-link {
     height: 45px;
     flex-basis: 45px;
   }
+}
+
+
+/* Place playback times on either side of a slim seek rail. */
+.quran-player .quran-player-timeline {
+  display: grid;
+  grid-template-columns: auto minmax(16px, 1fr) auto;
+  align-items: center;
+  gap: 5px;
+  padding-block: 0;
+}
+
+.quran-player .quran-player-times {
+  display: contents;
+  transform: none;
+}
+
+#quran-player-elapsed,
+#quran-player-duration {
+  grid-row: 1;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+#quran-player-elapsed { grid-column: 1; }
+#quran-player-duration { grid-column: 3; }
+
+#quran-player-seek {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#quran-player-seek::-webkit-slider-runnable-track {
+  height: 3px;
+  border: 0;
+}
+
+#quran-player-seek::-moz-range-track {
+  height: 3px;
+  border: 0;
+}
+
+#quran-player-seek::-webkit-slider-thumb {
+  width: 10px;
+  height: 10px;
+  margin-top: -3.5px;
+  border-width: 2px;
+}
+
+#quran-player-seek::-moz-range-thumb {
+  width: 6px;
+  height: 6px;
+  border-width: 2px;
+}
+
+@media (max-width: 599px) {
+  .quran-player .quran-player-timeline { gap: 3px; }
+  .quran-player .quran-player-times { font-size: 0.55rem; }
 }
