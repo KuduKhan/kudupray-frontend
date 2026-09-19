@@ -39772,3 +39772,39 @@ body.dark-mode .footer-partner-link {
     transition: none;
   }
 }
+
+
+/* Center the selected Surah number in a softly outlined identity badge. */
+#tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  flex: 0 0 36px;
+  padding: 0;
+  border: 1px solid rgba(148, 107, 25, 0.34);
+  border-radius: 50%;
+  color: #8a6116;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.9), transparent 42%),
+    linear-gradient(145deg, #fff8db, #e8f4ed);
+  box-shadow:
+    0 2px 7px rgba(123, 87, 16, 0.13),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.5),
+    inset 0 0 0 3px rgba(180, 133, 38, 0.12);
+  font-family: "Noto Naskh Arabic", "Amiri", serif;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+body.quran-reader-english-numerals #tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
+  font-size: 10px;
+}
