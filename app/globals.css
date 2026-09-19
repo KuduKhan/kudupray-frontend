@@ -38650,3 +38650,10 @@ body.dark-mode .quran-reader-preference-options button[aria-selected="true"] {
 #tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger {
   padding-left: 2px !important;
 }
+
+/* The shared Reader panel accommodates its 40px controls with equal top and bottom clearance. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  height: 50px !important;
+  min-height: 50px !important;
+  align-items: center;
+}
