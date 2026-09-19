@@ -38210,12 +38210,3 @@ body.quran-reader-english-numerals #quran-surah-list .quran-surah-badge,
 body.quran-reader-english-numerals #quran-surah-picker .quran-surah-badge {
   font-size: 10px;
 }
-
-/* Mirror the selector scale for the inline number at the start of each ayah. */
-.quran-reader-arabic .quran-reader-ayah-number {
-  font-size: 14px;
-}
-
-body.quran-reader-english-numerals .quran-reader-arabic .quran-reader-ayah-number {
-  font-size: 10px;
-}
