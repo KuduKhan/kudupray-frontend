@@ -38548,3 +38548,105 @@ body.dark-mode .quran-reader-preference-options button[aria-selected="true"] {
     padding: 3px 7px !important;
   }
 }
+
+/* Align the Reader toolbar controls with the compact Reading layers control rhythm. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  min-height: 44px;
+  padding: 4px;
+}
+
+#tab-quran-reader .quran-reader-toolbar-segment {
+  min-height: 36px;
+}
+
+#tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  min-height: 36px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+@media (max-width: 599px) {
+  #tab-quran-reader .quran-reader-toolbar-shell {
+    min-height: 44px;
+    padding: 4px;
+  }
+
+  #tab-quran-reader .quran-reader-toolbar-segment,
+  #tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+    min-height: 36px;
+  }
+}
+
+/* Fixed compact toolbar dimensions: icon, names and controls remain centered inside the shared shell. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  height: 44px !important;
+}
+
+#tab-quran-reader .quran-reader-toolbar-segment,
+#tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  height: 36px !important;
+  min-height: 36px !important;
+}
+
+/* Give the compact Reader toolbar contents a clear, even inset from each edge. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 4px 5px;
+}
+
+#tab-quran-reader .quran-reader-toolbar-segment,
+#tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  height: 38px !important;
+  min-height: 38px !important;
+}
+
+/* A final two-pixel inset keeps every toolbar control evenly framed. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  height: 48px !important;
+  min-height: 48px !important;
+}
+
+#tab-quran-reader .quran-reader-toolbar-segment,
+#tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  height: 40px !important;
+  min-height: 40px !important;
+}
+
+/* Slightly larger selected identities, still evenly inset inside the Reader controls. */
+#tab-quran-reader #quran-surah-selected-number.quran-surah-badge,
+#tab-quran-reader #quran-reciter-selected-avatar.quran-reciter-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  flex-basis: 36px;
+}
+
+#tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
+  font-size: 0.72rem;
+}
+
+/* Match the selected identity's horizontal inset to its two-pixel vertical inset. */
+#tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger {
+  padding-left: 2px !important;
+}
