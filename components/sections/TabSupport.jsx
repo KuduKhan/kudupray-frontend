@@ -1,5 +1,7 @@
 "use client";
 
+import DeveloperSocials from "./DeveloperSocials";
+
 import { dispatch } from "../runtime-events";
 
 export default function TabSupport() {
@@ -273,7 +275,7 @@ export default function TabSupport() {
                 </p>
                 <div className="support-note-signature">
                   <div className="support-note-signature-copy">
-                    <strong>{"Mufasa Khan"}</strong>
+                    <div className="support-note-name-row"><DeveloperSocials /><strong>{"Mufasa Khan"}</strong></div>
                     <span>{"Founder & Lead Developer"}</span>
                   </div>
                   <span className="support-note-avatar" aria-hidden="true">

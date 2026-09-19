@@ -39951,3 +39951,725 @@ body.quran-reader-english-numerals #tab-quran-reader #quran-surah-selected-numbe
     text-overflow: clip;
   }
 }
+
+
+/* Compact the desktop support card without constraining its content height. */
+@media (min-width: 1024px) {
+  #tab-support .support-shell {
+    padding-block: 16px;
+  }
+
+  #tab-support .support-shell > .section-header {
+    margin-bottom: 14px;
+    padding-block: 0;
+  }
+
+  #tab-support .support-content {
+    padding-top: 0;
+  }
+
+  #tab-support .support-three-column .support-hero,
+  #tab-support .support-choice-column,
+  #tab-support .support-three-column .support-developer-note {
+    padding-block: 18px;
+  }
+
+  #tab-support .support-three-column .premium-badge,
+  #tab-support .support-three-column .heart-icon-container,
+  #tab-support .support-three-column .support-choice-intro {
+    margin-bottom: 8px;
+  }
+
+  #tab-support .support-three-column .support-assurance {
+    margin-top: 8px;
+  }
+}
+
+
+/* Compact desktop Preferences while retaining full-size controls and text. */
+@media (min-width: 1024px) {
+  #tab-settings > .card {
+    padding-block: 16px;
+  }
+
+  #tab-settings .settings-preferences-header {
+    margin-bottom: 14px;
+    padding-block: 0;
+  }
+
+  #tab-settings .settings-menu-grid {
+    row-gap: 10px;
+  }
+
+  #tab-settings .settings-menu-group .group-title {
+    margin-top: 0 !important;
+    margin-bottom: 6px;
+  }
+
+  #tab-settings .settings-focus-panel {
+    margin-block: 6px 0;
+    padding-block: 10px;
+  }
+
+  #tab-settings .settings-panel-note {
+    padding-block: 0 6px;
+  }
+
+  #tab-settings .settings-menu-group .setting-item {
+    margin-block: 5px;
+    padding-block: 8px;
+  }
+
+  #tab-settings .settings-focus-panel .setting-item:last-child {
+    margin-bottom: 0;
+  }
+
+  #tab-settings .system-settings-panel .system-reset-action {
+    min-height: 52px;
+    padding-block: 7px;
+    margin-top: 3px;
+  }
+}
+
+
+/* Compact Support and Preferences on phones using spacing, not smaller text. */
+@media (max-width: 599px) {
+  #tab-support .support-shell,
+  #tab-settings > .card {
+    padding-block: 10px;
+  }
+
+  #tab-support .support-shell > .section-header,
+  #tab-settings .settings-preferences-header {
+    margin-bottom: 10px;
+    padding-block: 0;
+  }
+
+  #tab-support .support-content { padding-top: 0; }
+  #tab-support .support-three-column { gap: 12px; }
+
+  #tab-support .support-three-column .support-hero,
+  #tab-support .support-choice-column,
+  #tab-support .support-three-column .support-developer-note {
+    padding-block: 14px;
+  }
+
+  #tab-support .support-three-column .premium-badge,
+  #tab-support .support-three-column .heart-icon-container,
+  #tab-support .support-three-column .support-choice-intro {
+    margin-bottom: 8px;
+  }
+
+  #tab-support .support-three-column .support-assurance { margin-top: 8px; }
+
+  #tab-settings .settings-menu-grid { row-gap: 8px; }
+  #tab-settings .settings-menu-group .group-title {
+    margin-top: 0 !important;
+    margin-bottom: 5px;
+  }
+
+  #tab-settings .settings-focus-panel {
+    margin-block: 5px 0;
+    padding-block: 8px;
+  }
+
+  #tab-settings .settings-panel-note { padding-block: 0 5px; }
+
+  #tab-settings .settings-menu-group .setting-item {
+    margin-block: 4px;
+    padding-block: 8px;
+  }
+
+  #tab-settings .settings-focus-panel .setting-item:last-child { margin-bottom: 0; }
+
+  #tab-settings .system-settings-panel .system-reset-action {
+    min-height: 50px;
+    padding-block: 6px;
+    margin-top: 3px;
+  }
+}
+
+
+/* Keep the free-tools promise close to the note, aligned with the portrait top. */
+#tab-support .support-three-column .support-note-footer {
+  margin-top: 12px;
+  padding-top: 10px;
+}
+
+#tab-support .support-note-principle {
+  align-self: start;
+  align-items: flex-start;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-note-principle {
+    font-size: 0.64rem;
+  }
+}
+
+#tab-support .support-note-principle i {
+  margin-top: 0.18em;
+}
+
+
+/* Keep the desktop developer credit as balanced as its phone layout. */
+@media (min-width: 600px) {
+  #tab-support .support-three-column .support-note-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    align-items: start;
+    gap: 12px;
+  }
+
+  #tab-support .support-note-principle {
+    min-width: 0;
+    max-width: none;
+    width: auto;
+    gap: 6px;
+  }
+
+  #tab-support .support-note-principle i {
+    flex: 0 0 auto;
+  }
+
+  #tab-support .support-note-signature {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    align-self: start;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    white-space: normal;
+  }
+
+  #tab-support .support-note-signature-copy {
+    min-width: 0;
+    text-align: right;
+  }
+
+  #tab-support .support-note-signature-copy > span {
+    max-width: 100%;
+    box-sizing: border-box;
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+}
+
+
+/* Fit the desktop developer card to its content and keep the role intact. */
+@media (min-width: 600px) {
+  #tab-support .support-three-column .support-developer-note {
+    height: auto;
+    min-height: 0;
+    align-self: start;
+    padding: 16px;
+  }
+
+  #tab-support .support-three-column .support-note-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 12px;
+  }
+
+  #tab-support .support-note-footer .support-note-principle {
+    flex: 1 1 110px;
+  }
+
+  #tab-support .support-note-signature {
+    flex: 0 0 auto;
+    width: auto;
+    margin-left: auto;
+  }
+
+  #tab-support .support-note-signature-copy {
+    flex-shrink: 0;
+  }
+
+  #tab-support .support-note-signature-copy > span {
+    white-space: nowrap;
+    font-size: 0.54rem;
+    padding: 3px 6px;
+  }
+}
+
+
+/* Give the desktop developer message a fuller, comfortable reading size. */
+@media (min-width: 1024px) {
+  #tab-support .support-developer-note blockquote {
+    font-size: clamp(1.4rem, 1.65vw, 1.55rem);
+    line-height: 1.7;
+  }
+}
+
+
+#tab-support .support-note-socials {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#tab-support .support-note-social-label {
+  color: #ecfdf5;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+#tab-support .support-note-socials .footer-social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+#tab-support .support-note-socials .footer-social-icons a {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 1024px) {
+  #tab-support .support-three-column > .support-developer-note {
+    align-self: stretch;
+    height: auto;
+  }
+
+  #tab-support .support-note-socials {
+    margin-top: auto;
+  }
+
+  #tab-support .support-three-column .support-note-footer {
+    margin-bottom: 16px;
+  }
+}
+
+/* Give the developer's phone social links the same clear brand surfaces as desktop. */
+@media (max-width: 599px) {
+  #tab-support .support-note-socials {
+    padding: 5px 10px;
+    gap: 8px;
+  }
+
+  #tab-support .support-note-social-label {
+    font-size: 0.72rem;
+  }
+
+  #tab-support .support-note-socials .footer-social-icons {
+    gap: 7px;
+  }
+
+  #tab-support .support-note-socials .footer-social-icons a {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    font-size: 0.8rem;
+    border-radius: 9px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    text-decoration: none;
+  }
+
+  #tab-support .support-note-socials .footer-social-icons a:nth-child(1) {
+    color: #1877f2;
+    border-color: rgba(24, 119, 242, 0.32);
+    background: #e8f1ff;
+  }
+
+  #tab-support .support-note-socials .footer-social-icons a:nth-child(2) {
+    color: #d9468d;
+    border-color: rgba(217, 70, 141, 0.32);
+    background: linear-gradient(145deg, #fff0e6, #fde8f4);
+  }
+
+  #tab-support .support-note-socials .footer-social-icons a:nth-child(3) {
+    color: #111827;
+    border-color: rgba(17, 24, 39, 0.28);
+    background: #f3f4f6;
+  }
+
+  #tab-support .support-note-socials .footer-social-icons a:nth-child(4) {
+    color: #0a66c2;
+    border-color: rgba(10, 102, 194, 0.32);
+    background: #e5f2ff;
+  }
+
+  #tab-support .support-note-socials .footer-social-icons a:nth-child(5) {
+    color: #374151;
+    border-color: rgba(55, 65, 81, 0.28);
+    background: #eef1f5;
+  }
+
+  #tab-support .support-note-socials .footer-x-button b {
+    font-family: Arial, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+}
+
+
+/* Tighter desktop Support spacing with the established card layout intact. */
+@media (min-width: 1024px) {
+  #tab-support .support-shell { padding-block: 12px; }
+  #tab-support .support-shell > .section-header { margin-bottom: 10px; }
+  #tab-support .support-three-column { gap: 16px; }
+
+  #tab-support .support-three-column .support-hero,
+  #tab-support .support-choice-column,
+  #tab-support .support-three-column .support-developer-note {
+    padding: 14px 16px;
+  }
+
+  #tab-support .support-note-heading { margin-bottom: 10px; }
+
+  #tab-support .support-three-column .support-note-footer {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 8px;
+    gap: 8px;
+  }
+
+  #tab-support .support-note-socials {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+
+  #tab-support .support-action-grid {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  #tab-support .support-three-column .support-tile {
+    padding: 10px;
+  }
+
+  #tab-support .support-three-column .support-tile .tile-icon {
+    margin-bottom: 6px;
+  }
+
+  #tab-support .support-three-column .support-hero-copy {
+    margin-block: 8px;
+  }
+}
+
+
+/* Circular social buttons in the developer card at every screen size. */
+#tab-support .support-note-socials .footer-social-icons a {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+
+#tab-support .support-note-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+#tab-support .developer-social-trigger {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  min-height: 26px;
+  padding: 0;
+  border: 1px solid rgba(253, 230, 138, 0.35);
+  border-radius: 50%;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.16);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#tab-support .developer-social-trigger:hover,
+#tab-support .developer-social-trigger[aria-expanded="true"] {
+  background: rgba(251, 191, 36, 0.22);
+  color: #fff1bc;
+}
+
+#tab-support .developer-social-trigger:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+body > .developer-social-menu.footer-social-popover.quran-reciter-picker:not([hidden]) {
+  display: block;
+  position: fixed;
+  z-index: 2147483000;
+  right: auto;
+  bottom: auto;
+  width: min(228px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 6px;
+  margin: 0;
+  border: 1px solid rgba(4, 120, 87, 0.18);
+  border-radius: 20px;
+  background: rgba(252, 254, 252, 0.98);
+  box-shadow: 0 20px 60px rgba(6, 40, 28, 0.22);
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+body > .developer-social-menu .footer-social-popover-options {
+  display: grid;
+  gap: 2px;
+  padding: 2px;
+}
+
+body > .developer-social-menu .quran-reciter-option {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 4px 9px;
+  gap: 9px;
+  border-radius: 12px;
+  font-size: 0.76rem;
+  text-decoration: none;
+}
+
+body > .developer-social-menu .quran-reciter-option > :first-child {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border-radius: 50%;
+  background: #e8f1ff;
+  color: #1877f2;
+}
+body > .developer-social-menu .quran-reciter-option:nth-child(2) > i { color: #d9468d; background: #fde8f4; }
+body > .developer-social-menu .quran-reciter-option:nth-child(3) > b { color: #111827; background: #f3f4f6; }
+body > .developer-social-menu .quran-reciter-option:nth-child(4) > i { color: #0a66c2; background: #e5f2ff; }
+body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #374151; background: #eef1f5; }
+
+
+#tab-support .developer-social-trigger .developer-connect-label {
+  display: none;
+}
+
+#tab-support .developer-social-trigger .developer-connect-icon {
+  font-size: 12px;
+}
+
+/* Shared Connect button on phone and desktop. */
+  #tab-support .developer-social-trigger {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    flex: 0 0 auto;
+    height: 28px;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 9px;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  #tab-support .developer-social-trigger .developer-connect-label {
+    display: inline;
+  }
+
+  #tab-support .developer-social-trigger .developer-connect-icon {
+    display: none;
+  }
+
+@media (max-width: 599px) {
+  #tab-support .support-note-signature-copy > span {
+    font-size: 0.6rem;
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-three-column .support-note-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px 12px;
+  }
+
+  #tab-support .support-note-principle {
+    flex: 1 1 110px;
+    max-width: none;
+  }
+
+  #tab-support .support-note-signature {
+    flex: 0 0 auto;
+    margin-left: auto;
+    align-self: start;
+  }
+}
+
+
+/* Consistent, legible founder title across phone and desktop. */
+#tab-support .support-note-signature-copy > span {
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+
+@media (max-width: 599px) {
+  #tab-support .developer-social-trigger {
+    height: 24px;
+    min-height: 24px;
+    padding: 0 7px;
+    border-radius: 7px;
+    font-size: 0.6rem;
+  }
+}
+
+
+/* Phone footer: social action first, partner credit fills the remaining row. */
+@media (max-width: 599px) {
+  .app-footer .footer-partner-wrap {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    gap: 8px;
+    padding-right: 8px;
+    height: auto;
+  }
+
+  .app-footer .footer-mobile-social-trigger {
+    order: -1;
+    flex: 0 0 35px;
+    margin: 0;
+  }
+
+  .app-footer .footer-partner-credit {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    height: auto;
+    min-height: 40px;
+    margin: 0;
+  }
+
+  .app-footer .footer-pukka-copy {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .app-footer .footer-partner-credit .footer-motto,
+  .app-footer .footer-partner-credit .footer-company {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .app-footer .footer-partner-link {
+    flex-shrink: 0;
+  }
+}
+
+
+@media (min-width: 600px) {
+  .app-footer .footer-social-label {
+    color: #fde68a;
+  }
+
+  .app-footer .footer-social-label::before {
+    background: #fde68a;
+    box-shadow: 0 0 0 3px rgba(253, 230, 138, 0.12);
+  }
+}
+
+
+@media (max-width: 599px) {
+  .app-footer .footer-kudu-credit .footer-kicker {
+    font-size: 0.76rem;
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+
+  .app-footer .footer-kudu-credit .footer-primary {
+    font-size: 0.75rem;
+    line-height: 1.45;
+    white-space: normal;
+  }
+}
+
+
+/* Partner link shares the compact Connect button shape. */
+.app-footer .footer-partner-credit .footer-partner-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: auto;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transform: none;
+}
+
+.app-footer .footer-partner-credit .footer-partner-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: none;
+}
+
+.app-footer .footer-partner-credit .footer-partner-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 599px) {
+  .app-footer .footer-partner-credit .footer-partner-link {
+    height: 24px;
+    min-height: 24px;
+    padding: 0 7px;
+    border-radius: 7px;
+    font-size: 0.6rem;
+  }
+}
+
+
+/* Match the Visit button's right clearance to its vertical clearance. */
+.app-footer .footer-partner-credit {
+  padding-right: 19px;
+}
+
+@media (max-width: 599px) {
+  .app-footer .footer-partner-credit {
+    padding-right: 8px;
+  }
+}

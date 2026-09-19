@@ -100,7 +100,7 @@ export default function AppFooter() {
                 aria-label="Visit the official Pukka Gen website"
                 title="Visit Pukka Gen"
               >
-                <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                <span>Visit</span>
               </a>
             </div>
             <button
