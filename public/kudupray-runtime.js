@@ -1643,7 +1643,7 @@ function renderQuranReaderReciters() {
     initQuranReciterPicker();
 }
 
-function createProfileAvatar(label, portraitUrl = '', fallbackSeed = label) {
+function createProfileAvatar(label, portraitUrl = '') {
     const avatar = document.createElement('span');
     avatar.className = 'quran-reciter-avatar';
     avatar.setAttribute('aria-hidden', 'true');
@@ -1655,24 +1655,34 @@ function createProfileAvatar(label, portraitUrl = '', fallbackSeed = label) {
     photo.loading = 'lazy';
     photo.decoding = 'async';
     photo.referrerPolicy = 'no-referrer';
+    photo.className = 'selector-profile-photo';
     // Keep initials visible until an image has loaded, so a slow third-party
     // source never leaves a primary selector without a recognizable profile.
     photo.addEventListener('load', () => {
-        if (photo.naturalWidth > 0) avatar.replaceChildren(photo);
+        if (photo.naturalWidth > 0) {
+            photo.classList.add('is-loaded');
+            avatar.replaceChildren(photo);
+        }
     }, { once: true });
     photo.addEventListener('error', () => {
-        if (photo.dataset.fallbackApplied) return;
-        photo.dataset.fallbackApplied = 'true';
-        photo.src = `https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(fallbackSeed || label || 'KuduPray')}&backgroundColor=e8f4ef,dcfce7`;
-    });
-    photo.src = portraitUrl || `https://api.dicebear.com/9.x/personas/svg?seed=${encodeURIComponent(fallbackSeed || label || 'KuduPray')}&backgroundColor=e8f4ef,dcfce7`;
+        // A photo must be verified before it is shown. Keep the readable
+        // initials when one is unavailable instead of substituting artwork.
+        photo.remove();
+    }, { once: true });
+    if (portraitUrl) {
+        // Attach the image before assigning its source. Detached images are
+        // not consistently fetched by browsers, which left profile initials
+        // visible even when a verified portrait was available.
+        avatar.append(photo);
+        photo.src = portraitUrl;
+    }
     return avatar;
 }
 
 function createQuranReciterAvatar(reciter) {
     const name = reciter.label.split(' · ')[0];
     const portrait = QURAN_RECITER_PORTRAITS[reciter.identifier];
-    return createProfileAvatar(name, portrait ? `https://www.assabile.com/media/person/280x219/${portrait}.png` : '', reciter.identifier || name);
+    return createProfileAvatar(name, portrait ? `https://www.assabile.com/media/person/280x219/${portrait}.png` : '');
 }
 
 function syncQuranReciterPicker() {
@@ -4152,15 +4162,12 @@ function hydrateAdhanSelect(select) {
 function createAdhanVoiceAvatar(adhan) {
     const name = String(adhan.name || 'Adhan').trim();
     // Use a verified photograph where the Adhan voice matches a reciter in the
-    // reader. Other voices receive a stable illustrated profile, rather than
-    // initials, so every Adhan option has the same visual language.
+    // reader. Other voices keep their clear initials until a verified portrait
+    // can be provided; no generated image is presented as a real person.
     if (/abdul\s*bas[ie]t|abdel\s*basset/i.test(name)) {
         return createQuranReciterAvatar({ identifier: 'ar.abdulbasitmurattal-2', label: name });
     }
-    if (/yasser\s+al[-\s]?dosari/i.test(name)) {
-        return createProfileAvatar(name, 'https://www.assabile.com/media/person/280x219/yasser-al-dosari.png', adhan.id || name);
-    }
-    return createProfileAvatar(name, '', adhan.id || name);
+    return createProfileAvatar(name);
 }
 
 function closeAdhanPicker(restoreFocus = false) {

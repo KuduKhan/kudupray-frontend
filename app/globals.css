@@ -32443,6 +32443,17 @@ body.dark-mode .quran-player::before {
   border-radius: 50%;
 }
 
+/* A verified selector portrait fades in only after its pixels are available.
+   Initials remain readable for slow or unavailable portrait sources. */
+.quran-reciter-avatar img.selector-profile-photo {
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.quran-reciter-avatar img.selector-profile-photo.is-loaded {
+  opacity: 1;
+}
+
 .quran-reciter-picker {
   position: fixed;
   z-index: 10050;
