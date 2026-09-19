@@ -34949,6 +34949,738 @@ body.dark-mode .brand-logo-mark img {
   filter: brightness(1.34) saturate(1.18) contrast(1.06) drop-shadow(0 3px 7px rgba(0, 0, 0, 0.56));
 }
 
+/* Compact Pukka Gen partner emblem, paired with the existing footer credit copy. */
+.footer-pukka-emblem {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(125, 224, 255, 0.64);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #071a3a, #08204a);
+  box-shadow:
+    0 5px 12px rgba(1, 18, 51, 0.25),
+    0 0 0 2px rgba(154, 238, 255, 0.09),
+    inset 0 1px 0 rgba(223, 251, 255, 0.3);
+}
+
+.footer-pukka-emblem::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(111, 226, 255, 0.08);
+}
+
+.footer-pukka-emblem img {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 39px;
+  height: 39px;
+  max-width: none;
+  object-fit: contain;
+  filter: brightness(1.14) saturate(1.16) contrast(1.1);
+}
+
+.footer-partner-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 7px 16px rgba(3, 65, 49, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48);
+}
+
+.footer-partner-credit .footer-motto,
+.footer-partner-credit .footer-company {
+  display: inline-flex;
+  align-items: center;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.footer-partner-credit .footer-motto {
+  gap: 5px;
+}
+
+.footer-partner-credit .footer-divider {
+  display: block;
+  width: 1px;
+  height: 17px;
+  background: linear-gradient(180deg, transparent, rgba(4, 120, 87, 0.36), transparent);
+}
+
+.footer-kudu-credit,
+.footer-social-credit {
+  min-width: 0;
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 7px 16px rgba(3, 65, 49, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48);
+}
+
+.footer-kudu-credit .footer-kicker {
+  margin-bottom: 3px;
+}
+
+.footer-kudu-credit .footer-primary {
+  margin: 0;
+}
+
+.footer-social-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-social-label {
+  color: var(--primary-dark);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.footer-social-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer-social-icons :is(span, a) {
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  color: #0d7059;
+  border: 1px solid rgba(4, 120, 87, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 0.67rem;
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.footer-social-icons a:hover,
+.footer-social-icons a:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 11px rgba(6, 78, 59, 0.16);
+}
+
+.footer-social-icons a:focus-visible {
+  outline: 2px solid rgba(4, 120, 87, 0.48);
+  outline-offset: 2px;
+}
+
+.footer-social-popover {
+  display: none;
+}
+
+.footer-mobile-social-trigger {
+  display: none;
+}
+
+body.dark-mode .footer-partner-credit {
+  border-color: rgba(187, 239, 224, 0.25);
+  background: rgba(219, 255, 242, 0.06);
+  box-shadow:
+    0 7px 16px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+body.dark-mode .footer-kudu-credit {
+  border-color: rgba(187, 239, 224, 0.25);
+  background: rgba(219, 255, 242, 0.06);
+  box-shadow:
+    0 7px 16px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+body.dark-mode .footer-social-credit {
+  border-color: rgba(187, 239, 224, 0.25);
+  background: rgba(219, 255, 242, 0.06);
+  box-shadow:
+    0 7px 16px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+}
+
+body.dark-mode .footer-social-label {
+  color: #a7e7d0;
+}
+
+body.dark-mode .footer-social-icons :is(span, a) {
+  color: #8ee1b5;
+  border-color: rgba(187, 239, 224, 0.16);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+@media (min-width: 600px) {
+  .footer-partner-credit {
+    min-width: 342px;
+    min-height: 54px;
+    justify-content: center;
+    gap: 10px;
+    padding: 7px 16px 7px 7px;
+    border-radius: 18px;
+  }
+
+  .footer-pukka-emblem {
+    width: 40px;
+    height: 40px;
+  }
+
+  .footer-pukka-emblem img {
+    top: -6px;
+    left: -6px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .footer-partner-credit .footer-divider {
+    height: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-copy:has(.footer-kudu-credit) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .footer-signature:has(.footer-partner-credit) {
+    flex: 0 0 auto;
+    align-self: center;
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+
+  .footer-partner-credit {
+    min-width: 0;
+    height: 66px;
+    min-height: 66px;
+    box-sizing: border-box;
+    gap: 12px;
+    padding: 8px 11px 8px 7px;
+    border-radius: 21px;
+  }
+
+  .footer-kudu-credit,
+  .footer-social-credit {
+    height: 66px;
+    min-height: 66px;
+    box-sizing: border-box;
+  }
+
+  .footer-kudu-credit {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 12px;
+    text-align: left;
+  }
+
+  .footer-social-credit {
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 8px 11px;
+    border-color: rgba(255, 255, 255, 0.64);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow:
+      0 9px 18px rgba(3, 65, 49, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  }
+
+  .footer-partner-wrap {
+    height: 66px;
+    align-items: center;
+  }
+
+  .footer-pukka-copy {
+    white-space: nowrap;
+  }
+
+  .footer-social-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #075c43;
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.09em;
+  }
+
+  .footer-social-label::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  }
+
+  .footer-social-icons {
+    gap: 6px;
+  }
+
+  .footer-social-icons :is(span, a) {
+    width: 30px;
+    height: 30px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    box-shadow:
+      0 3px 7px rgba(6, 78, 59, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    font-size: 0.84rem;
+  }
+
+  .footer-social-icons :is(span, a):nth-child(1) {
+    color: #1877f2;
+    border-color: rgba(24, 119, 242, 0.32);
+    background: #e8f1ff;
+  }
+
+  .footer-social-icons :is(span, a):nth-child(2) {
+    color: #d9468d;
+    border-color: rgba(217, 70, 141, 0.32);
+    background: linear-gradient(145deg, #fff0e6, #fde8f4);
+  }
+
+  .footer-social-icons :is(span, a):nth-child(3) {
+    color: #111827;
+    border-color: rgba(17, 24, 39, 0.28);
+    background: #f3f4f6;
+  }
+
+  .footer-social-icons :is(span, a):nth-child(4) {
+    color: #0a66c2;
+    border-color: rgba(10, 102, 194, 0.32);
+    background: #e5f2ff;
+  }
+
+  .footer-social-icons :is(span, a):nth-child(5) {
+    color: #374151;
+    border-color: rgba(55, 65, 81, 0.28);
+    background: #eef1f5;
+  }
+
+  .footer-x-button b {
+    font-family: Arial, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .footer-pukka-emblem {
+    width: 48px;
+    height: 48px;
+  }
+
+  .footer-pukka-emblem img {
+    top: -7px;
+    left: -7px;
+    width: 62px;
+    height: 62px;
+  }
+
+  .footer-partner-credit .footer-motto,
+  .footer-partner-credit .footer-company {
+    font-size: 0.74rem;
+  }
+
+  .footer-partner-credit .footer-divider {
+    height: 29px;
+  }
+}
+
+@media (max-width: 599px) {
+  .footer-social-credit {
+    display: none;
+  }
+
+  .footer-kudu-credit {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .footer-signature:has(.footer-partner-credit) {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .footer-partner-credit {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    min-height: 32px;
+    padding: 2px 7px 2px 4px;
+    border-color: rgba(8, 120, 87, 0.2);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow:
+      0 7px 16px rgba(6, 78, 59, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .app-footer:has(.footer-social-popover) {
+    overflow: visible;
+  }
+
+  .footer-mobile-social-trigger {
+    width: 20px;
+    height: 16px;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    margin-left: 2px;
+    padding: 0;
+    color: #c86b09;
+    border: 1px solid rgba(217, 119, 6, 0.26);
+    border-radius: 5px;
+    background: linear-gradient(145deg, rgba(255, 247, 237, 0.56), rgba(255, 237, 213, 0.24));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+    font-size: 0.46rem;
+    font-weight: 900;
+    letter-spacing: -0.08em;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  }
+
+  .footer-mobile-social-trigger:active {
+    transform: scale(0.93);
+  }
+
+  .footer-mobile-social-trigger:focus-visible {
+    outline: 2px solid rgba(4, 120, 87, 0.52);
+    outline-offset: 2px;
+  }
+
+  .footer-social-popover:not([hidden]) {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 9px);
+    z-index: 6;
+    width: min(228px, calc(100vw - 28px));
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    gap: 0;
+    padding: 7px;
+    border: 1px solid rgba(4, 120, 87, 0.16);
+    border-radius: 22px;
+    background: #fcfefc;
+    color: #163d30;
+    box-shadow: 0 20px 60px rgba(6, 40, 28, 0.22), 0 3px 12px rgba(6, 40, 28, 0.08);
+  }
+
+  .footer-social-popover-title {
+    color: #276254;
+    padding: 8px 12px 10px;
+    font-size: 0.71rem;
+    font-weight: 750;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  .footer-social-popover-options {
+    display: grid;
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .footer-social-popover-options a {
+    width: 100%;
+    min-height: 36px;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    font-size: 0.72rem;
+    font-weight: 750;
+    text-align: left;
+    text-decoration: none;
+  }
+
+  .footer-social-popover-options a > :first-child {
+    width: 28px;
+    height: 28px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 9px;
+  }
+
+  .footer-social-popover-options a:focus-visible {
+    outline: 2px solid rgba(4, 120, 87, 0.52);
+    outline-offset: 2px;
+  }
+
+  .footer-social-popover-options a:hover,
+  .footer-social-popover-options a:focus-visible {
+    border-color: rgba(4, 120, 87, 0.2);
+    background: rgba(239, 250, 245, 0.9);
+  }
+
+  .footer-social-popover-options a:nth-child(1) > :first-child {
+    color: #1877f2;
+    border: 1px solid rgba(24, 119, 242, 0.22);
+    background: #e8f1ff;
+  }
+
+  .footer-social-popover-options a:nth-child(2) > :first-child {
+    color: #d9468d;
+    border: 1px solid rgba(217, 70, 141, 0.2);
+    background: linear-gradient(145deg, #fff0e6, #fde8f4);
+  }
+
+  .footer-social-popover-options a:nth-child(3) > :first-child {
+    color: #111827;
+    border: 1px solid rgba(17, 24, 39, 0.18);
+    background: #f3f4f6;
+  }
+
+  .footer-social-popover-options a:nth-child(4) > :first-child {
+    color: #0a66c2;
+    border: 1px solid rgba(10, 102, 194, 0.2);
+    background: #e5f2ff;
+  }
+
+  .footer-social-popover-options a:nth-child(5) > :first-child {
+    color: #374151;
+    border: 1px solid rgba(55, 65, 81, 0.18);
+    background: #eef1f5;
+  }
+
+  .footer-social-popover-options .footer-x-button b {
+    font-family: Arial, sans-serif;
+    font-size: 0.84rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  body.dark-mode .footer-social-popover:not([hidden]) {
+    border-color: rgba(187, 239, 224, 0.2);
+    background: rgba(8, 35, 27, 0.98);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  }
+
+  body.dark-mode .footer-social-popover-title {
+    color: #a7e7d0;
+  }
+
+  body.dark-mode .footer-social-popover-options a {
+    color: #d9f5e9;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  body.dark-mode .footer-social-popover-options a:hover,
+  body.dark-mode .footer-social-popover-options a:focus-visible {
+    border-color: rgba(187, 239, 224, 0.18);
+    background: rgba(255, 255, 255, 0.075);
+  }
+
+  body.dark-mode .footer-mobile-social-trigger {
+    color: #f7c66d;
+    border-color: rgba(247, 198, 109, 0.26);
+    background: rgba(217, 119, 6, 0.1);
+  }
+
+  .footer-pukka-emblem {
+    width: 26px;
+    height: 26px;
+  }
+
+  .footer-pukka-emblem img {
+    top: -4px;
+    left: -4px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .footer-partner-credit {
+    gap: 5px;
+    min-height: 32px;
+    padding: 2px 7px 2px 4px;
+  }
+
+  .footer-partner-credit .footer-motto,
+  .footer-partner-credit .footer-company {
+    font-size: 0.61rem;
+  }
+
+  .footer-partner-credit .footer-motto {
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .footer-partner-credit .footer-divider {
+    height: 16px;
+  }
+
+  .footer-partner-credit .footer-company {
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 380px) {
+  .footer-pukka-emblem {
+    width: 26px;
+    height: 26px;
+  }
+
+  .footer-pukka-emblem img {
+    top: -4px;
+    left: -4px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .footer-partner-credit {
+    gap: 5px;
+    min-height: 32px;
+    padding: 2px 6px 2px 3px;
+  }
+}
+
+/* Partner credit follows the Adhan selector and preview-control arrangement. */
+.footer-partner-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-pukka-copy {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 599px) {
+  .footer-signature:has(.footer-partner-wrap) {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .footer-partner-wrap {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .footer-partner-credit {
+    width: auto;
+    min-width: 0;
+    height: 42px;
+    min-height: 42px;
+    flex: 0 1 calc(100% - 88px);
+    align-items: center;
+    gap: 6px;
+    padding: 4px 3px 4px 5px;
+    border-color: rgba(255, 255, 255, 0.34);
+    border-radius: 17px;
+    background: rgba(255, 255, 255, 0.13);
+    box-shadow: none;
+  }
+
+  .footer-pukka-emblem {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+
+  .footer-pukka-emblem img {
+    top: -5px;
+    left: -5px;
+    width: 39px;
+    height: 39px;
+  }
+
+  .footer-pukka-copy {
+    display: grid;
+    gap: 0;
+    flex: 1;
+    min-width: 0;
+    line-height: 1.1;
+  }
+
+  .footer-partner-credit .footer-motto,
+  .footer-partner-credit .footer-company {
+    min-height: 0;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  .footer-partner-credit .footer-motto {
+    color: #fff8dc;
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .footer-partner-credit .footer-company {
+    color: rgba(240, 255, 249, 0.76);
+    font-size: 0.58rem;
+    font-weight: 650;
+  }
+
+  .footer-mobile-social-trigger {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    color: #fde68a;
+    border: 1px solid rgba(253, 230, 138, 0.28);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.11);
+    box-shadow:
+      0 2px 10px rgba(0, 0, 0, 0.08),
+      inset 0 1px rgba(255, 255, 255, 0.1);
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .footer-mobile-social-trigger:active {
+    transform: scale(0.94);
+  }
+
+  .footer-social-popover:not([hidden]) {
+    right: 0;
+  }
+}
+
 @media (max-width: 599px) {
   .brand-logo-mark {
     border-radius: 17px;

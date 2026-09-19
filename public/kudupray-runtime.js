@@ -1655,9 +1655,13 @@ function createQuranReciterAvatar(reciter) {
     photo.loading = 'lazy';
     photo.decoding = 'async';
     photo.referrerPolicy = 'no-referrer';
-    photo.addEventListener('error', () => photo.remove(), { once: true });
+    // Keep the initials visible until a third-party portrait has actually
+    // loaded. A portrait host being slow or unavailable must not leave an
+    // empty avatar in a primary reader control.
+    photo.addEventListener('load', () => {
+        if (photo.naturalWidth > 0) avatar.replaceChildren(photo);
+    }, { once: true });
     photo.src = `https://www.assabile.com/media/person/280x219/${QURAN_RECITER_PORTRAITS[reciter.identifier]}.png`;
-    avatar.append(photo);
     return avatar;
 }
 
@@ -1669,7 +1673,6 @@ function syncQuranReciterPicker() {
     if (trigger.dataset.reciter !== reciter.identifier) {
         const avatar = createQuranReciterAvatar(reciter);
         avatar.id = 'quran-reciter-selected-avatar';
-        avatar.querySelector('img').loading = 'eager';
         current.replaceWith(avatar);
         trigger.dataset.reciter = reciter.identifier;
     }
