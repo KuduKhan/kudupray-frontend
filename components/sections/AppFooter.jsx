@@ -85,7 +85,7 @@ export default function AppFooter() {
                   alt=""
                   width={1254}
                   height={1254}
-                  sizes="26px"
+                  sizes="(max-width: 599px) 33px, 45px"
                 />
               </span>
               <span className="footer-pukka-copy">
