@@ -1,5 +1,6 @@
 "use client";
 
+import SupportTestimonials from "./SupportTestimonials";
 import DeveloperSocials from "./DeveloperSocials";
 
 import { dispatch } from "../runtime-events";
@@ -261,6 +262,7 @@ export default function TabSupport() {
                   "\n                    “Jazakumullahu khayran for trusting KuduPray with a small part of your daily worship. Every careful correction, sincere dua, and thoughtful share helps me build it with greater care. May Allah accept it, keep it beneficial, and forgive its shortcomings.”\n                "
                 }
               </blockquote>
+              <SupportTestimonials />
               <div className="support-note-footer">
                 <p className="support-note-principle">
                   <i

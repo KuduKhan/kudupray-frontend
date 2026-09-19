@@ -40200,8 +40200,8 @@ body.quran-reader-english-numerals #tab-quran-reader #quran-surah-selected-numbe
 /* Give the desktop developer message a fuller, comfortable reading size. */
 @media (min-width: 1024px) {
   #tab-support .support-developer-note blockquote {
-    font-size: clamp(1.4rem, 1.65vw, 1.55rem);
-    line-height: 1.7;
+    font-size: clamp(1.15rem, 1.35vw, 1.3rem);
+    line-height: 1.6;
   }
 }
 
@@ -40672,4 +40672,90 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   .app-footer .footer-partner-credit {
     padding-right: 8px;
   }
+}
+
+
+/* Anchor the developer credit group at the bottom of its flex card. */
+#tab-support .support-three-column .support-note-footer {
+  margin-top: auto;
+  margin-bottom: 0;
+  padding-top: 12px;
+}
+
+#tab-support .support-three-column .support-developer-note blockquote {
+  margin-bottom: 12px;
+}
+
+
+/* A compact community strip between the developer message and signature. */
+#tab-support .support-testimonials {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  margin: auto 0 12px;
+  padding: 8px 0;
+  border-block: 1px solid rgba(255, 255, 255, 0.12);
+}
+#tab-support .support-testimonials-heading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 5px;
+  color: #fde68a;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+#tab-support .support-testimonials-window {
+  overflow: hidden;
+  border-radius: 10px;
+}
+#tab-support .support-testimonials-track {
+  display: flex;
+  width: max-content;
+  animation: support-testimonials-scroll 36s linear infinite;
+}
+#tab-support .support-testimonials-group {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding-right: 10px;
+}
+#tab-support .support-testimonial {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 245px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ecfdf5;
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+#tab-support .support-testimonial i { color: #fde68a; font-size: 12px; }
+#tab-support .support-testimonial q {
+  display: block;
+}
+#tab-support .support-testimonial strong {
+  display: block;
+  margin-top: 4px;
+  color: #fde68a;
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+#tab-support .support-testimonials:hover .support-testimonials-track,
+#tab-support .support-testimonials:focus-within .support-testimonials-track,
+#tab-support .support-testimonials :focus-visible {
+  outline: 2px solid #fde68a;
+  outline-offset: 2px;
+}
+@keyframes support-testimonials-scroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  #tab-support .support-testimonials-track { animation: none; }
+  #tab-support .support-testimonials-window { overflow-x: auto; }
+  #tab-support .support-testimonials-group[aria-hidden="true"] { display: none; }
 }
