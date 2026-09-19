@@ -38195,3 +38195,27 @@ body.dark-mode #tab-quran-reader .quran-reader-premium-emblem .quran-reader-embl
     flex-basis: 30px;
   }
 }
+
+/* Final selector numeral scale: this comes after compact-view refinements so
+   the Arabic Surah numbers stay readable at every breakpoint. */
+#tab-quran-reader #quran-surah-selected-number.quran-surah-badge,
+#quran-surah-list .quran-surah-badge,
+#quran-surah-picker .quran-surah-badge {
+  font-size: 14px;
+}
+
+/* Western numerals need less vertical space than Arabic-Indic figures. */
+body.quran-reader-english-numerals #tab-quran-reader #quran-surah-selected-number.quran-surah-badge,
+body.quran-reader-english-numerals #quran-surah-list .quran-surah-badge,
+body.quran-reader-english-numerals #quran-surah-picker .quran-surah-badge {
+  font-size: 10px;
+}
+
+/* Mirror the selector scale for the inline number at the start of each ayah. */
+.quran-reader-arabic .quran-reader-ayah-number {
+  font-size: 14px;
+}
+
+body.quran-reader-english-numerals .quran-reader-arabic .quran-reader-ayah-number {
+  font-size: 10px;
+}

@@ -1852,6 +1852,7 @@ function formatQuranReaderAyahNumber(number) {
 
 window.setQuranReaderNumbering = function (useArabic) {
     quranReaderState.arabicNumbers = Boolean(useArabic);
+    document.body.classList.toggle('quran-reader-english-numerals', !quranReaderState.arabicNumbers);
     document.querySelectorAll('.quran-reader-ayah-number[data-number]').forEach(marker => {
         marker.textContent = formatQuranReaderAyahNumber(marker.dataset.number);
     });
@@ -1876,6 +1877,7 @@ function hydrateQuranReader() {
     } catch (error) {
         // The reader remains fully usable when device storage is unavailable.
     }
+    document.body.classList.toggle('quran-reader-english-numerals', !quranReaderState.arabicNumbers);
 }
 
 function getQuranReaderReciter() {
