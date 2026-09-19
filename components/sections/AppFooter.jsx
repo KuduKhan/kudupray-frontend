@@ -1,12 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 
 export default function AppFooter() {
   const [isMobileSocialOpen, setIsMobileSocialOpen] = useState(false);
+  const [socialMenuPosition, setSocialMenuPosition] = useState({ left: 8, bottom: 8 });
+  const socialTriggerRef = useRef(null);
+  const socialMenuRef = useRef(null);
+
+  useEffect(() => {
+    if (!isMobileSocialOpen) return undefined;
+
+    const positionSocialMenu = () => {
+      const trigger = socialTriggerRef.current;
+      if (!trigger) return;
+      const rect = trigger.getBoundingClientRect();
+      const menuWidth = Math.min(228, window.innerWidth - 28);
+      setSocialMenuPosition({
+        left: Math.max(14, Math.min(rect.right - menuWidth, window.innerWidth - menuWidth - 14)),
+        bottom: Math.max(12, window.innerHeight - rect.top + 10),
+      });
+    };
+
+    positionSocialMenu();
+    window.addEventListener("resize", positionSocialMenu);
+    window.addEventListener("scroll", positionSocialMenu, true);
+    return () => {
+      window.removeEventListener("resize", positionSocialMenu);
+      window.removeEventListener("scroll", positionSocialMenu, true);
+    };
+  }, [isMobileSocialOpen]);
+
+  useEffect(() => {
+    if (!isMobileSocialOpen) return undefined;
+
+    const closeOnOutsideInteraction = (event) => {
+      if (socialTriggerRef.current?.contains(event.target) || socialMenuRef.current?.contains(event.target)) return;
+      setIsMobileSocialOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setIsMobileSocialOpen(false);
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsideInteraction);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideInteraction);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isMobileSocialOpen]);
 
   return (
+    <>
     <footer className="app-footer" aria-label="KuduPray credits">
       <div className="footer-brand-mark brand-logo-mark" aria-hidden="true">
         <img src="/brand/kudupray-emblem.png" alt="" />
@@ -47,6 +94,7 @@ export default function AppFooter() {
               </span>
             </div>
             <button
+              ref={socialTriggerRef}
               type="button"
               className="footer-mobile-social-trigger"
               aria-label={isMobileSocialOpen ? "Hide social platforms" : "Show social platforms"}
@@ -56,19 +104,30 @@ export default function AppFooter() {
             >
               <span aria-hidden="true">{"⟩⟩⟩"}</span>
             </button>
-            <div id="footer-mobile-social-icons" className="footer-social-popover" role="dialog" aria-label="Choose a social platform" hidden={!isMobileSocialOpen}>
-              <span className="footer-social-popover-title">{"Choose a platform"}</span>
-              <div className="footer-social-popover-options">
-                <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" title="Facebook" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-facebook-f" aria-hidden="true"></i><span>{"Facebook"}</span></a>
-                <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-instagram" aria-hidden="true"></i><span>{"Instagram"}</span></a>
-                <a href="https://x.com/" target="_blank" rel="noreferrer" className="footer-x-button" aria-label="X / Twitter" title="X / Twitter" onClick={() => setIsMobileSocialOpen(false)}><b aria-hidden="true">X</b><span>{"X / Twitter"}</span></a>
-                <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" title="LinkedIn" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-linkedin-in" aria-hidden="true"></i><span>{"LinkedIn"}</span></a>
-                <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub" title="GitHub" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-github" aria-hidden="true"></i><span>{"GitHub"}</span></a>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </footer>
+    {isMobileSocialOpen && typeof document !== "undefined" && createPortal(
+      <div
+        ref={socialMenuRef}
+        id="footer-mobile-social-icons"
+        className="footer-social-popover quran-reciter-picker"
+        role="dialog"
+        aria-label="Choose a social platform"
+        style={{ left: `${socialMenuPosition.left}px`, bottom: `${socialMenuPosition.bottom}px` }}
+      >
+        <span className="footer-social-popover-title quran-reciter-picker-heading">{"Choose a platform"}</span>
+        <div className="footer-social-popover-options quran-reciter-list">
+          <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" title="Facebook" className="quran-reciter-option" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-facebook-f" aria-hidden="true"></i><span>{"Facebook"}</span></a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" aria-label="Instagram" title="Instagram" className="quran-reciter-option" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-instagram" aria-hidden="true"></i><span>{"Instagram"}</span></a>
+          <a href="https://x.com/" target="_blank" rel="noreferrer" className="footer-x-button quran-reciter-option" aria-label="X / Twitter" title="X / Twitter" onClick={() => setIsMobileSocialOpen(false)}><b aria-hidden="true">X</b><span>{"X / Twitter"}</span></a>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer" aria-label="LinkedIn" title="LinkedIn" className="quran-reciter-option" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-linkedin-in" aria-hidden="true"></i><span>{"LinkedIn"}</span></a>
+          <a href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub" title="GitHub" className="quran-reciter-option" onClick={() => setIsMobileSocialOpen(false)}><i className="fa-brands fa-github" aria-hidden="true"></i><span>{"GitHub"}</span></a>
+        </div>
+      </div>,
+      document.body,
+    )}
+  </>
   );
 }
