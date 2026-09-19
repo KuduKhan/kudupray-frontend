@@ -92,6 +92,16 @@ export default function AppFooter() {
                 <span className="footer-motto">{"Pukka Gen ~ No Duff."}</span>
                 <span className="footer-company">{"An Intellisoft Company."}</span>
               </span>
+              <a
+                className="footer-partner-link"
+                href="https://pukkagennoduff.vercel.app"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Visit the official Pukka Gen website"
+                title="Visit Pukka Gen"
+              >
+                <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+              </a>
             </div>
             <button
               ref={socialTriggerRef}
