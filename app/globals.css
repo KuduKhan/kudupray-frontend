@@ -39808,3 +39808,146 @@ body.dark-mode .footer-partner-link {
 body.quran-reader-english-numerals #tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
   font-size: 10px;
 }
+
+
+/* Retain the original phone dock styling while letting its contents set the height. */
+@media (max-width: 599px) {
+  #primary-navigation.floating-nav {
+    height: auto;
+    min-height: 0;
+  }
+
+  #primary-navigation.floating-nav .nav-item {
+    height: auto;
+    min-height: 0;
+  }
+}
+
+
+/* A close-fitting inner frame groups the mobile menus into one shared panel. */
+@media (max-width: 599px) {
+  #primary-navigation.floating-nav {
+    isolation: isolate;
+  }
+
+  #primary-navigation.floating-nav::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    z-index: -1;
+    opacity: 1 !important;
+    border: 1px solid rgba(19, 105, 76, 0.14);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.24);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    pointer-events: none;
+  }
+}
+
+
+/* Balance the icon and label groups inside the mobile dock's inner frame. */
+@media (max-width: 599px) {
+  #primary-navigation.floating-nav {
+    align-items: center;
+  }
+
+  #primary-navigation.floating-nav .nav-item {
+    align-items: center;
+    justify-content: center;
+    padding-block: 4px;
+    gap: 3px;
+    transform: none;
+  }
+
+  #primary-navigation.floating-nav .nav-item .nav-tile {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    margin: 0;
+    padding: 0;
+    transform: none;
+  }
+
+  #primary-navigation.floating-nav .nav-item .nav-tile i {
+    transform: none;
+  }
+
+  #primary-navigation.floating-nav .nav-item span {
+    display: block;
+    margin: 0;
+    padding: 0;
+    line-height: 12px;
+    text-align: center;
+  }
+}
+
+
+/* Carry the phone dock's framing and balanced groups through to desktop. */
+@media (min-width: 600px) {
+  #primary-navigation.floating-nav {
+    isolation: isolate;
+    height: auto;
+    min-height: 0;
+    align-items: center;
+    padding: 5px !important;
+    gap: 4px !important;
+    border-radius: 22px !important;
+  }
+
+  #primary-navigation.floating-nav::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    z-index: -1;
+    opacity: 1 !important;
+    border: 1px solid rgba(19, 105, 76, 0.14);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.24);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    pointer-events: none;
+  }
+
+  #primary-navigation.floating-nav .nav-item {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding: 4px 8px;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    transform: none;
+  }
+
+  #primary-navigation.floating-nav .nav-item .nav-tile {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    margin: 0;
+    padding: 0;
+    transform: none;
+  }
+
+  #primary-navigation.floating-nav .nav-item .nav-tile i {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    transform: none;
+  }
+
+  #primary-navigation.floating-nav .nav-item span {
+    display: block;
+    margin: 0;
+    padding: 0;
+    line-height: 12px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
