@@ -263,22 +263,21 @@ export default function TabSupport() {
                 }
               </blockquote>
               <SupportTestimonials />
-              <div className="support-note-footer">
+              <div className="support-note-footer support-note-footer-aligned">
                 <p className="support-note-principle">
                   <i
                     className="fa-solid fa-shield-heart"
                     aria-hidden="true"
                   ></i>
                   <span>
-                    {
-                      "Core worship tools remain free, ad-free, and privacy-minded."
-                    }
+                    <span className="support-principle-line">Core worship tools remain free,</span>{" "}
+                    <span className="support-principle-line">ad-free, and privacy-minded.</span>
                   </span>
                 </p>
                 <div className="support-note-signature">
                   <div className="support-note-signature-copy">
-                    <div className="support-note-name-row"><DeveloperSocials /><strong>{"Mufasa Khan"}</strong></div>
-                    <span>{"Founder & Lead Developer"}</span>
+                    <div className="support-note-name-row"><strong>{"Mufasa Khan"}</strong></div>
+                    <div className="support-note-role-row"><DeveloperSocials /><span>{"Founder & Lead Developer"}</span></div>
                   </div>
                   <span className="support-note-avatar" aria-hidden="true">
                     <img src="/brand/developer-profile.png" alt="" />

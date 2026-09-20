@@ -1,5 +1,25 @@
 // Preserved browser runtime. Loaded by next/script after React hydration.
 
+// Keep controls usable for this visit when storage is blocked or full.
+const kuduStorage = (() => {
+    const fallback = new Map();
+    return {
+        getItem(key) {
+            if (fallback.has(key)) return fallback.get(key);
+            try { return window.localStorage.getItem(key); } catch { return null; }
+        },
+        setItem(key, value) {
+            const text = String(value);
+            fallback.set(key, text);
+            try { window.localStorage.setItem(key, text); fallback.delete(key); } catch { /* Session fallback. */ }
+        },
+        removeItem(key) {
+            fallback.set(key, null);
+            try { window.localStorage.removeItem(key); fallback.delete(key); } catch { /* Hide the stale value for this visit. */ }
+        },
+    };
+})();
+
 // === DATA: 40 RABBANA + ESSENTIAL DUAS ===
 const duas = [
     // --- 40 RABBANA DUAS ---
@@ -788,7 +808,7 @@ function restoreDeenQuizDeck() {
     if (deenQuizDeckHydrated) return;
     deenQuizDeckHydrated = true;
     try {
-        const saved = JSON.parse(window.localStorage.getItem(DEEN_QUIZ_DECK_STORAGE_KEY) || 'null');
+        const saved = JSON.parse(kuduStorage.getItem(DEEN_QUIZ_DECK_STORAGE_KEY) || 'null');
         const validDeck = Array.isArray(saved?.deck) &&
             saved?.bankSize === DEEN_QUIZ_QUESTION_BANK.length &&
             saved.deck.length <= DEEN_QUIZ_QUESTION_BANK.length &&
@@ -807,7 +827,7 @@ function restoreDeenQuizDeck() {
 
 function saveDeenQuizDeck() {
     try {
-        window.localStorage.setItem(DEEN_QUIZ_DECK_STORAGE_KEY, JSON.stringify({
+        kuduStorage.setItem(DEEN_QUIZ_DECK_STORAGE_KEY, JSON.stringify({
             bankSize: DEEN_QUIZ_QUESTION_BANK.length,
             deck: deenQuizDeck,
             lastIndex: deenQuizLastIndex,
@@ -1102,12 +1122,12 @@ function setReflectionLoading(kind, loading) {
 
 function cacheLiveReflection(kind, item) {
     if (!item?.live || !REFLECTION_CACHE_KEYS[kind]) return;
-    try { localStorage.setItem(REFLECTION_CACHE_KEYS[kind], JSON.stringify(item)); } catch (error) { /* Cache is optional. */ }
+    try { kuduStorage.setItem(REFLECTION_CACHE_KEYS[kind], JSON.stringify(item)); } catch (error) { /* Cache is optional. */ }
 }
 
 function readCachedReflection(kind) {
     try {
-        const item = JSON.parse(localStorage.getItem(REFLECTION_CACHE_KEYS[kind]) || 'null');
+        const item = JSON.parse(kuduStorage.getItem(REFLECTION_CACHE_KEYS[kind]) || 'null');
         if (!item?.live || !item.text || !item.reference || !item.url) return null;
         if (kind === 'verse' && !item.arabic) return null;
         return { ...item, cached: true };
@@ -1305,7 +1325,7 @@ window.copyCurrentHadith = function (button) {
 };
 
 function saveTasbihState() {
-    try { localStorage.setItem('kudu_tasbih_state', JSON.stringify(tasbihState)); } catch (error) { /* Storage may be unavailable. */ }
+    try { kuduStorage.setItem('kudu_tasbih_state', JSON.stringify(tasbihState)); } catch (error) { /* Storage may be unavailable. */ }
 }
 
 function getTasbihCount() {
@@ -1395,7 +1415,7 @@ function initDailyCompanion() {
     }
 
     try {
-        const savedState = JSON.parse(localStorage.getItem('kudu_tasbih_state') || 'null');
+        const savedState = JSON.parse(kuduStorage.getItem('kudu_tasbih_state') || 'null');
         if (savedState && TASBIH_PHRASES.includes(savedState.phrase) && savedState.counts && typeof savedState.counts === 'object') {
             tasbihState = { phrase: savedState.phrase, counts: savedState.counts };
         }
@@ -1499,7 +1519,7 @@ const quranReaderState = {
 };
 
 function getQuranReaderTranslation() {
-    const language = document.getElementById('lang-select')?.value || localStorage.getItem('kudu_lang') || 'en';
+    const language = document.getElementById('lang-select')?.value || kuduStorage.getItem('kudu_lang') || 'en';
     const selected = QURAN_READER_TRANSLATION_OPTIONS.find(option => option.edition === quranReaderState.translationEdition);
     return selected || QURAN_READER_TRANSLATIONS[language] || QURAN_READER_TRANSLATIONS.en;
 }
@@ -2082,14 +2102,14 @@ window.setQuranReaderNumbering = function (useArabic) {
     syncQuranSurahPicker();
     const surahPicker = document.getElementById('quran-surah-picker');
     if (surahPicker && !surahPicker.hidden) renderQuranSurahPickerList();
-    try { localStorage.setItem('kudu_quran_reader_numbering', quranReaderState.arabicNumbers ? 'arabic' : 'english'); } catch (error) { /* Optional device preference. */ }
+    try { kuduStorage.setItem('kudu_quran_reader_numbering', quranReaderState.arabicNumbers ? 'arabic' : 'english'); } catch (error) { /* Optional device preference. */ }
 };
 
 window.setQuranReaderTranslation = function (edition) {
     const translation = QURAN_READER_TRANSLATION_OPTIONS.find(option => option.edition === edition);
     if (!translation || quranReaderState.translationEdition === translation.edition) return;
     quranReaderState.translationEdition = translation.edition;
-    try { localStorage.setItem('kudu_quran_reader_translation', translation.edition); } catch (error) { /* Optional device preference. */ }
+    try { kuduStorage.setItem('kudu_quran_reader_translation', translation.edition); } catch (error) { /* Optional device preference. */ }
     syncQuranReaderVisibility();
     void loadQuranReaderSurah(quranReaderState.surahNumber);
 };
@@ -2101,7 +2121,7 @@ window.setQuranReaderArabicStyle = function (style) {
         text.classList.toggle('quran-arabic-style-uthmani', nextStyle === 'uthmani');
         text.classList.toggle('quran-arabic-style-naskh', nextStyle === 'naskh');
     });
-    try { localStorage.setItem('kudu_quran_reader_arabic_style', nextStyle); } catch (error) { /* Optional device preference. */ }
+    try { kuduStorage.setItem('kudu_quran_reader_arabic_style', nextStyle); } catch (error) { /* Optional device preference. */ }
     syncQuranReaderVisibility();
 };
 
@@ -2109,17 +2129,17 @@ function hydrateQuranReader() {
     if (quranReaderState.hydrated) return;
     quranReaderState.hydrated = true;
     try {
-        const savedSurah = Number(localStorage.getItem('kudu_quran_reader_surah'));
+        const savedSurah = Number(kuduStorage.getItem('kudu_quran_reader_surah'));
         if (Number.isInteger(savedSurah) && savedSurah >= 1 && savedSurah <= 114) quranReaderState.surahNumber = savedSurah;
-        const savedReciter = localStorage.getItem('kudu_quran_reader_reciter');
+        const savedReciter = kuduStorage.getItem('kudu_quran_reader_reciter');
         if (QURAN_READER_RECITERS.some(reciter => reciter.identifier === savedReciter)) quranReaderState.reciter = savedReciter;
-        quranReaderState.repeatSurah = localStorage.getItem('kudu_quran_reader_repeat') === 'true';
-        quranReaderState.autoplayNextSurah = localStorage.getItem('kudu_quran_reader_autoplay') === 'true';
-        const savedNumbering = localStorage.getItem('kudu_quran_reader_numbering');
+        quranReaderState.repeatSurah = kuduStorage.getItem('kudu_quran_reader_repeat') === 'true';
+        quranReaderState.autoplayNextSurah = kuduStorage.getItem('kudu_quran_reader_autoplay') === 'true';
+        const savedNumbering = kuduStorage.getItem('kudu_quran_reader_numbering');
         if (savedNumbering === 'arabic' || savedNumbering === 'english') quranReaderState.arabicNumbers = savedNumbering === 'arabic';
-        const savedTranslation = localStorage.getItem('kudu_quran_reader_translation');
+        const savedTranslation = kuduStorage.getItem('kudu_quran_reader_translation');
         if (QURAN_READER_TRANSLATION_OPTIONS.some(option => option.edition === savedTranslation)) quranReaderState.translationEdition = savedTranslation;
-        const savedArabicStyle = localStorage.getItem('kudu_quran_reader_arabic_style');
+        const savedArabicStyle = kuduStorage.getItem('kudu_quran_reader_arabic_style');
         if (savedArabicStyle === 'naskh' || savedArabicStyle === 'uthmani') quranReaderState.arabicTextStyle = savedArabicStyle;
     } catch (error) {
         // The reader remains fully usable when device storage is unavailable.
@@ -2482,14 +2502,14 @@ function bindQuranPlayer() {
     document.getElementById('quran-player-next')?.addEventListener('click', () => navigateSurah(1));
     document.getElementById('quran-player-repeat')?.addEventListener('click', event => {
         quranReaderState.repeatSurah = !quranReaderState.repeatSurah;
-        try { localStorage.setItem('kudu_quran_reader_repeat', String(quranReaderState.repeatSurah)); } catch (error) { /* Optional device preference. */ }
+        try { kuduStorage.setItem('kudu_quran_reader_repeat', String(quranReaderState.repeatSurah)); } catch (error) { /* Optional device preference. */ }
         setQuranReaderStatus(quranReaderState.repeatSurah ? 'Repeat surah is on.' : 'Repeat surah is off.');
         syncQuranPlayer();
         event.currentTarget.focus({ preventScroll: true });
     });
     document.getElementById('quran-player-autoplay')?.addEventListener('click', event => {
         quranReaderState.autoplayNextSurah = !quranReaderState.autoplayNextSurah;
-        try { localStorage.setItem('kudu_quran_reader_autoplay', String(quranReaderState.autoplayNextSurah)); } catch (error) { /* Optional device preference. */ }
+        try { kuduStorage.setItem('kudu_quran_reader_autoplay', String(quranReaderState.autoplayNextSurah)); } catch (error) { /* Optional device preference. */ }
         setQuranReaderStatus(quranReaderState.autoplayNextSurah ? 'Autoplay next surah is on.' : 'Autoplay next surah is off.');
         syncQuranPlayer();
         event.currentTarget.focus({ preventScroll: true });
@@ -2820,7 +2840,7 @@ async function loadQuranReaderSurah(number = quranReaderState.surahNumber, { pla
         if (requestId !== quranReaderState.requestId) return;
         renderQuranReaderSurah(payload, translationInfo);
         updateQuranReaderAudio({ play });
-        try { localStorage.setItem('kudu_quran_reader_surah', String(normalizedNumber)); } catch (error) { /* Optional device preference. */ }
+        try { kuduStorage.setItem('kudu_quran_reader_surah', String(normalizedNumber)); } catch (error) { /* Optional device preference. */ }
         setQuranReaderStatus('');
     } catch (error) {
         if (requestId !== quranReaderState.requestId) return;
@@ -2902,7 +2922,7 @@ window.selectQuranReaderReciter = function (identifier) {
     clearQuranDownload();
     quranReaderState.reciter = identifier;
     updateQuranReaderAudioMeta();
-    try { localStorage.setItem('kudu_quran_reader_reciter', identifier); } catch (error) { /* Optional device preference. */ }
+    try { kuduStorage.setItem('kudu_quran_reader_reciter', identifier); } catch (error) { /* Optional device preference. */ }
     updateQuranReaderAudio({ play: shouldContinue });
     setQuranReaderStatus(shouldContinue
         ? 'Reciter updated. The same selected voice is continuing with the highlighted ayah.'
@@ -2920,7 +2940,7 @@ window.setQuranReaderLayer = function (type, visible) {
     const settingToggle = document.getElementById(type === 'trans' ? 'toggle-trans' : 'toggle-trans-en');
     if (settingToggle) settingToggle.checked = Boolean(visible);
     document.body.classList.toggle(`hide-${type}`, !visible);
-    try { localStorage.setItem(`hide_${type}`, String(!visible)); } catch (error) { /* Display preference still applies for this visit. */ }
+    try { kuduStorage.setItem(`hide_${type}`, String(!visible)); } catch (error) { /* Display preference still applies for this visit. */ }
     syncQuranReaderVisibility();
     refreshSettingsSummary();
 };
@@ -2958,7 +2978,7 @@ function init() {
     elements.greg.innerText = today.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
     // Load Saved Location
-    const savedLoc = localStorage.getItem('kudu_location');
+    const savedLoc = kuduStorage.getItem('kudu_location');
     if (savedLoc) {
         try {
             const locData = JSON.parse(savedLoc);
@@ -2971,7 +2991,7 @@ function init() {
                 throw new Error('Invalid saved location');
             }
         } catch (error) {
-            localStorage.removeItem('kudu_location');
+            kuduStorage.removeItem('kudu_location');
             triggerAutoLocation();
         }
     } else {
@@ -3311,7 +3331,7 @@ function setCalendarDataStatus(state, message) {
 function readCalendarCache(key) {
     if (islamicCalendarMemoryCache.has(key)) return islamicCalendarMemoryCache.get(key);
     try {
-        const stored = JSON.parse(localStorage.getItem(`kudu_hijri_calendar_${key}`));
+        const stored = JSON.parse(kuduStorage.getItem(`kudu_hijri_calendar_${key}`));
         if (!stored?.savedAt || !Array.isArray(stored.data)) return null;
         const cached = normaliseAlAdhanMonth(stored.data);
         islamicCalendarMemoryCache.set(key, cached);
@@ -3324,7 +3344,7 @@ function readCalendarCache(key) {
 function saveCalendarCache(key, rawData, normalised) {
     islamicCalendarMemoryCache.set(key, normalised);
     try {
-        localStorage.setItem(`kudu_hijri_calendar_${key}`, JSON.stringify({ savedAt: Date.now(), data: rawData }));
+        kuduStorage.setItem(`kudu_hijri_calendar_${key}`, JSON.stringify({ savedAt: Date.now(), data: rawData }));
     } catch (error) {
         // Calendar remains usable when browser storage is unavailable.
     }
@@ -3744,34 +3764,38 @@ function refreshSettingsSummary() {
 
 function loadSettings() {
     // Theme
-    const theme = localStorage.getItem('kudu_theme');
+    const theme = kuduStorage.getItem('kudu_theme');
     if (theme === 'dark') {
         document.body.classList.add('dark-mode');
         document.getElementById('toggle-theme').checked = true;
     }
 
     // Text Size
-    const size = localStorage.getItem('kudu_size');
-    if (size) {
+    const savedSize = kuduStorage.getItem('kudu_size');
+    const size = Number(savedSize);
+    if (savedSize !== null && Number.isFinite(size) && size >= 12 && size <= 24) {
         document.documentElement.style.fontSize = size + 'px';
         const pct = Math.round((parseInt(size) / 16) * 100);
         document.getElementById('text-size-display').innerText = pct + '%';
     }
 
     // Language
-    const lang = localStorage.getItem('kudu_lang') || 'en';
+    const lang = kuduStorage.getItem('kudu_lang') || 'en';
     const langSelect = document.getElementById('lang-select');
-    if (langSelect) langSelect.value = lang;
+    if (langSelect) {
+        langSelect.value = [...langSelect.options].some(option => option.value === lang) ? lang : 'en';
+        kuduStorage.setItem('kudu_lang', langSelect.value);
+    }
 
     // Display Toggles (Arabic removed as user requested default)
 
     // Check Transliteration
-    if (localStorage.getItem('hide_trans') === 'true') {
+    if (kuduStorage.getItem('hide_trans') === 'true') {
         document.body.classList.add('hide-trans');
         document.getElementById('toggle-trans').checked = false;
     }
     // Check Translation
-    if (localStorage.getItem('hide_eng') === 'true') {
+    if (kuduStorage.getItem('hide_eng') === 'true') {
         document.body.classList.add('hide-eng');
         document.getElementById('toggle-trans-en').checked = false;
     }
@@ -3787,7 +3811,7 @@ window.adjustTextSize = function (dir) {
     if (newSize > 24) newSize = 24;
 
     document.documentElement.style.fontSize = newSize + 'px';
-    localStorage.setItem('kudu_size', newSize);
+    kuduStorage.setItem('kudu_size', newSize);
 
     const pct = Math.round((newSize / 16) * 100);
     document.getElementById('text-size-display').innerText = pct + '%';
@@ -3796,7 +3820,7 @@ window.adjustTextSize = function (dir) {
 
 window.changeLanguage = function () {
     const lang = document.getElementById('lang-select').value;
-    localStorage.setItem('kudu_lang', lang);
+    kuduStorage.setItem('kudu_lang', lang);
     refreshSettingsSummary();
     showToast('Language Preference Saved');
 
@@ -3810,7 +3834,7 @@ window.toggleDisplay = function (type) {
     const isHidden = document.body.classList.toggle(bodyClass);
 
     // If hidden is true, we save 'true' to local storage
-    localStorage.setItem('hide_' + type, isHidden);
+    kuduStorage.setItem('hide_' + type, isHidden);
     refreshSettingsSummary();
 
     // Visibility changes alter the height of open guide panels.
@@ -3823,13 +3847,13 @@ window.toggleDisplay = function (type) {
 
 window.toggleTheme = function () {
     const isDark = document.body.classList.toggle('dark-mode');
-    localStorage.setItem('kudu_theme', isDark ? 'dark' : 'light');
+    kuduStorage.setItem('kudu_theme', isDark ? 'dark' : 'light');
     refreshSettingsSummary();
 }
 
 window.resetLocation = function () {
     if (confirm("Clear saved location and re-detect?")) {
-        localStorage.removeItem('kudu_location');
+        kuduStorage.removeItem('kudu_location');
         showToast("Location Reset. Refreshing...");
         setTimeout(() => location.reload(), 1000);
     }
@@ -3861,7 +3885,7 @@ function saveManualLocation() {
     const city = parts.shift();
     const country = parts.join(', ');
     if (city && country) {
-        localStorage.setItem('kudu_location', JSON.stringify({ type: 'manual', city, country }));
+        kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'manual', city, country }));
         fetchTimingsByCity(city, country);
         toggleLocationInput();
     }
@@ -3873,7 +3897,7 @@ function triggerAutoLocation() {
         navigator.geolocation.getCurrentPosition(
             pos => {
                 const { latitude, longitude } = pos.coords;
-                localStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
+                kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
                 fetchTimingsByCoords(latitude, longitude);
                 if (elements.locInputContainer.style.display === 'flex') toggleLocationInput();
             },
@@ -3934,7 +3958,7 @@ window.findQibla = function () {
     elements.qiblaStatus.textContent = 'Finding your precise location…';
     navigator.geolocation.getCurrentPosition(position => {
         const { latitude, longitude } = position.coords;
-        localStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
+        kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
         updateQibla(latitude, longitude);
         fetchTimingsByCoords(latitude, longitude);
         showToast('Qibla direction updated');
@@ -4228,7 +4252,7 @@ async function fetchAPI(url) {
         // Location Display Name
         let locText = meta.timezone;
         // Try to make it prettier if manual
-        const saved = localStorage.getItem('kudu_location');
+        const saved = kuduStorage.getItem('kudu_location');
         if (saved) {
             const p = JSON.parse(saved);
             if (p.type === 'manual') locText = `${p.city}, ${p.country}`;
@@ -4307,7 +4331,7 @@ function renderTimetable(t) {
     });
 
     // Compact alarm controls share the sixth grid cell with the Adhan voice choice.
-    const isAlarmOn = localStorage.getItem('kudu_alarm') === 'true';
+    const isAlarmOn = kuduStorage.getItem('kudu_alarm') === 'true';
     const alarmIcon = isAlarmOn ? 'fa-bell' : 'fa-bell-slash';
     const alarmColor = isAlarmOn ? 'icon-emerald' : 'icon-purple'; // Purple for OFF/Settings feel
     const alarmClass = isAlarmOn ? 'alarm-active' : '';
@@ -4353,7 +4377,7 @@ function renderTimetable(t) {
 }
 
 function getSelectedAdhan() {
-    const selectedId = localStorage.getItem('kudu_adhan_voice');
+    const selectedId = kuduStorage.getItem('kudu_adhan_voice');
     return adhanCatalog.find(adhan => adhan.id === selectedId) || adhanCatalog[0] || null;
 }
 
@@ -4578,9 +4602,9 @@ async function initAdhanCatalog() {
             audioUrl: new URL(adhan.audioUrl, ADHAN_API_BASE).href
         }));
         if (!adhanCatalog.length) throw new Error('No Adhan recordings returned');
-        const savedVoice = localStorage.getItem('kudu_adhan_voice');
+        const savedVoice = kuduStorage.getItem('kudu_adhan_voice');
         const selectedVoice = adhanCatalog.some(adhan => adhan.id === savedVoice) ? savedVoice : adhanCatalog[0].id;
-        localStorage.setItem('kudu_adhan_voice', selectedVoice);
+        kuduStorage.setItem('kudu_adhan_voice', selectedVoice);
         preloadAdhanSources();
         syncAdhanCardControls();
     } catch (error) {
@@ -4599,7 +4623,7 @@ async function initAdhanCatalog() {
 window.setAdhanSelection = function (adhanId) {
     if (!adhanCatalog.some(adhan => adhan.id === adhanId)) return;
     stopAdhanPlayback();
-    localStorage.setItem('kudu_adhan_voice', adhanId);
+    kuduStorage.setItem('kudu_adhan_voice', adhanId);
     adhanAudio = getPreloadedAdhanAudio(adhanCatalog.find(adhan => adhan.id === adhanId));
     if (adhanAudio && adhanAudio.readyState === HTMLMediaElement.HAVE_NOTHING) adhanAudio.load();
     const select = document.getElementById('alarm-card-adhan-select');
@@ -4617,9 +4641,9 @@ window.toggleAdhanPreview = async function () {
 };
 
 function toggleAlarm() {
-    const current = localStorage.getItem('kudu_alarm') === 'true';
+    const current = kuduStorage.getItem('kudu_alarm') === 'true';
     const newState = !current;
-    localStorage.setItem('kudu_alarm', newState);
+    kuduStorage.setItem('kudu_alarm', newState);
 
     // Update the compact alarm controls in place so the selected Adhan is preserved.
     const tile = document.getElementById('alarm-tile');
@@ -4802,7 +4826,7 @@ function tick() {
 
         // Check alarm trigger condition (if enabled and just reached 0)
         const alarmKey = nextEvent.toISOString();
-        if (localStorage.getItem('kudu_alarm') === 'true' && diff > -2000 && lastAlarmKey !== alarmKey) {
+        if (kuduStorage.getItem('kudu_alarm') === 'true' && diff > -2000 && lastAlarmKey !== alarmKey) {
             lastAlarmKey = alarmKey;
             showToast("It's time for prayer!");
             playSelectedAdhan();
@@ -5028,15 +5052,15 @@ window.setArabicLevel = function (level, button) {
     if (progress) progress.style.width = detail.progress;
     if (track) track.setAttribute('aria-label', `${detail.title}: suggested learning focus`);
     arabicSelectedLevel = level;
-    try { localStorage.setItem('kudu_arabic_level', level); } catch (error) { /* The selected focus still works without storage. */ }
+    try { kuduStorage.setItem('kudu_arabic_level', level); } catch (error) { /* The selected focus still works without storage. */ }
     renderArabicStudyDashboard();
 };
 
 function initArabicLevel() {
     try {
-        const savedDuration = Number(localStorage.getItem('kudu_arabic_session_duration'));
+        const savedDuration = Number(kuduStorage.getItem('kudu_arabic_session_duration'));
         if ([10, 15, 25].includes(savedDuration)) arabicSessionDuration = savedDuration;
-        const savedLevel = localStorage.getItem('kudu_arabic_level');
+        const savedLevel = kuduStorage.getItem('kudu_arabic_level');
         const savedButton = savedLevel && document.querySelector(`.arabic-level[data-arabic-level="${savedLevel}"]`);
         if (savedButton) window.setArabicLevel(savedLevel, savedButton);
         else renderArabicStudyDashboard();
@@ -5070,7 +5094,7 @@ function renderArabicSessionDuration() {
 window.setArabicSessionDuration = function (minutes) {
     if (![10, 15, 25].includes(minutes)) return;
     arabicSessionDuration = minutes;
-    try { localStorage.setItem('kudu_arabic_session_duration', String(minutes)); } catch (error) { /* Use the chosen duration for this visit. */ }
+    try { kuduStorage.setItem('kudu_arabic_session_duration', String(minutes)); } catch (error) { /* Use the chosen duration for this visit. */ }
     renderArabicSessionDuration();
 };
 
@@ -5249,7 +5273,7 @@ function initArabicLetterPicker() {
 
 function readArabicNotebook() {
     try {
-        const words = JSON.parse(localStorage.getItem('kudu_arabic_notebook'));
+        const words = JSON.parse(kuduStorage.getItem('kudu_arabic_notebook'));
         return Array.isArray(words) ? words.filter(item => item?.arabic && item?.meaning).slice(-30) : [];
     } catch (error) { return []; }
 }
@@ -5280,13 +5304,13 @@ window.saveArabicNotebookWord = function (arabic, meaning) {
     try {
         const words = readArabicNotebook();
         if (!words.some(item => item.arabic === arabic)) words.push({ arabic, meaning });
-        localStorage.setItem('kudu_arabic_notebook', JSON.stringify(words.slice(-30)));
+        kuduStorage.setItem('kudu_arabic_notebook', JSON.stringify(words.slice(-30)));
         renderArabicNotebook();
     } catch (error) { /* Notebook remains optional when browser storage is unavailable. */ }
 };
 
 window.clearArabicNotebook = function () {
-    try { localStorage.removeItem('kudu_arabic_notebook'); } catch (error) { /* Nothing to clear when storage is unavailable. */ }
+    try { kuduStorage.removeItem('kudu_arabic_notebook'); } catch (error) { /* Nothing to clear when storage is unavailable. */ }
     renderArabicNotebook();
 };
 
@@ -5357,7 +5381,7 @@ let arabicReviewKnown = 0;
 
 function saveArabicReviewRound() {
     try {
-        localStorage.setItem('kudu_arabic_review', JSON.stringify({ date: getArabicLocalDate(), completed: true, known: arabicReviewKnown }));
+        kuduStorage.setItem('kudu_arabic_review', JSON.stringify({ date: getArabicLocalDate(), completed: true, known: arabicReviewKnown }));
     } catch (error) { /* Study remains available when storage is unavailable. */ }
     renderArabicMomentum();
 }
@@ -5604,10 +5628,10 @@ function getArabicDateOffset(daysAgo) {
 }
 function readArabicStudyHistory() {
     try {
-        const raw = localStorage.getItem(ARABIC_DAILY_HISTORY_KEY);
+        const raw = kuduStorage.getItem(ARABIC_DAILY_HISTORY_KEY);
         const parsed = raw?.startsWith('[') ? JSON.parse(raw) : String(raw || '').split(',');
         const history = Array.isArray(parsed) ? parsed.filter(value => /^\d{4}-\d{2}-\d{2}$/.test(value)) : [];
-        const legacy = localStorage.getItem(ARABIC_DAILY_PROGRESS_KEY);
+        const legacy = kuduStorage.getItem(ARABIC_DAILY_PROGRESS_KEY);
         if (legacy && !history.includes(legacy)) history.push(legacy);
         return [...new Set(history)].sort().slice(-365);
     } catch (error) { return []; }
@@ -5646,7 +5670,7 @@ function renderArabicMomentum() {
     if (words) words.textContent = String(readArabicNotebook().length);
     if (recall) {
         try {
-            const latestRecall = JSON.parse(localStorage.getItem('kudu_arabic_review'));
+            const latestRecall = JSON.parse(kuduStorage.getItem('kudu_arabic_review'));
             recall.textContent = latestRecall?.completed ? `${latestRecall.known}/5` : '—';
         } catch (error) { recall.textContent = '—'; }
     }
@@ -5658,7 +5682,7 @@ window.exportArabicLearningData = function () {
         sessionDurationMinutes: arabicSessionDuration,
         studyHistory: readArabicStudyHistory(),
         wordNotebook: readArabicNotebook(),
-        latestRecall: (() => { try { return JSON.parse(localStorage.getItem('kudu_arabic_review')); } catch (error) { return null; } })()
+        latestRecall: (() => { try { return JSON.parse(kuduStorage.getItem('kudu_arabic_review')); } catch (error) { return null; } })()
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -5694,9 +5718,9 @@ window.toggleArabicDailyComplete = function () {
         const history = readArabicStudyHistory();
         const completeToday = history.includes(today);
         const updated = completeToday ? history.filter(day => day !== today) : [...history, today];
-        localStorage.setItem(ARABIC_DAILY_HISTORY_KEY, updated.join(','));
-        if (completeToday) localStorage.removeItem(ARABIC_DAILY_PROGRESS_KEY);
-        else localStorage.setItem(ARABIC_DAILY_PROGRESS_KEY, today);
+        kuduStorage.setItem(ARABIC_DAILY_HISTORY_KEY, updated.join(','));
+        if (completeToday) kuduStorage.removeItem(ARABIC_DAILY_PROGRESS_KEY);
+        else kuduStorage.setItem(ARABIC_DAILY_PROGRESS_KEY, today);
         renderArabicDailyProgress();
     } catch (error) {
         const status = document.getElementById('arabic-daily-status');
@@ -5982,7 +6006,7 @@ window.filterDuaBySelect = function (resetPage = true) {
     const cat = activeDuaLibraryMode === 'ruqyah' ? 'Ruqyah' : select.value;
     syncDuaVisualCategories(cat);
     const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
-    const currentLang = localStorage.getItem('kudu_lang') || 'en';
+    const currentLang = kuduStorage.getItem('kudu_lang') || 'en';
 
     let filtered = activeDuaLibraryMode === 'ruqyah'
         ? duas.filter(d => d.cat === 'Ruqyah')
@@ -6044,7 +6068,7 @@ function getCategoryColorClass(cat) {
 
 function getDuaFavourites() {
     try {
-        const saved = JSON.parse(localStorage.getItem('kudu_dua_favourites') || '[]');
+        const saved = JSON.parse(kuduStorage.getItem('kudu_dua_favourites') || '[]');
         return Array.isArray(saved) ? saved.map(Number).filter(Number.isInteger) : [];
     } catch (error) {
         return [];
@@ -6107,7 +6131,7 @@ window.duaPillAction = function (action, index) {
         return;
     }
     if (action === 'share') {
-        const language = localStorage.getItem('kudu_lang') || 'en';
+        const language = kuduStorage.getItem('kudu_lang') || 'en';
         const translation = dua.translations[language] || dua.translations.en;
         const text = [dua.ar, dua.tr, translation, dua.source].filter(Boolean).join('\n\n');
         if (navigator.share) {
@@ -6124,7 +6148,7 @@ window.duaPillAction = function (action, index) {
         const wasFavourite = favourites.has(index);
         if (wasFavourite) favourites.delete(index);
         else favourites.add(index);
-        localStorage.setItem('kudu_dua_favourites', JSON.stringify([...favourites]));
+        kuduStorage.setItem('kudu_dua_favourites', JSON.stringify([...favourites]));
         showToast(wasFavourite ? 'Removed from favourites.' : 'Added to favourites.');
         window.filterDuaBySelect(false);
     }
@@ -6223,7 +6247,7 @@ function renderDuas(list) {
     const container = document.getElementById('dua-container');
     const summary = document.getElementById('dua-result-summary');
     const pagination = document.getElementById('dua-pagination');
-    const lang = localStorage.getItem('kudu_lang') || 'en';
+    const lang = kuduStorage.getItem('kudu_lang') || 'en';
     const category = document.getElementById('dua-category-select')?.value || 'All';
     const isRuqyah = activeDuaLibraryMode === 'ruqyah';
     updateFavouriteDuaToggle();

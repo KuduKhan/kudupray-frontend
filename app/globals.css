@@ -19100,6 +19100,7 @@ body.dark-mode .support-contact-arrow {
 #schedule-card .schedule-guidance summary {
   min-height: 100%;
   box-sizing: border-box;
+  padding-block: 9px;
   line-height: 1.4;
 }
 
@@ -20451,20 +20452,20 @@ body.dark-mode .footer-company {
   #schedule-card .schedule-guidance>.info-disclosure,
   #schedule-card .schedule-guidance>.info-disclosure.compact {
     min-width: 0;
-    min-height: 52px;
+    min-height: 44px;
     margin: 0;
     border-radius: 16px;
   }
 
   #schedule-card .schedule-guidance summary {
     min-width: 0;
-    min-height: 52px;
+    min-height: 44px;
     height: 100%;
     display: grid;
     grid-template-columns: 28px minmax(0, 1fr) 11px;
     align-items: center;
     gap: 7px;
-    padding: 7px;
+    padding: 4px 7px;
     font-size: 0.62rem;
     line-height: 1.32;
     text-align: left;
@@ -20507,14 +20508,14 @@ body.dark-mode .footer-company {
 
   #schedule-card .schedule-guidance>.info-disclosure,
   #schedule-card .schedule-guidance>.info-disclosure.compact {
-    min-height: 50px;
+    min-height: 44px;
   }
 
   #schedule-card .schedule-guidance summary {
-    min-height: 50px;
+    min-height: 44px;
     grid-template-columns: 24px minmax(0, 1fr) 9px;
     gap: 5px;
-    padding: 5px;
+    padding: 4px 5px;
     font-size: 0.56rem;
   }
 
@@ -40381,6 +40382,24 @@ body.quran-reader-english-numerals #tab-quran-reader #quran-surah-selected-numbe
   gap: 8px;
 }
 
+#tab-support .support-note-role-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+#tab-support .support-note-role-row > span {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
 #tab-support .developer-social-trigger {
   display: inline-grid;
   place-items: center;
@@ -40674,8 +40693,99 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   }
 }
 
+/* Slightly tighten the Pukka Gen acknowledgement without changing its content scale. */
+@media (min-width: 1024px) {
+  .app-footer .footer-partner-credit {
+    height: 64px;
+    min-height: 64px;
+  }
+}
+
+@media (max-width: 599px) {
+  .app-footer .footer-partner-credit {
+    min-height: 38px;
+    padding-block: 3px;
+  }
+}
+
 
 /* Anchor the developer credit group at the bottom of its flex card. */
+#tab-support .support-three-column .support-note-footer-aligned {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 5px 8px;
+}
+
+#tab-support .support-note-footer-aligned .support-note-signature,
+#tab-support .support-note-footer-aligned .support-note-signature-copy {
+  display: contents;
+}
+
+#tab-support .support-note-footer-aligned .support-note-role-row {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+#tab-support .support-note-footer-aligned .support-note-principle {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+  max-width: none;
+  min-width: 0;
+  line-height: 1.35;
+  font-size: 0.55rem;
+  color: #d1fae5;
+}
+
+#tab-support .support-note-footer-aligned .support-note-name-row {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+#tab-support .support-note-footer-aligned .support-note-principle > span {
+  flex: 1;
+  min-width: 0;
+}
+
+#tab-support .support-principle-line {
+  display: block;
+  white-space: normal;
+  font-size: inherit;
+}
+
+#tab-support .support-note-footer-aligned .developer-social-trigger {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+  margin: 0;
+}
+
+#tab-support .support-note-footer-aligned .support-note-role-row > span {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  margin: 0;
+  padding: 3px 7px;
+  color: #d1fae5;
+  border: 1px solid rgba(167, 243, 208, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+#tab-support .support-note-footer-aligned .support-note-avatar {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
 #tab-support .support-three-column .support-note-footer {
   margin-top: auto;
   margin-bottom: 0;
@@ -40760,12 +40870,14 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   font-size: 10px;
 }
 #tab-support .support-testimonial-title {
+  flex: 1 1 0;
   min-width: 0;
   margin-right: auto;
   overflow: hidden;
-  color: rgba(236, 253, 245, 0.66);
+  color: rgba(236, 253, 245, 0.68);
   font-size: 0.54rem;
   font-weight: 600;
+  line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -40785,6 +40897,10 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
 }
 #tab-support .support-testimonial-person strong {
   display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  text-align: right;
   color: #fde68a;
   font-size: 0.6rem;
   font-weight: 700;

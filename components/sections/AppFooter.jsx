@@ -17,14 +17,19 @@ export default function AppFooter() {
       const trigger = socialTriggerRef.current;
       if (!trigger) return;
       const rect = trigger.getBoundingClientRect();
-      const menuWidth = Math.min(228, window.innerWidth - 28);
+      if (!rect.width || !rect.height) { setIsMobileSocialOpen(false); return; }
+      const menuWidth = socialMenuRef.current?.offsetWidth || Math.min(228, window.innerWidth - 28);
+      const menuHeight = socialMenuRef.current?.offsetHeight || 260;
+      const desiredTop = rect.top >= menuHeight + 22 ? rect.top - menuHeight - 10 : rect.bottom + 10;
+      const top = Math.max(12, Math.min(desiredTop, window.innerHeight - menuHeight - 12));
       setSocialMenuPosition({
         left: Math.max(14, Math.min(rect.right - menuWidth, window.innerWidth - menuWidth - 14)),
-        bottom: Math.max(12, window.innerHeight - rect.top + 10),
+        bottom: Math.max(12, window.innerHeight - top - menuHeight),
       });
     };
 
     positionSocialMenu();
+    socialMenuRef.current?.querySelector("a")?.focus({ preventScroll: true });
     window.addEventListener("resize", positionSocialMenu);
     window.addEventListener("scroll", positionSocialMenu, true);
     return () => {
@@ -41,7 +46,10 @@ export default function AppFooter() {
       setIsMobileSocialOpen(false);
     };
     const closeOnEscape = (event) => {
-      if (event.key === "Escape") setIsMobileSocialOpen(false);
+      if (event.key === "Escape") {
+        setIsMobileSocialOpen(false);
+        socialTriggerRef.current?.focus({ preventScroll: true });
+      }
     };
 
     document.addEventListener("pointerdown", closeOnOutsideInteraction);

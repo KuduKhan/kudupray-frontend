@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const testimonials = [
   {
@@ -30,6 +30,40 @@ const testimonials = [
   },
 ];
 
+function TestimonialName({ name }) {
+  const element = useRef(null);
+  const [displayName, setDisplayName] = useState(name);
+
+  useEffect(() => {
+    const node = element.current;
+    const context = document.createElement("canvas").getContext("2d");
+    if (!node || !context) return;
+    let active = true;
+    const fit = () => {
+      if (!active || !node.clientWidth) return;
+      const style = getComputedStyle(node);
+      context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      const parts = name.split(/\s+/);
+      const longestFirst = parts.map((part, index) => ({ index, length: Array.from(part).length }))
+        .sort((a, b) => b.length - a.length);
+      const width = text => context.measureText(text).width
+        + (parseFloat(style.letterSpacing) || 0) * text.length;
+      for (const { index } of longestFirst) {
+        if (width(parts.join(" ")) <= node.clientWidth) break;
+        parts[index] = `${Array.from(parts[index])[0]}.`;
+      }
+      setDisplayName(parts.join(" "));
+    };
+    const observer = new ResizeObserver(fit);
+    observer.observe(node);
+    document.fonts.ready.then(fit);
+    fit();
+    return () => { active = false; observer.disconnect(); };
+  }, [name]);
+
+  return <strong ref={element} title={name} aria-label={name}>{displayName}</strong>;
+}
+
 export default function SupportTestimonials() {
   const [isInteracting, setIsInteracting] = useState(false);
 
@@ -54,7 +88,7 @@ export default function SupportTestimonials() {
               <div className="support-testimonial-copy"><q>{quote}</q></div>
               <footer className="support-testimonial-person">
                 <span className="support-testimonial-title">{title}</span>
-                <strong>{name}</strong>
+                <TestimonialName name={name} />
                 <i className="fa-solid fa-quote-left" aria-hidden="true" />
               </footer>
             </article>)}
