@@ -215,6 +215,18 @@ export default function TabQuranReader() {
                       <span>{"Download all surahs"}</span>
                       <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
                     </button>
+                    <button
+                      type="button"
+                      id="quran-offline-manager-trigger"
+                      className="quran-reader-offline-download-trigger quran-reader-offline-manager-trigger"
+                      aria-haspopup="dialog"
+                      aria-expanded="false"
+                      aria-controls="quran-offline-manager-picker"
+                    >
+                      <i className="fa-solid fa-hard-drive" aria-hidden="true"></i>
+                      <span>{"Audio manager"}</span>
+                      <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    </button>
                     <p id="quran-offline-download-summary" role="status" aria-live="polite">
                       {"Choose a reciter to save its full recitation on this device."}
                     </p>
