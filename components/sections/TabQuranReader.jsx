@@ -197,6 +197,28 @@ export default function TabQuranReader() {
                       {" Arabic numerals"}
                     </label>
                   </div>
+                  <div
+                    className="quran-reader-offline-download"
+                    role="group"
+                    aria-label="Offline Qur’an recitations"
+                  >
+                    <span>{"Offline recitations"}</span>
+                    <button
+                      type="button"
+                      id="quran-offline-download-trigger"
+                      className="quran-reader-offline-download-trigger"
+                      aria-haspopup="dialog"
+                      aria-expanded="false"
+                      aria-controls="quran-offline-download-picker"
+                    >
+                      <i className="fa-solid fa-download" aria-hidden="true"></i>
+                      <span>{"Download all surahs"}</span>
+                      <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    <p id="quran-offline-download-summary" role="status" aria-live="polite">
+                      {"Choose a reciter to save its full recitation on this device."}
+                    </p>
+                  </div>
                 </div>
               </details>
             </div>

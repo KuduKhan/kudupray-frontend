@@ -1443,6 +1443,8 @@ function mountDailyCompanionPage() {
 // AlQuran Cloud provides the catalogue, Uthmani text, transliteration, translations, and its audio CDN.
 const QURAN_READER_API_ROOT = 'https://api.alquran.cloud/v1';
 const QURAN_READER_AUDIO_ROOT = 'https://cdn.islamic.network/quran/audio';
+const QURAN_OFFLINE_AUDIO_CACHE = 'kudupray-quran-audio-v1';
+const QURAN_OFFLINE_TOTAL_AYAHS = 6236;
 const QURAN_READER_TRANSLATIONS = Object.freeze({
     en: { edition: 'en.asad', label: 'Muhammad Asad' },
     sw: { edition: 'sw.barwani', label: 'Ali Muhsin Al-Barwani' },
@@ -1962,6 +1964,200 @@ function initQuranReaderPreferencePickers() {
     window.addEventListener('resize', positionOpenPickers);
     window.visualViewport?.addEventListener('resize', positionOpenPickers);
     syncQuranReaderPreferencePickers();
+}
+
+// Full recitations are kept in Cache Storage, which lets the regular audio
+// elements read saved files without changing their normal streaming behavior.
+const quranOfflineDownload = { controller: null, reciter: '', completed: 0, total: QURAN_OFFLINE_TOTAL_AYAHS, failed: 0 };
+
+function getQuranOfflineAudioUrl(reciter, ayahNumber) {
+    return `${QURAN_READER_AUDIO_ROOT}/${reciter.bitrate}/${reciter.identifier}/${ayahNumber}.mp3`;
+}
+
+function setQuranOfflineDownloadSummary(message) {
+    const summary = document.getElementById('quran-offline-download-summary');
+    if (summary) summary.textContent = message;
+}
+
+function getQuranOfflineReciter(reciter = null) {
+    return reciter || QURAN_READER_RECITERS.find(item => item.identifier === quranOfflineDownload.reciter) || null;
+}
+
+async function getQuranOfflineCounts() {
+    const counts = new Map(QURAN_READER_RECITERS.map(reciter => [reciter.identifier, 0]));
+    if (!('caches' in window)) return counts;
+    const cache = await window.caches.open(QURAN_OFFLINE_AUDIO_CACHE);
+    const keys = await cache.keys();
+    keys.forEach(request => {
+        const reciter = QURAN_READER_RECITERS.find(item => request.url.includes(`/quran/audio/${item.bitrate}/${item.identifier}/`));
+        if (reciter) counts.set(reciter.identifier, (counts.get(reciter.identifier) || 0) + 1);
+    });
+    return counts;
+}
+
+function formatQuranOfflineProgress(reciter, completed, total = QURAN_OFFLINE_TOTAL_AYAHS, failed = 0) {
+    const label = reciter?.label || 'Selected reciter';
+    const suffix = failed ? ` · ${failed} will retry when you resume` : '';
+    return `${label}: ${completed.toLocaleString()} of ${total.toLocaleString()} ayahs saved for offline listening${suffix}.`;
+}
+
+function syncQuranOfflineDownloadPicker(counts = null) {
+    const panel = document.getElementById('quran-offline-download-picker');
+    if (!panel) return;
+    const active = Boolean(quranOfflineDownload.controller && !quranOfflineDownload.controller.signal.aborted);
+    const activeReciter = getQuranOfflineReciter();
+    panel.querySelectorAll('[data-offline-reciter]').forEach(option => {
+        const count = counts?.get(option.dataset.offlineReciter);
+        const detail = option.querySelector('small');
+        const isActive = active && option.dataset.offlineReciter === quranOfflineDownload.reciter;
+        option.disabled = active && !isActive;
+        option.setAttribute('aria-selected', String(isActive || (count || 0) >= QURAN_OFFLINE_TOTAL_AYAHS));
+        if (detail) detail.textContent = isActive
+            ? `${quranOfflineDownload.completed.toLocaleString()} of ${QURAN_OFFLINE_TOTAL_AYAHS.toLocaleString()} ayahs saving`
+            : (count || 0) >= QURAN_OFFLINE_TOTAL_AYAHS
+                ? 'Full recitation saved offline'
+                : `${(count || 0).toLocaleString()} of ${QURAN_OFFLINE_TOTAL_AYAHS.toLocaleString()} ayahs saved`;
+    });
+    const cancel = panel.querySelector('#quran-offline-download-cancel');
+    if (cancel) cancel.hidden = !active;
+    if (activeReciter) setQuranOfflineDownloadSummary(formatQuranOfflineProgress(activeReciter, quranOfflineDownload.completed, quranOfflineDownload.total, quranOfflineDownload.failed));
+}
+
+async function refreshQuranOfflineDownloadPicker() {
+    try { syncQuranOfflineDownloadPicker(await getQuranOfflineCounts()); } catch (error) { /* Cache status is optional. */ }
+}
+
+function closeQuranOfflineDownloadPicker(restoreFocus = false) {
+    const panel = document.getElementById('quran-offline-download-picker');
+    const trigger = document.getElementById('quran-offline-download-trigger');
+    if (!panel || panel.hidden) return;
+    panel.hidden = true;
+    trigger?.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) trigger?.focus({ preventScroll: true });
+}
+
+async function downloadQuranOfflineRecitation(identifier) {
+    const reciter = QURAN_READER_RECITERS.find(item => item.identifier === identifier);
+    if (!reciter || !('caches' in window)) {
+        setQuranOfflineDownloadSummary('Offline downloads are not available in this browser.');
+        return;
+    }
+    if (quranOfflineDownload.controller) return;
+    const controller = new AbortController();
+    quranOfflineDownload.controller = controller;
+    quranOfflineDownload.reciter = reciter.identifier;
+    quranOfflineDownload.failed = 0;
+    try {
+        await navigator.storage?.persist?.();
+        const cache = await window.caches.open(QURAN_OFFLINE_AUDIO_CACHE);
+        const existing = new Set((await cache.keys()).map(request => request.url));
+        quranOfflineDownload.completed = 0;
+        for (let number = 1; number <= QURAN_OFFLINE_TOTAL_AYAHS; number++) {
+            if (existing.has(getQuranOfflineAudioUrl(reciter, number))) quranOfflineDownload.completed++;
+        }
+        quranOfflineDownload.total = QURAN_OFFLINE_TOTAL_AYAHS;
+        syncQuranOfflineDownloadPicker();
+        let nextAyah = 1;
+        const worker = async () => {
+            while (!controller.signal.aborted) {
+                const number = nextAyah++;
+                if (number > QURAN_OFFLINE_TOTAL_AYAHS) return;
+                const url = getQuranOfflineAudioUrl(reciter, number);
+                if (existing.has(url)) continue;
+                try {
+                    const response = await fetch(url, { signal: controller.signal, cache: 'no-store', priority: 'low' });
+                    if (!response.ok) throw new Error(`Audio download failed (${response.status})`);
+                    const type = response.headers.get('content-type') || '';
+                    if (/text|json|html/i.test(type)) throw new Error('Invalid audio response');
+                    await cache.put(url, response.clone());
+                    quranOfflineDownload.completed++;
+                } catch (error) {
+                    if (controller.signal.aborted || error.name === 'AbortError') return;
+                    quranOfflineDownload.failed++;
+                    if (/quota|space/i.test(String(error?.name || '') + String(error?.message || ''))) {
+                        controller.abort();
+                        setQuranOfflineDownloadSummary('Device storage is full. Existing recitation audio is kept; free space and resume this download.');
+                        return;
+                    }
+                }
+                if (quranOfflineDownload.completed % 4 === 0 || quranOfflineDownload.failed) syncQuranOfflineDownloadPicker();
+            }
+        };
+        await Promise.all([worker(), worker()]);
+        if (!controller.signal.aborted) {
+            setQuranOfflineDownloadSummary(formatQuranOfflineProgress(reciter, quranOfflineDownload.completed, quranOfflineDownload.total, quranOfflineDownload.failed));
+        } else if (!/storage is full/i.test(document.getElementById('quran-offline-download-summary')?.textContent || '')) {
+            setQuranOfflineDownloadSummary(`${reciter.label}: download paused. ${quranOfflineDownload.completed.toLocaleString()} ayahs remain saved; choose it again to resume.`);
+        }
+    } catch (error) {
+        setQuranOfflineDownloadSummary('Unable to prepare offline storage. Check available device space and try again.');
+    } finally {
+        if (quranOfflineDownload.controller === controller) quranOfflineDownload.controller = null;
+        syncQuranOfflineDownloadPicker();
+        void refreshQuranOfflineDownloadPicker();
+    }
+}
+
+function initQuranOfflineDownloadPicker() {
+    if (document.getElementById('quran-offline-download-picker')) return;
+    const trigger = document.getElementById('quran-offline-download-trigger');
+    if (!trigger) return;
+    const panel = document.createElement('div');
+    panel.id = 'quran-offline-download-picker';
+    panel.className = 'quran-reciter-picker quran-offline-download-picker';
+    panel.hidden = true;
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-label', 'Download all Qur’an recitations');
+    const heading = document.createElement('div');
+    heading.className = 'quran-reciter-picker-heading';
+    heading.textContent = 'Download all surahs';
+    const help = document.createElement('p');
+    help.className = 'quran-offline-download-help';
+    help.textContent = 'Choose a reciter. Audio is saved in this browser for offline listening; keep KuduPray open while it downloads.';
+    const list = document.createElement('div');
+    list.className = 'quran-offline-download-list';
+    list.setAttribute('role', 'listbox');
+    list.setAttribute('aria-label', 'Reciters available for offline download');
+    QURAN_READER_RECITERS.forEach(reciter => {
+        const option = document.createElement('button');
+        option.type = 'button'; option.className = 'quran-reciter-option'; option.dataset.offlineReciter = reciter.identifier;
+        option.setAttribute('role', 'option'); option.setAttribute('aria-selected', 'false');
+        const copy = document.createElement('span'); copy.className = 'quran-surah-option-copy';
+        const name = document.createElement('span'); name.textContent = reciter.label;
+        const detail = document.createElement('small'); detail.textContent = 'Checking saved audio…';
+        copy.append(name, detail);
+        const action = document.createElement('span'); action.className = 'quran-reciter-check'; action.innerHTML = '<i class="fa-solid fa-download" aria-hidden="true"></i>';
+        option.append(createQuranReciterAvatar(reciter), copy, action);
+        option.addEventListener('click', () => void downloadQuranOfflineRecitation(reciter.identifier));
+        list.append(option);
+    });
+    const cancel = document.createElement('button');
+    cancel.type = 'button'; cancel.id = 'quran-offline-download-cancel'; cancel.className = 'quran-offline-download-cancel'; cancel.hidden = true;
+    cancel.innerHTML = '<i class="fa-solid fa-pause" aria-hidden="true"></i><span>Pause download</span>';
+    cancel.addEventListener('click', () => quranOfflineDownload.controller?.abort());
+    panel.append(heading, help, list, cancel);
+    document.body.append(panel);
+    const position = () => positionQuranPicker(panel, trigger, 370);
+    const open = async keyboard => {
+        closeQuranReaderPreferencePickers();
+        panel.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        position();
+        await refreshQuranOfflineDownloadPicker();
+        if (keyboard) list.querySelector('button:not([disabled])')?.focus({ preventScroll: true });
+    };
+    trigger.addEventListener('click', event => panel.hidden ? void open(event.detail === 0) : closeQuranOfflineDownloadPicker(true));
+    trigger.addEventListener('keydown', event => {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); void open(true); }
+    });
+    panel.addEventListener('keydown', event => {
+        if (event.key === 'Escape') { event.preventDefault(); closeQuranOfflineDownloadPicker(true); }
+    });
+    document.addEventListener('pointerdown', event => {
+        if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranOfflineDownloadPicker();
+    });
+    window.addEventListener('resize', position);
+    window.visualViewport?.addEventListener('resize', position);
 }
 
 function initAppSelectPickers(root = document) {
@@ -2880,6 +3076,7 @@ window.openQuranReader = function () {
     hydrateQuranReader();
     bindQuranReaderAudio();
     renderQuranReaderReciters();
+    initQuranOfflineDownloadPicker();
     renderQuranReaderSurahOptions();
     const reciterSelect = document.getElementById('quran-reader-reciter');
     if (reciterSelect) reciterSelect.value = quranReaderState.reciter;
@@ -2899,6 +3096,7 @@ window.closeQuranReader = function () {
     closeQuranSurahPicker();
     closeQuranReciterPicker();
     closeQuranReaderPreferencePickers();
+    closeQuranOfflineDownloadPicker();
     closeQuranReaderMoreMenu();
     getQuranReaderActiveAudio()?.pause();
     quranReaderState.standbyAudio?.pause();
@@ -2951,6 +3149,13 @@ window.openCompanionSection = function (sectionName) {
 };
 
 // === INIT ===
+function registerQuranOfflineAudioServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    navigator.serviceWorker.register('/kudupray-offline-audio-sw.js', { scope: '/' }).catch(() => {
+        // The download picker still reports that offline saving is unavailable when needed.
+    });
+}
+
 function init() {
     document.querySelector('.knowledge-hub')?.remove();
     document.getElementById('view-special-legacy')?.remove();
@@ -2967,6 +3172,7 @@ function init() {
     loadSettings(); // NEW: Load user preferences
     initAdhanCatalog();
     initQuranReaderPreferencePickers();
+    registerQuranOfflineAudioServiceWorker();
     initAccessibility();
     initInfoDisclosurePopups();
     initScrollAwareChrome();

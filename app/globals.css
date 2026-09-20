@@ -40693,6 +40693,169 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   }
 }
 
+/* Offline recitation downloads use the same compact selector language as the reader controls. */
+#tab-quran-reader .quran-reader-offline-download {
+  display: grid;
+  gap: 6px;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(7, 60, 49, 0.08);
+}
+
+#tab-quran-reader .quran-reader-offline-download > span {
+  color: #537166;
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#tab-quran-reader .quran-reader-offline-download-trigger {
+  width: 100%;
+  min-height: 32px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 9px;
+  border: 1px solid rgba(8, 120, 87, 0.2);
+  border-radius: 11px;
+  color: #0a6448;
+  background: linear-gradient(145deg, rgba(243, 251, 246, 0.98), rgba(228, 246, 236, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 10px rgba(7, 60, 49, 0.05);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+#tab-quran-reader .quran-reader-offline-download-trigger > i:first-child { color: #07805f; }
+#tab-quran-reader .quran-reader-offline-download-trigger > i:last-child { color: #5e7d70; font-size: 0.6rem; }
+#tab-quran-reader .quran-reader-offline-download-trigger:hover,
+#tab-quran-reader .quran-reader-offline-download-trigger:focus-visible,
+#tab-quran-reader .quran-reader-offline-download-trigger[aria-expanded="true"] {
+  border-color: rgba(8, 120, 87, 0.43);
+  background: linear-gradient(145deg, #fff, #e6f6ed);
+  outline: none;
+}
+
+#tab-quran-reader .quran-reader-offline-download-trigger:active { transform: translateY(1px); }
+
+#tab-quran-reader .quran-reader-offline-download p {
+  margin: 0;
+  color: #638075;
+  font-size: 0.59rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.quran-reciter-picker.quran-offline-download-picker {
+  width: min(370px, calc(100vw - 24px));
+  padding: 7px;
+}
+
+.quran-offline-download-help {
+  margin: 1px 4px 6px;
+  color: #638075;
+  font-size: 0.65rem;
+  font-weight: 650;
+  line-height: 1.38;
+}
+
+.quran-offline-download-list {
+  display: grid;
+  gap: 2px;
+}
+
+.quran-offline-download-picker .quran-reciter-option {
+  min-height: 46px;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  padding: 4px 8px;
+}
+
+.quran-offline-download-picker .quran-reciter-avatar {
+  width: 34px;
+  height: 34px;
+  font-size: 0.58rem;
+}
+
+.quran-offline-download-picker .quran-surah-option-copy {
+  gap: 1px;
+}
+
+.quran-offline-download-picker .quran-surah-option-copy > span {
+  font-size: 0.71rem;
+}
+
+.quran-offline-download-picker .quran-surah-option-copy small {
+  color: #648176;
+  font-size: 0.58rem;
+  font-weight: 650;
+}
+
+.quran-offline-download-picker .quran-reciter-option[aria-selected="true"] .quran-reciter-check {
+  color: #07805f;
+}
+
+.quran-offline-download-picker .quran-reciter-option:disabled {
+  cursor: progress;
+  opacity: 0.62;
+}
+
+.quran-offline-download-cancel {
+  min-height: 29px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 5px;
+  padding: 0 10px;
+  border: 1px solid rgba(183, 86, 50, 0.26);
+  border-radius: 10px;
+  color: #a54b2c;
+  background: rgba(255, 243, 237, 0.9);
+  font: inherit;
+  font-size: 0.65rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-offline-download {
+  border-color: rgba(145, 207, 176, 0.16);
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-offline-download > span,
+body.dark-mode #tab-quran-reader .quran-reader-offline-download p,
+body.dark-mode .quran-offline-download-help,
+body.dark-mode .quran-offline-download-picker .quran-surah-option-copy small {
+  color: #b7d5c5;
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-offline-download-trigger {
+  border-color: rgba(145, 207, 176, 0.24);
+  color: #e9f8ef;
+  background: linear-gradient(145deg, rgba(28, 69, 51, 0.9), rgba(12, 38, 27, 0.9));
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-offline-download-trigger:hover,
+body.dark-mode #tab-quran-reader .quran-reader-offline-download-trigger:focus-visible,
+body.dark-mode #tab-quran-reader .quran-reader-offline-download-trigger[aria-expanded="true"] {
+  border-color: rgba(145, 207, 176, 0.52);
+  background: linear-gradient(145deg, rgba(38, 84, 64, 0.96), rgba(14, 45, 31, 0.96));
+}
+
+body.dark-mode .quran-reciter-picker.quran-offline-download-picker {
+  border-color: rgba(145, 207, 176, 0.24);
+  background: rgba(8, 28, 20, 0.98);
+}
+
+@media (max-width: 599px) {
+  .quran-reciter-picker.quran-offline-download-picker { width: min(340px, calc(100vw - 20px)); }
+  .quran-offline-download-picker .quran-reciter-option { min-height: 42px; }
+}
+
 /* Slightly tighten the Pukka Gen acknowledgement without changing its content scale. */
 @media (min-width: 1024px) {
   .app-footer .footer-partner-credit {
