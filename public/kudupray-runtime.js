@@ -2048,7 +2048,16 @@ function syncQuranOfflineDownloadPicker(counts = null) {
 }
 
 async function refreshQuranOfflineDownloadPicker() {
-    try { syncQuranOfflineDownloadPicker(await getQuranOfflineCounts()); } catch (error) { /* Cache status is optional. */ }
+    try {
+        const counts = await getQuranOfflineCounts();
+        syncQuranOfflineDownloadPicker(counts);
+        if (!quranOfflineDownload.controller) {
+            const saved = [...counts.values()].filter(count => count > 0);
+            setQuranOfflineDownloadSummary(saved.length
+                ? `${saved.length} ${saved.length === 1 ? 'reciter is' : 'reciters are'} saved on this device. Open Audio manager to view or remove them.`
+                : 'Choose a reciter to save its full recitation on this device.');
+        }
+    } catch (error) { /* Cache status is optional. */ }
 }
 
 function getQuranOfflineReciterUrlPrefix(reciter) {
@@ -2077,6 +2086,46 @@ async function deleteQuranOfflineRecitation(identifier) {
     await renderQuranOfflineAudioManager();
 }
 
+function getQuranOfflineFileName(request) {
+    const match = request.url.match(/\/(\d+)\.mp3(?:$|\?)/i);
+    return `${String(match?.[1] || 'ayah').padStart(4, '0')}.mp3`;
+}
+
+function getQuranOfflineFolderName(reciter) {
+    return reciter.label.replace(/[<>:"/\\|?*]+/g, '').replace(/\s+/g, ' ').trim().slice(0, 80) || 'Reciter';
+}
+
+async function exportQuranOfflineRecitation(identifier) {
+    const reciter = QURAN_READER_RECITERS.find(item => item.identifier === identifier);
+    if (!reciter || !('showDirectoryPicker' in window) || !('caches' in window)) {
+        setQuranOfflineDownloadSummary('Folder export is not available in this browser.');
+        return;
+    }
+    try {
+        const destination = await window.showDirectoryPicker({ mode: 'readwrite' });
+        const quranAudio = await destination.getDirectoryHandle('Quran Audio', { create: true });
+        const reciterFolder = await quranAudio.getDirectoryHandle(getQuranOfflineFolderName(reciter), { create: true });
+        const cache = await window.caches.open(QURAN_OFFLINE_AUDIO_CACHE);
+        const prefix = getQuranOfflineReciterUrlPrefix(reciter);
+        const requests = (await cache.keys()).filter(request => request.url.startsWith(prefix));
+        let saved = 0;
+        for (const request of requests) {
+            const response = await cache.match(request);
+            if (!response) continue;
+            const file = await reciterFolder.getFileHandle(getQuranOfflineFileName(request), { create: true });
+            const writable = await file.createWritable();
+            await writable.write(await response.blob());
+            await writable.close();
+            saved++;
+            if (saved % 12 === 0) setQuranOfflineDownloadSummary(`Saving ${reciter.label} to Quran Audio · ${saved.toLocaleString()} files exported.`);
+        }
+        setQuranOfflineDownloadSummary(`${reciter.label}: ${saved.toLocaleString()} audio files saved in the Quran Audio folder.`);
+    } catch (error) {
+        if (error?.name === 'AbortError') setQuranOfflineDownloadSummary('Folder selection was cancelled.');
+        else setQuranOfflineDownloadSummary('Unable to save this recitation to the selected folder.');
+    }
+}
+
 async function renderQuranOfflineAudioManager() {
     const panel = document.getElementById('quran-offline-manager-picker');
     const list = document.getElementById('quran-offline-manager-list');
@@ -2096,12 +2145,20 @@ async function renderQuranOfflineAudioManager() {
         const count = counts.get(reciter.identifier) || 0;
         detail.textContent = count >= QURAN_OFFLINE_TOTAL_AYAHS ? 'Full recitation saved offline' : `${count.toLocaleString()} ayahs saved · resume available`;
         copy.append(name, detail);
+        const actions = document.createElement('span');
+        actions.className = 'quran-offline-manager-actions';
+        const exportButton = document.createElement('button');
+        exportButton.type = 'button'; exportButton.className = 'quran-offline-manager-export';
+        exportButton.innerHTML = '<i class="fa-solid fa-folder-open" aria-hidden="true"></i><span>Save folder</span>';
+        exportButton.setAttribute('aria-label', `Save ${reciter.label} audio to a Quran Audio folder`);
+        exportButton.addEventListener('click', () => void exportQuranOfflineRecitation(reciter.identifier));
         const remove = document.createElement('button');
         remove.type = 'button'; remove.className = 'quran-offline-manager-remove';
         remove.innerHTML = '<i class="fa-solid fa-trash-can" aria-hidden="true"></i><span>Remove</span>';
         remove.setAttribute('aria-label', `Remove ${reciter.label} offline audio`);
         remove.addEventListener('click', () => void deleteQuranOfflineRecitation(reciter.identifier));
-        row.append(createQuranReciterAvatar(reciter), copy, remove);
+        actions.append(exportButton, remove);
+        row.append(createQuranReciterAvatar(reciter), copy, actions);
         list.append(row);
     });
 }
@@ -2724,6 +2781,9 @@ function closeQuranSpeedPicker(restoreFocus = false) {
 function closeQuranReaderMoreMenu() {
     const menu = document.querySelector('.quran-reader-more');
     if (menu) menu.open = false;
+    closeQuranReaderPreferencePickers();
+    closeQuranOfflineDownloadPicker();
+    closeQuranOfflineAudioManager();
 }
 
 function bindQuranReaderMoreMenu() {
@@ -2739,7 +2799,8 @@ function bindQuranReaderMoreMenu() {
     });
     document.addEventListener('pointerdown', event => {
         if (!menu.open) return;
-        if (menu.contains(event.target) || summary?.contains(event.target)) return;
+        const picker = event.target.closest?.('#quran-reader-translation-picker, #quran-reader-arabic-style-picker, #quran-offline-download-picker, #quran-offline-manager-picker');
+        if (menu.contains(event.target) || summary?.contains(event.target) || picker) return;
         closeQuranReaderMoreMenu();
     });
 }
@@ -3206,6 +3267,7 @@ window.openQuranReader = function () {
     renderQuranReaderReciters();
     initQuranOfflineDownloadPicker();
     initQuranOfflineAudioManager();
+    void refreshQuranOfflineDownloadPicker();
     renderQuranReaderSurahOptions();
     const reciterSelect = document.getElementById('quran-reader-reciter');
     if (reciterSelect) reciterSelect.value = quranReaderState.reciter;

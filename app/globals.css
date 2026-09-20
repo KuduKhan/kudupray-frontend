@@ -40808,7 +40808,14 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
 .quran-offline-manager-row .quran-surah-option-copy > span { font-size: 0.7rem; }
 .quran-offline-manager-row .quran-surah-option-copy small { color: #648176; font-size: 0.58rem; font-weight: 650; }
 
-.quran-offline-manager-remove {
+.quran-offline-manager-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quran-offline-manager-remove,
+.quran-offline-manager-export {
   min-height: 29px;
   display: inline-flex;
   align-items: center;
@@ -40824,10 +40831,23 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   cursor: pointer;
 }
 
+.quran-offline-manager-export {
+  border-color: rgba(8, 120, 87, 0.22);
+  color: #0a6d50;
+  background: rgba(235, 248, 240, 0.92);
+}
+
 .quran-offline-manager-remove:hover,
 .quran-offline-manager-remove:focus-visible {
   border-color: rgba(183, 86, 50, 0.48);
   background: #fff0e9;
+  outline: none;
+}
+
+.quran-offline-manager-export:hover,
+.quran-offline-manager-export:focus-visible {
+  border-color: rgba(8, 120, 87, 0.45);
+  background: #e5f6ec;
   outline: none;
 }
 
@@ -40936,6 +40956,8 @@ body.dark-mode .quran-offline-manager-row {
   .quran-reciter-picker.quran-offline-download-picker { width: min(340px, calc(100vw - 20px)); }
   .quran-reciter-picker.quran-offline-manager-picker { width: min(340px, calc(100vw - 20px)); }
   .quran-offline-download-picker .quran-reciter-option { min-height: 42px; }
+  .quran-offline-manager-export span { display: none; }
+  .quran-offline-manager-export { width: 29px; justify-content: center; padding: 0; }
 }
 
 /* Slightly tighten the Pukka Gen acknowledgement without changing its content scale. */
