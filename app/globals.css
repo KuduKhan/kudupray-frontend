@@ -40794,6 +40794,104 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   }
 }
 
+/* A compact, centered download action shares the Qur’an Reader selector rail. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 36px auto;
+}
+
+@media (min-width: 1024px) {
+  #tab-quran-reader .quran-reader-toolbar-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) 48px 40px;
+  }
+}
+
+#tab-quran-reader .quran-reader-download {
+  width: 48px;
+  min-width: 48px;
+  min-height: 40px;
+  justify-content: center;
+  align-self: center;
+  padding: 0;
+  overflow: visible;
+  border: 1px solid rgba(4, 120, 87, 0.14);
+  border-radius: 14px;
+  color: #08765a;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 3px 9px rgba(4, 120, 87, 0.06);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+#tab-quran-reader .quran-reader-download > i {
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+#tab-quran-reader .quran-reader-download:hover,
+#tab-quran-reader .quran-reader-download:focus-visible {
+  border-color: rgba(4, 120, 87, 0.24);
+  color: var(--primary);
+  background: rgba(4, 120, 87, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 3px 10px rgba(6, 78, 59, 0.08);
+  outline: none;
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-download {
+  border-color: rgba(110, 231, 183, 0.18);
+  color: #a7f3d0;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 3px 10px rgba(0, 0, 0, 0.16);
+}
+
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  width: 40px;
+  min-width: 40px;
+  height: 40px !important;
+  min-height: 40px !important;
+  margin: 0;
+  padding: 0;
+  border-radius: 14px;
+}
+
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary > i {
+  font-size: 1rem;
+}
+
+@media (max-width: 599px) {
+  #tab-quran-reader .quran-reader-toolbar-shell {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 40px 36px;
+    gap: 5px;
+    padding: 5px;
+  }
+
+  #tab-quran-reader .quran-reader-download {
+    width: 40px;
+    min-width: 40px;
+    min-height: 36px;
+    border-radius: 12px;
+  }
+
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+    width: 36px;
+    min-width: 36px;
+    height: 36px !important;
+    min-height: 36px !important;
+    border-radius: 12px;
+  }
+}
+
+@media (min-width: 1280px) {
+  body.quran-reader-active #tab-quran-reader .quran-reader-header {
+    grid-template-columns: minmax(0, 1fr) minmax(440px, 620px) minmax(0, 1fr);
+  }
+}
+
 
 /* Anchor the developer credit group at the bottom of its flex card. */
 #tab-support .support-three-column .support-note-footer-aligned {
@@ -41005,4 +41103,83 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   #tab-support .support-testimonials-track { animation: none; }
   #tab-support .support-testimonials-window { overflow-x: auto; }
   #tab-support .support-testimonials-group[aria-hidden="true"] { display: none; }
+}
+
+/* Keep the reader controls on one even, vertically centered rail. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  align-items: center;
+  padding-block: 6px;
+}
+
+#tab-quran-reader .quran-reader-download,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+#tab-quran-reader .quran-reader-download > i {
+  font-size: 1.05rem;
+}
+
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary > i {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+@media (max-width: 599px) {
+  #tab-quran-reader .quran-reader-toolbar-shell {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 40px 40px;
+    align-items: center;
+    padding-block: 5px;
+  }
+
+  #tab-quran-reader .quran-reader-download,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+    width: 40px;
+    min-width: 40px;
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+
+  #tab-quran-reader .quran-reader-download > i {
+    font-size: 1rem;
+  }
+
+  #tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary > i {
+    font-size: 1.05rem;
+  }
+}
+
+/* The reader selector rail is a fixed 50px frame: 40px controls and a true 5px inset on every edge. */
+#tab-quran-reader .quran-reader-toolbar-shell,
+#tab-quran-reader .quran-reader-page .quran-reader-toolbar-shell {
+  box-sizing: border-box;
+  height: 50px !important;
+  min-height: 50px !important;
+  padding: 5px !important;
+  align-items: center;
+}
+
+#tab-quran-reader .quran-reader-toolbar-segment,
+#tab-quran-reader .quran-reader-toolbar .quran-reciter-trigger,
+#tab-quran-reader .quran-reader-download,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  box-sizing: border-box;
+  height: 40px !important;
+  min-height: 40px !important;
+  align-self: center;
+}
+
+/* 50px total height = 1px border + 4px inset + 40px control + 4px inset + 1px border. */
+#tab-quran-reader .quran-reader-toolbar-shell,
+#tab-quran-reader .quran-reader-page .quran-reader-toolbar-shell {
+  padding: 4px !important;
 }

@@ -103,10 +103,19 @@ export default function TabQuranReader() {
                   ></i>
                 </button>
               </div>
+              <button
+                type="button"
+                id="quran-reader-download-trigger"
+                className="quran-reader-download quran-reader-toolbar-segment"
+                onClick={() => window.downloadQuranReaderSurah?.()}
+                aria-label="Download selected surah audio for this session"
+                title="Download selected surah audio"
+              >
+                <i className="fa-solid fa-download" aria-hidden="true"></i>
+              </button>
               <details className="quran-reader-more quran-reader-toolbar-segment">
                 <summary aria-label="More Qur’an reading options">
-                  <i className="fa-solid fa-sliders" aria-hidden="true"></i>
-                  <span>{"More"}</span>
+                  <i className="fa-solid fa-gear" aria-hidden="true"></i>
                 </summary>
                 <div className="quran-reader-more-panel">
                   <div

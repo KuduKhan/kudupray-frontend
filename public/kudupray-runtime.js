@@ -2327,6 +2327,19 @@ function downloadQuranSurah() {
     return quranDownload.promise;
 }
 
+globalThis.downloadQuranReaderSurah = function () {
+    if (!quranReaderState.ayahs.length) {
+        setQuranReaderStatus('Wait for the selected surah to finish loading.', true);
+        return;
+    }
+    const surah = getQuranReaderSurah(quranReaderState.surahNumber);
+    const label = surah?.englishName || `Surah ${quranReaderState.surahNumber}`;
+    setQuranReaderStatus(`Downloading ${label} audio for this session…`);
+    void downloadQuranSurah().catch(() => {
+        setQuranReaderStatus(`Unable to download ${label} audio right now. Please check your connection and try again.`, true);
+    });
+};
+
 async function startQuranDownloadedPlayback({ scroll = false } = {}) {
     if (!quranReaderState.ayahs.length) return;
     const audio = getQuranReaderActiveAudio();
