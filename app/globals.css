@@ -41308,3 +41308,130 @@ body.dark-mode #tab-quran-reader .quran-reader-download {
     bottom: 76px;
   }
 }
+
+/* Set the quote just above the footer separator, with a small clear gap. */
+#tab-support .support-note-quote {
+  bottom: 64px;
+}
+
+#tab-support .support-note-footer-aligned .support-note-name-row {
+  gap: 3px;
+}
+
+#tab-support .support-note-footer-aligned .support-note-title {
+  padding-block: 2px;
+  line-height: 1.2;
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-note-quote {
+    bottom: 54px;
+  }
+}
+
+/* Give the profile image a clear visual gap beneath the decorative quotation mark. */
+#tab-support .support-note-quote {
+  bottom: 82px;
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-note-quote {
+    bottom: 72px;
+  }
+}
+
+/* Phone layout: keep the Community Voices rail and developer card as balanced as the desktop composition. */
+@media (max-width: 599px) {
+  #tab-support .support-developer-note .support-testimonials {
+    margin-bottom: 7px;
+    padding-bottom: 6px;
+  }
+
+  #tab-support .support-testimonials-heading {
+    margin-bottom: 4px;
+    font-size: 0.68rem;
+  }
+
+  #tab-support .support-testimonials-group {
+    gap: 8px;
+    padding-right: 8px;
+  }
+
+  #tab-support .support-testimonial {
+    width: min(238px, calc(100vw - 96px));
+    min-height: 100px;
+    padding: 5px;
+    font-size: 0.68rem;
+    line-height: 1.42;
+  }
+
+  #tab-support .support-testimonial-copy {
+    padding: 7px 8px;
+  }
+
+  #tab-support .support-testimonial-person {
+    min-height: 24px;
+    margin: 4px 3px 0;
+  }
+
+  #tab-support .support-note-heading-row {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  #tab-support .support-note-heading h4 {
+    font-size: 0.9rem;
+    line-height: 1.25;
+  }
+
+  #tab-support .support-note-heading-row .developer-social-trigger {
+    height: 24px;
+    min-height: 24px;
+    padding-inline: 7px;
+  }
+
+  #tab-support .support-developer-note blockquote {
+    font-size: 0.96rem;
+    line-height: 1.62;
+  }
+
+  #tab-support .support-three-column .support-note-footer-aligned {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 5px 7px;
+    padding-top: 6px;
+  }
+
+  #tab-support .support-note-footer-aligned .support-note-principle {
+    font-size: 0.6rem;
+    line-height: 1.35;
+  }
+
+  #tab-support .support-note-footer-aligned .support-note-name-row {
+    gap: 3px;
+  }
+}
+
+/* Keep the developer headline on one calm, readable line on phones. */
+@media (max-width: 599px) {
+  #tab-support .support-note-heading h4 {
+    font-size: 0.78rem;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+  }
+}
+
+#tab-support .support-testimonials-heading {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+#tab-support .support-note-kicker {
+  font-size: 0.65rem;
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-note-kicker {
+    font-size: 0.68rem;
+  }
+}
