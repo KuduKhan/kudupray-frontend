@@ -246,23 +246,26 @@ export default function TabSupport() {
                 className="fa-solid fa-quote-right support-note-quote"
                 aria-hidden="true"
               ></i>
-              <div className="support-note-heading">
-                <span className="support-note-emblem" aria-hidden="true">
-                  <i className="fa-solid fa-code"></i>
-                </span>
-                <div>
-                  <span className="support-note-kicker">
-                    {"From the developer"}
+              <SupportTestimonials />
+              <div className="support-note-heading-row">
+                <div className="support-note-heading">
+                  <span className="support-note-emblem" aria-hidden="true">
+                    <i className="fa-solid fa-code"></i>
                   </span>
-                  <h4>{"Built with care, kept for everyone"}</h4>
+                  <div>
+                    <span className="support-note-kicker">
+                      {"From the developer"}
+                    </span>
+                    <h4>{"Built with care, kept for everyone"}</h4>
+                  </div>
                 </div>
+                <DeveloperSocials />
               </div>
               <blockquote>
                 {
                   "\n                    “Jazakumullahu khayran for trusting KuduPray with a small part of your daily worship. Every careful correction, sincere dua, and thoughtful share helps me build it with greater care. May Allah accept it, keep it beneficial, and forgive its shortcomings.”\n                "
                 }
               </blockquote>
-              <SupportTestimonials />
               <div className="support-note-footer support-note-footer-aligned">
                 <p className="support-note-principle">
                   <i
@@ -276,8 +279,10 @@ export default function TabSupport() {
                 </p>
                 <div className="support-note-signature">
                   <div className="support-note-signature-copy">
-                    <div className="support-note-name-row"><strong>{"Mufasa Khan"}</strong></div>
-                    <div className="support-note-role-row"><DeveloperSocials /><span>{"Founder & Lead Developer"}</span></div>
+                    <div className="support-note-name-row">
+                      <strong>{"Mufasa Khan"}</strong>
+                      <span className="support-note-title">{"Founder & Lead Developer"}</span>
+                    </div>
                   </div>
                   <span className="support-note-avatar" aria-hidden="true">
                     <img src="/brand/developer-profile.png" alt="" />

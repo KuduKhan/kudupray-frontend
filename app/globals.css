@@ -41183,3 +41183,128 @@ body.dark-mode #tab-quran-reader .quran-reader-download {
 #tab-quran-reader .quran-reader-page .quran-reader-toolbar-shell {
   padding: 4px !important;
 }
+
+/* Community voices lead the developer card; the developer message follows beneath it. */
+#tab-support .support-developer-note .support-testimonials {
+  margin: 0 0 8px;
+  padding: 0 0 6px;
+  border-top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Keep Connect alongside the developer introduction, aligned to its right edge. */
+#tab-support .support-note-heading .developer-social-trigger {
+  margin-left: auto;
+  align-self: center;
+}
+
+/* Keep the social action independent while preserving a calm developer introduction. */
+#tab-support .support-note-heading-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#tab-support .support-note-heading-row .support-note-heading {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+#tab-support .support-note-heading-row .developer-social-trigger {
+  flex: 0 0 auto;
+  margin-left: 0;
+}
+
+/* The founder title follows the name immediately, alongside the portrait. */
+#tab-support .support-note-footer-aligned .support-note-role-row {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: end;
+  display: block;
+}
+
+#tab-support .support-note-footer-aligned .support-note-role-row > span {
+  display: inline-flex;
+}
+
+/* Treat the name and founder title as one compact profile block. */
+#tab-support .support-note-footer-aligned .support-note-name-row {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1px;
+  line-height: 1.15;
+}
+
+#tab-support .support-note-footer-aligned .support-note-title {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #d1fae5;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+/* Restore the compact founder pill beneath the name. */
+#tab-support .support-note-footer-aligned .support-note-title {
+  padding: 2px 6px;
+  border: 1px solid rgba(167, 243, 208, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* The decorative quotation mark now sits beside the message instead of behind Community Voices. */
+#tab-support .support-note-quote {
+  top: auto;
+  right: 18px;
+  bottom: 64px;
+}
+
+/* Let the principle occupy the complete free area beside the compact profile block. */
+#tab-support .support-note-footer-aligned .support-note-principle {
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-size: 0.6rem;
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-note-quote {
+    right: 14px;
+    bottom: 58px;
+    font-size: 3.1rem;
+  }
+}
+
+/* Position the decorative quotation mark within the developer message. */
+#tab-support .support-note-quote {
+  bottom: 132px;
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-note-quote {
+    bottom: 116px;
+  }
+}
+
+/* Keep the decorative quote just above the profile image with breathing room. */
+#tab-support .support-note-quote {
+  bottom: 88px;
+}
+
+@media (max-width: 599px) {
+  #tab-support .support-note-quote {
+    bottom: 76px;
+  }
+}
