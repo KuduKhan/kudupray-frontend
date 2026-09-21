@@ -103,16 +103,26 @@ export default function TabQuranReader() {
                   ></i>
                 </button>
               </div>
-              <button
-                type="button"
-                id="quran-reader-download-trigger"
-                className="quran-reader-download quran-reader-toolbar-segment"
-                onClick={() => window.downloadQuranReaderSurah?.()}
-                aria-label="Download selected surah audio files"
-                title="Download selected surah audio files"
-              >
-                <i className="fa-solid fa-download" aria-hidden="true"></i>
-              </button>
+              <details id="quran-reader-download-menu" className="quran-reader-download quran-reader-toolbar-segment">
+                <summary
+                  id="quran-reader-download-trigger"
+                  aria-label="Download selected surah audio"
+                  title="Download selected surah audio"
+                >
+                  <i className="fa-solid fa-download" aria-hidden="true"></i>
+                </summary>
+                <div className="quran-reader-download-panel" role="group" aria-label="Qur’an audio download options">
+                  <span className="quran-reader-download-heading">{"Download audio"}</span>
+                  <button type="button" onClick={() => window.downloadQuranReaderSurah?.("full")}>
+                    <i className="fa-solid fa-file-audio" aria-hidden="true"></i>
+                    <span><strong>{"Full Surah MP3"}</strong><small>{"One continuous audio file"}</small></span>
+                  </button>
+                  <button type="button" onClick={() => window.downloadQuranReaderSurah?.("ayahs")}>
+                    <i className="fa-solid fa-folder-open" aria-hidden="true"></i>
+                    <span><strong>{"Ayah-by-ayah MP3"}</strong><small>{"A ZIP with each ayah as an MP3"}</small></span>
+                  </button>
+                </div>
+              </details>
               <details className="quran-reader-more quran-reader-toolbar-segment">
                 <summary aria-label="More Qur’an reading options">
                   <i className="fa-solid fa-gear" aria-hidden="true"></i>

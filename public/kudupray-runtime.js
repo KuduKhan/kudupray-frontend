@@ -2429,7 +2429,40 @@ async function createQuranAudioArchive(entries) {
     return new Blob([...localParts, ...directoryParts, end], { type: 'application/zip' });
 }
 
-async function downloadQuranReaderSurahArchive() {
+function closeQuranReaderDownloadMenu() {
+    const menu = document.getElementById('quran-reader-download-menu');
+    if (menu) menu.open = false;
+}
+
+function bindQuranReaderDownloadMenu() {
+    const menu = document.getElementById('quran-reader-download-menu');
+    if (!menu || menu.dataset.bound) return;
+    menu.dataset.bound = 'true';
+    menu.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            closeQuranReaderDownloadMenu();
+            menu.querySelector('summary')?.focus({ preventScroll: true });
+        }
+    });
+    document.addEventListener('pointerdown', event => {
+        if (menu.open && !menu.contains(event.target)) closeQuranReaderDownloadMenu();
+    });
+}
+
+function startQuranFileDownload(file, filename) {
+    const href = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = href;
+    link.download = filename;
+    link.style.display = 'none';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(href), 60_000);
+}
+
+async function downloadQuranReaderSurahArchive(format = 'ayahs') {
     if (!quranReaderState.ayahs.length) {
         setQuranReaderStatus('Wait for the selected surah to finish loading.', true);
         return;
@@ -2438,8 +2471,9 @@ async function downloadQuranReaderSurahArchive() {
     const label = surah?.englishName || `Surah ${quranReaderState.surahNumber}`;
     const reciter = getQuranReaderReciter();
     const button = document.getElementById('quran-reader-download-trigger');
-    if (button?.disabled) return;
-    if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
+    if (button?.getAttribute('aria-busy') === 'true') return;
+    if (button) button.setAttribute('aria-busy', 'true');
+    closeQuranReaderDownloadMenu();
     try {
         setQuranReaderStatus(`Preparing ${label} audio for download…`);
         await downloadQuranSurah();
@@ -2449,27 +2483,25 @@ async function downloadQuranReaderSurahArchive() {
             const number = String(ayah.numberInSurah || index + 1).padStart(3, '0');
             return { name: `${number}.mp3`, blob };
         });
-        setQuranReaderStatus(`Creating your ${label} audio download…`);
-        const archive = await createQuranAudioArchive(entries);
-        const href = URL.createObjectURL(archive);
-        const link = document.createElement('a');
-        link.href = href;
-        link.download = `KuduPray-${quranDownloadFilenamePart(label)}-${quranDownloadFilenamePart(reciter.label)}.zip`;
-        link.style.display = 'none';
-        document.body.append(link);
-        link.click();
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(href), 60_000);
-        setQuranReaderStatus(`${label} audio download has started. The ZIP contains one MP3 for each ayah.`);
+        const prefix = `KuduPray-${quranDownloadFilenamePart(label)}-${quranDownloadFilenamePart(reciter.label)}`;
+        if (format === 'full') {
+            setQuranReaderStatus(`Creating your full ${label} MP3…`);
+            startQuranFileDownload(new Blob(entries.map(entry => entry.blob), { type: 'audio/mpeg' }), `${prefix}.mp3`);
+            setQuranReaderStatus(`${label} full MP3 download has started.`);
+        } else {
+            setQuranReaderStatus(`Creating your ${label} ayah-by-ayah download…`);
+            startQuranFileDownload(await createQuranAudioArchive(entries), `${prefix}-ayah-by-ayah.zip`);
+            setQuranReaderStatus(`${label} ayah-by-ayah download has started. The ZIP contains one MP3 for each ayah.`);
+        }
     } catch (error) {
         setQuranReaderStatus(`Unable to prepare ${label} audio for download. Please check your connection and try again.`, true);
     } finally {
-        if (button) { button.disabled = false; button.removeAttribute('aria-busy'); }
+        if (button) button.removeAttribute('aria-busy');
     }
 }
 
-globalThis.downloadQuranReaderSurah = function () {
-    void downloadQuranReaderSurahArchive();
+globalThis.downloadQuranReaderSurah = function (format) {
+    void downloadQuranReaderSurahArchive(format);
 };
 
 async function startQuranDownloadedPlayback({ scroll = false } = {}) {
@@ -3058,6 +3090,7 @@ async function refreshQuranReaderCatalog() {
 window.openQuranReader = function () {
     hydrateQuranReader();
     bindQuranReaderAudio();
+    bindQuranReaderDownloadMenu();
     renderQuranReaderReciters();
     renderQuranReaderSurahOptions();
     const reciterSelect = document.getElementById('quran-reader-reciter');
@@ -3078,6 +3111,7 @@ window.closeQuranReader = function () {
     closeQuranSurahPicker();
     closeQuranReciterPicker();
     closeQuranReaderPreferencePickers();
+    closeQuranReaderDownloadMenu();
     closeQuranReaderMoreMenu();
     getQuranReaderActiveAudio()?.pause();
     quranReaderState.standbyAudio?.pause();

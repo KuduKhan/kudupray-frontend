@@ -41440,3 +41440,223 @@ body.dark-mode #tab-quran-reader .quran-reader-download {
   cursor: progress;
   opacity: 0.7;
 }
+
+/* Download choices use the same compact selector language as the reader controls. */
+#tab-quran-reader details.quran-reader-download {
+  position: relative;
+  display: block;
+  overflow: visible;
+}
+
+#tab-quran-reader .quran-reader-download > summary {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  cursor: pointer;
+  list-style: none;
+}
+
+#tab-quran-reader .quran-reader-download > summary::-webkit-details-marker {
+  display: none;
+}
+
+#tab-quran-reader .quran-reader-download > summary > i {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+#tab-quran-reader .quran-reader-download > summary[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+#tab-quran-reader .quran-reader-download-panel {
+  position: absolute;
+  z-index: 80;
+  top: calc(100% + 8px);
+  right: 0;
+  display: none;
+  width: 244px;
+  box-sizing: border-box;
+  padding: 6px;
+  border: 1px solid rgba(8, 120, 87, 0.22);
+  border-radius: 18px;
+  background: rgba(252, 254, 252, 0.98);
+  box-shadow: 0 18px 42px rgba(6, 78, 59, 0.2), inset 0 1px rgba(255, 255, 255, 0.95);
+}
+
+#tab-quran-reader .quran-reader-download[open] .quran-reader-download-panel {
+  display: grid;
+  gap: 3px;
+}
+
+#tab-quran-reader .quran-reader-download-heading {
+  padding: 3px 7px 2px;
+  color: #527367;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#tab-quran-reader .quran-reader-download-panel > button {
+  display: grid;
+  grid-template-columns: 29px minmax(0, 1fr);
+  align-items: center;
+  min-height: 46px;
+  padding: 5px 7px;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  color: #0b3f34;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+#tab-quran-reader .quran-reader-download-panel > button:hover,
+#tab-quran-reader .quran-reader-download-panel > button:focus-visible {
+  outline: none;
+  background: rgba(8, 120, 87, 0.09);
+}
+
+#tab-quran-reader .quran-reader-download-panel > button > i {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border: 1px solid rgba(8, 120, 87, 0.17);
+  border-radius: 10px;
+  color: #08765a;
+  background: rgba(223, 245, 234, 0.72);
+  font-size: 0.73rem;
+}
+
+#tab-quran-reader .quran-reader-download-panel > button > span {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+#tab-quran-reader .quran-reader-download-panel strong {
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+#tab-quran-reader .quran-reader-download-panel small {
+  overflow: hidden;
+  color: #5d746a;
+  font-size: 0.6rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-download-panel {
+  border-color: rgba(110, 231, 183, 0.18);
+  background: #143d2c;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35), inset 0 1px rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-download-heading,
+body.dark-mode #tab-quran-reader .quran-reader-download-panel small {
+  color: #b7d7c8;
+}
+
+body.dark-mode #tab-quran-reader .quran-reader-download-panel > button {
+  color: #ecfdf5;
+}
+
+@media (max-width: 599px) {
+  #tab-quran-reader .quran-reader-download > summary > i {
+    font-size: 1rem;
+  }
+
+  #tab-quran-reader .quran-reader-download-panel {
+    top: calc(100% + 6px);
+    width: min(232px, calc(100vw - 24px));
+    padding: 5px;
+    border-radius: 16px;
+  }
+
+  #tab-quran-reader .quran-reader-download-panel > button {
+    min-height: 43px;
+    padding: 4px 6px;
+  }
+}
+
+/* The download choices live in a details element, but its trigger keeps the
+   exact centered 40px icon geometry of the original download button. */
+#tab-quran-reader details.quran-reader-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  align-self: center;
+  line-height: 1;
+}
+
+#tab-quran-reader details.quran-reader-download > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 1;
+}
+
+#tab-quran-reader details.quran-reader-download > summary > i {
+  display: block;
+  line-height: 1;
+  transform: none;
+}
+
+/* Use the same compact four-control rail at every viewport width. */
+#tab-quran-reader .quran-reader-toolbar-shell {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 40px 40px;
+  gap: 5px;
+}
+
+/* Settings follows the exact same centered icon geometry as Download. */
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 !important;
+  box-sizing: border-box;
+  line-height: 1;
+}
+
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary > i {
+  display: block;
+  line-height: 1;
+}
+
+@media (min-width: 600px) {
+  #tab-quran-reader .quran-reader-download-panel {
+    width: 286px;
+  }
+
+  #tab-quran-reader .quran-reader-download-panel > button {
+    grid-template-columns: 30px minmax(0, 1fr);
+    min-height: 48px;
+  }
+
+  #tab-quran-reader .quran-reader-download-panel small {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+}
