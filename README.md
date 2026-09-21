@@ -37,7 +37,7 @@ This is an incremental React migration. The static interface is JSX rendered by 
 
 Prayer times and location selection, Qibla tools, Islamic calendar, Qur’an reading and recitation, reciter/surah/speed pickers, immediate streaming with background caching, duas and favourites, daily companion and dhikr counter, guides and Arabic learning, dark mode, and reading preferences.
 
-Local preferences stay in browser localStorage; users opening the app on a different origin start with fresh preferences. Live prayer data, Qur’an content/audio, fonts, photos, and map services require connectivity. Browser permissions still apply to location and compass access. No new backend or account system is added.
+Local preferences stay in browser localStorage; users opening the app on a different origin start with fresh preferences. Live prayer data, unsaved Qur’an content/audio, fonts, photos, and map services require connectivity. Browser permissions still apply to location and compass access. No new backend or account system is added.
 
 ## Verification
 
@@ -50,3 +50,28 @@ The streaming regression checks immediate play, streaming fallback, cached repla
 
 Framework reference: [Next.js App Router documentation](https://nextjs.org/docs/app).
 # kudupray-frontend
+
+## Offline Qur’an release checks
+
+“Download all surahs” first saves the production app shell and all 114 surahs in
+the currently selected translation (including Arabic and transliteration), then
+saves the reciter’s audio. Keep the tab open during preparation and download.
+Other translations need an online visit or download before offline use.
+Downloads resume by skipping files already in Cache Storage. Browser storage
+can be evicted or manually cleared; the completion message reports whether
+persistent storage was granted. Folder export, when available, is a separate copy.
+
+Before release on Android Chrome and iOS Safari:
+
+1. Finish a recitation download, close the browser, enable airplane mode, and reopen the same origin.
+2. Open the reader, play and seek an ayah, then switch surahs.
+3. Pause/resume a partial download and verify saved files are retained.
+4. Simulate full/blocked storage and confirm the error stays visible.
+5. Test supported folder export, cancellation, a full destination, and partial recitations.
+6. Confirm export/removal cannot run during a download or another export/removal.
+
+`npm test` includes fallback count/Juz, persistent reader data, resume, storage
+errors, operation guards, export failure, service-worker byte ranges, and shell
+preparation regression tests. These tests use synthetic fixtures; real device
+backgrounding, eviction, audio-CDN availability, and folder permissions still
+require the device checks above.
