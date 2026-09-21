@@ -41435,3 +41435,8 @@ body.dark-mode #tab-quran-reader .quran-reader-download {
     font-size: 0.68rem;
   }
 }
+
+#tab-quran-reader .quran-reader-download:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}

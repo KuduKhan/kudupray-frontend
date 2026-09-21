@@ -14,7 +14,7 @@ const audio = { dataset: {}, paused: false, readyState: 4, currentTime: 0, durat
     pause() {}, getAttribute() { return source; }, ended: false, async play() { plays++; } };
 const state = { surahNumber: 1, activeAyahIndex: 0, ayahs: Array.from({length:7}, (_,i)=>({number:i+1})) };
 const context = vm.createContext({
-    AbortController, DOMException, setTimeout, clearTimeout,
+    AbortController, DOMException, URLSearchParams, setTimeout, clearTimeout,
     URL: { createObjectURL: b => `blob:${b.id}`, revokeObjectURL() {} },
     QURAN_READER_AUDIO_ROOT: 'https://audio.test', quranReaderState: state,
     getQuranReaderReciter: () => ({identifier:'reciter',bitrate:128}),
@@ -29,7 +29,7 @@ const context = vm.createContext({
         calls++;
         await new Promise(r=>setTimeout(r, 2));
         if (signal.aborted) throw new DOMException('Aborted','AbortError');
-        const id = Number(url.match(/(\d+)\.mp3$/)[1]);
+        const id = Number(new URL(url, 'https://audio.test').searchParams.get('ayah') || url.match(/(\d+)\.mp3$/)?.[1]);
         if (fail && id === 7) throw new Error('Offline');
         completed++;
         return {ok:true, blob:async()=>({id,size:10,type:'audio/mpeg'})};

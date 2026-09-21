@@ -108,8 +108,8 @@ export default function TabQuranReader() {
                 id="quran-reader-download-trigger"
                 className="quran-reader-download quran-reader-toolbar-segment"
                 onClick={() => window.downloadQuranReaderSurah?.()}
-                aria-label="Download selected surah audio for this session"
-                title="Download selected surah audio"
+                aria-label="Download selected surah audio files"
+                title="Download selected surah audio files"
               >
                 <i className="fa-solid fa-download" aria-hidden="true"></i>
               </button>

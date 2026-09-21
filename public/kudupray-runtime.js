@@ -2224,7 +2224,7 @@ function setQuranReaderActiveAyah(index, { scroll = false } = {}) {
 }
 
 // Stream immediately while keeping the selected surah's audio in session memory.
-const quranDownload = { key: '', urls: new Map(), controller: null, promise: null, ready: false, intent: 0 };
+const quranDownload = { key: '', urls: new Map(), blobs: new Map(), controller: null, promise: null, ready: false, intent: 0 };
 
 function clearQuranDownload() {
     quranDownload.intent++;
@@ -2235,6 +2235,7 @@ function clearQuranDownload() {
     quranDownload.key = '';
     for (const url of quranDownload.urls.values()) URL.revokeObjectURL(url);
     quranDownload.urls.clear();
+    quranDownload.blobs.clear();
 }
 
 function quranStreamNeedsBandwidth(audio) {
@@ -2259,6 +2260,15 @@ async function waitForQuranStreamHeadroom(signal) {
         });
     }
     if (signal.aborted) throw new DOMException('Cancelled', 'AbortError');
+}
+
+function getQuranDownloadAudioUrl(reciter, ayahNumber) {
+    const query = new URLSearchParams({
+        bitrate: String(reciter.bitrate),
+        reciter: reciter.identifier,
+        ayah: String(ayahNumber)
+    });
+    return `/api/quran-audio?${query}`;
 }
 
 function downloadQuranSurah() {
@@ -2291,7 +2301,7 @@ function downloadQuranSurah() {
                 controller.signal.addEventListener('abort', abort, { once: true });
                 const timer = setTimeout(abort, 45000);
                 try {
-                    const response = await fetch(`${QURAN_READER_AUDIO_ROOT}/${reciter.bitrate}/${reciter.identifier}/${ayah.number}.mp3`, { signal: request.signal, priority: 'low', cache: 'force-cache' });
+                    const response = await fetch(getQuranDownloadAudioUrl(reciter, ayah.number), { signal: request.signal, priority: 'low', cache: 'force-cache' });
                     if (!response.ok) throw new Error(`Audio download failed (${response.status})`);
                     blob = await response.blob();
                     if (!blob.size || /text|json|html/i.test(blob.type)) throw new Error('Invalid audio response');
@@ -2304,6 +2314,7 @@ function downloadQuranSurah() {
                 }
             }
             if (controller.signal.aborted) throw new DOMException('Cancelled', 'AbortError');
+            quranDownload.blobs.set(ayah.number, blob);
             quranDownload.urls.set(ayah.number, URL.createObjectURL(blob));
             progress();
         }
@@ -2327,17 +2338,138 @@ function downloadQuranSurah() {
     return quranDownload.promise;
 }
 
-globalThis.downloadQuranReaderSurah = function () {
+function quranDownloadFilenamePart(value) {
+    return String(value || 'Quran').normalize('NFKD').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'Quran';
+}
+
+const quranZipCrcTable = (() => {
+    const table = new Uint32Array(256);
+    for (let index = 0; index < 256; index++) {
+        let value = index;
+        for (let bit = 0; bit < 8; bit++) value = (value >>> 1) ^ (value & 1 ? 0xEDB88320 : 0);
+        table[index] = value >>> 0;
+    }
+    return table;
+})();
+
+function quranZipCrc32(bytes) {
+    let value = 0xFFFFFFFF;
+    for (const byte of bytes) value = quranZipCrcTable[(value ^ byte) & 0xFF] ^ (value >>> 8);
+    return (value ^ 0xFFFFFFFF) >>> 0;
+}
+
+function writeQuranZipUint16(view, offset, value) { view.setUint16(offset, value, true); }
+function writeQuranZipUint32(view, offset, value) { view.setUint32(offset, value >>> 0, true); }
+
+async function createQuranAudioArchive(entries) {
+    const encoder = new TextEncoder();
+    const localParts = [];
+    const directoryParts = [];
+    let offset = 0;
+    const now = new Date();
+    const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | Math.floor(now.getSeconds() / 2);
+    const dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+
+    for (const entry of entries) {
+        const name = encoder.encode(entry.name);
+        const bytes = new Uint8Array(await entry.blob.arrayBuffer());
+        const crc = quranZipCrc32(bytes);
+        const local = new Uint8Array(30 + name.length + bytes.length);
+        const localView = new DataView(local.buffer);
+        writeQuranZipUint32(localView, 0, 0x04034B50);
+        writeQuranZipUint16(localView, 4, 20);
+        writeQuranZipUint16(localView, 6, 0x0800);
+        writeQuranZipUint16(localView, 8, 0);
+        writeQuranZipUint16(localView, 10, dosTime);
+        writeQuranZipUint16(localView, 12, dosDate);
+        writeQuranZipUint32(localView, 14, crc);
+        writeQuranZipUint32(localView, 18, bytes.length);
+        writeQuranZipUint32(localView, 22, bytes.length);
+        writeQuranZipUint16(localView, 26, name.length);
+        writeQuranZipUint16(localView, 28, 0);
+        local.set(name, 30);
+        local.set(bytes, 30 + name.length);
+        localParts.push(local);
+
+        const directory = new Uint8Array(46 + name.length);
+        const directoryView = new DataView(directory.buffer);
+        writeQuranZipUint32(directoryView, 0, 0x02014B50);
+        writeQuranZipUint16(directoryView, 4, 20);
+        writeQuranZipUint16(directoryView, 6, 20);
+        writeQuranZipUint16(directoryView, 8, 0x0800);
+        writeQuranZipUint16(directoryView, 10, 0);
+        writeQuranZipUint16(directoryView, 12, dosTime);
+        writeQuranZipUint16(directoryView, 14, dosDate);
+        writeQuranZipUint32(directoryView, 16, crc);
+        writeQuranZipUint32(directoryView, 20, bytes.length);
+        writeQuranZipUint32(directoryView, 24, bytes.length);
+        writeQuranZipUint16(directoryView, 28, name.length);
+        writeQuranZipUint16(directoryView, 30, 0);
+        writeQuranZipUint16(directoryView, 32, 0);
+        writeQuranZipUint16(directoryView, 34, 0);
+        writeQuranZipUint16(directoryView, 36, 0);
+        writeQuranZipUint32(directoryView, 38, 0);
+        writeQuranZipUint32(directoryView, 42, offset);
+        directory.set(name, 46);
+        directoryParts.push(directory);
+        offset += local.length;
+    }
+
+    const directorySize = directoryParts.reduce((total, part) => total + part.length, 0);
+    const end = new Uint8Array(22);
+    const endView = new DataView(end.buffer);
+    writeQuranZipUint32(endView, 0, 0x06054B50);
+    writeQuranZipUint16(endView, 4, 0);
+    writeQuranZipUint16(endView, 6, 0);
+    writeQuranZipUint16(endView, 8, entries.length);
+    writeQuranZipUint16(endView, 10, entries.length);
+    writeQuranZipUint32(endView, 12, directorySize);
+    writeQuranZipUint32(endView, 16, offset);
+    writeQuranZipUint16(endView, 20, 0);
+    return new Blob([...localParts, ...directoryParts, end], { type: 'application/zip' });
+}
+
+async function downloadQuranReaderSurahArchive() {
     if (!quranReaderState.ayahs.length) {
         setQuranReaderStatus('Wait for the selected surah to finish loading.', true);
         return;
     }
     const surah = getQuranReaderSurah(quranReaderState.surahNumber);
     const label = surah?.englishName || `Surah ${quranReaderState.surahNumber}`;
-    setQuranReaderStatus(`Downloading ${label} audio for this session…`);
-    void downloadQuranSurah().catch(() => {
-        setQuranReaderStatus(`Unable to download ${label} audio right now. Please check your connection and try again.`, true);
-    });
+    const reciter = getQuranReaderReciter();
+    const button = document.getElementById('quran-reader-download-trigger');
+    if (button?.disabled) return;
+    if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
+    try {
+        setQuranReaderStatus(`Preparing ${label} audio for download…`);
+        await downloadQuranSurah();
+        const entries = quranReaderState.ayahs.map((ayah, index) => {
+            const blob = quranDownload.blobs.get(ayah.number);
+            if (!blob) throw new Error(`Missing audio for ayah ${ayah.numberInSurah || index + 1}`);
+            const number = String(ayah.numberInSurah || index + 1).padStart(3, '0');
+            return { name: `${number}.mp3`, blob };
+        });
+        setQuranReaderStatus(`Creating your ${label} audio download…`);
+        const archive = await createQuranAudioArchive(entries);
+        const href = URL.createObjectURL(archive);
+        const link = document.createElement('a');
+        link.href = href;
+        link.download = `KuduPray-${quranDownloadFilenamePart(label)}-${quranDownloadFilenamePart(reciter.label)}.zip`;
+        link.style.display = 'none';
+        document.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(href), 60_000);
+        setQuranReaderStatus(`${label} audio download has started. The ZIP contains one MP3 for each ayah.`);
+    } catch (error) {
+        setQuranReaderStatus(`Unable to prepare ${label} audio for download. Please check your connection and try again.`, true);
+    } finally {
+        if (button) { button.disabled = false; button.removeAttribute('aria-busy'); }
+    }
+}
+
+globalThis.downloadQuranReaderSurah = function () {
+    void downloadQuranReaderSurahArchive();
 };
 
 async function startQuranDownloadedPlayback({ scroll = false } = {}) {
