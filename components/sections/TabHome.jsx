@@ -827,101 +827,72 @@ export default function TabHome() {
             <h3 className="section-title">{"Today's Schedule"}</h3>
           </div>
 
-          <div style={{ textAlign: "right" }}>
-            <div
-              id="loc-display"
-              onClick={(event) => dispatch(32, event)}
-              style={{
-                fontSize: "0.8rem",
-                color: "var(--text-sub)",
-                cursor: "pointer",
-                padding: "6px 14px",
-                borderRadius: "20px",
-                display: "inline-flex",
-                alignItems: "center",
-                background: "var(--glass-bg)",
-                border: "1px solid rgba(0,0,0,0.05)",
-                transition: "all 0.2s",
-                fontWeight: "600",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.02)",
-              }}
-            >
-              <i
-                className="fa-solid fa-location-dot"
-                style={{ color: "var(--primary)", marginRight: "6px" }}
-              ></i>
-              <span id="loc-name">{"Detecting..."}</span>
-              <i
-                className="fa-solid fa-pen-to-square"
-                style={{
-                  fontSize: "0.7rem",
-                  opacity: "0.5",
-                  marginLeft: "8px",
-                }}
-              ></i>
+          <div
+            id="solar-position"
+            className="solar-position"
+            aria-label="Sun position from dawn to dusk"
+          >
+            <div className="solar-position-track" aria-hidden="true">
+              <span className="solar-position-arc"></span>
+              <span className="solar-position-horizon"></span>
+              <span className="solar-position-zenith"><i className="fa-solid fa-arrow-up"></i></span>
+              <span className="solar-position-sun"></span>
             </div>
+            <div className="solar-position-times" aria-label="Solar schedule">
+              <span className="solar-time-dawn"><em>Sunrise</em><strong id="solar-sunrise-time">--:--</strong></span>
+              <span className="solar-time-zenith"><em>Zenith</em><strong id="solar-zenith-time">--:--</strong></span>
+              <span className="solar-time-dusk"><em>Sunset</em><strong id="solar-sunset-time">--:--</strong></span>
+            </div>
+          </div>
+
+          <div className="location-selector-wrap">
+            <button
+              type="button"
+              id="loc-display"
+              className="location-selector"
+              onClick={(event) => dispatch(32, event)}
+              aria-controls="loc-input-container"
+              aria-expanded="false"
+              aria-label="Change prayer-time location"
+            >
+              <i className="fa-solid fa-location-dot" aria-hidden="true"></i>
+              <span id="loc-name">{"Detecting..."}</span>
+              <i className="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
 
         <div
           id="loc-input-container"
-          style={{
-            display: "none",
-            justifyContent: "flex-end",
-            gap: "6px",
-            background: "rgba(0,0,0,0.02)",
-            padding: "10px",
-            borderRadius: "16px",
-            border: "1px solid rgba(0,0,0,0.04)",
-          }}
+          className="location-editor"
+          style={{ display: "none" }}
         >
           <input
             type="text"
             id="manual-loc"
+            className="location-city-input"
             placeholder="City, Country"
-            style={{
-              padding: "8px 14px",
-              borderRadius: "20px",
-              border: "1px solid #ccc",
-              width: "100%",
-              maxWidth: "200px",
-              fontSize: "0.85rem",
-              outline: "none",
-              boxShadow: "inset 0 1px 3px rgba(0,0,0,0.05)",
-            }}
+            aria-label="City and country"
+            autoComplete="address-level2"
           />
           <button
             type="button"
             onClick={(event) => dispatch(33, event)}
-            className="icon-btn"
+            className="icon-btn location-action location-apply"
             aria-label="Use entered location"
             title="Use entered location"
-            style={{
-              width: "36px",
-              height: "36px",
-              background: "var(--primary)",
-              color: "white",
-              border: "none",
-              boxShadow: "0 2px 5px rgba(4, 120, 87, 0.3)",
-            }}
           >
             <i className="fa-solid fa-check"></i>
           </button>
           <button
             type="button"
             onClick={(event) => dispatch(34, event)}
-            className="icon-btn"
-            style={{
-              width: "36px",
-              height: "36px",
-              background: "var(--accent)",
-              color: "white",
-              border: "none",
-              boxShadow: "0 2px 5px rgba(217, 119, 6, 0.3)",
-            }}
-            title="Use GPS"
+            className="icon-btn location-action location-detect"
+            aria-label="Use current position"
+            title="Use current position"
           >
-            <i className="fa-solid fa-location-crosshairs"></i>
+            <i className="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+            <span className="location-detect-label">{"Current"}</span>
           </button>
         </div>
         <div

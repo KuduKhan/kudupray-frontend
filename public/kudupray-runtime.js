@@ -3225,7 +3225,7 @@ function init() {
 }
 
 function initAccessibility() {
-    document.querySelectorAll('.guide-tile, .accordion-btn, .modal-close-btn, #loc-display').forEach(el => {
+    document.querySelectorAll('.guide-tile, .accordion-btn, .modal-close-btn, #loc-display:not(button)').forEach(el => {
         el.setAttribute('tabindex', '0');
         el.setAttribute('role', 'button');
         el.addEventListener('keydown', event => {
@@ -4085,6 +4085,21 @@ window.resetLocation = function () {
 }
 
 // === LOCATION LOGIC ===
+function setLocationName(name) {
+    const text = String(name || 'Choose location');
+    const apply = () => {
+        const locationName = document.getElementById('loc-name');
+        const locationDisplay = document.getElementById('loc-display');
+        if (locationName) {
+            locationName.textContent = text;
+            elements.locName = locationName;
+        }
+        if (locationDisplay) locationDisplay.title = `Prayer-time location: ${text}`;
+    };
+    apply();
+    window.requestAnimationFrame(apply);
+}
+
 function toggleLocationInput(forceOpen) {
     const shouldOpen = typeof forceOpen === 'boolean'
         ? forceOpen
@@ -4092,10 +4107,12 @@ function toggleLocationInput(forceOpen) {
     if (shouldOpen) {
         elements.locInputContainer.style.display = 'flex';
         elements.locDisplay.style.display = 'none';
+        elements.locDisplay.setAttribute('aria-expanded', 'true');
         elements.manualLocInput.focus();
     } else {
         elements.locInputContainer.style.display = 'none';
         elements.locDisplay.style.display = 'inline-flex';
+        elements.locDisplay.setAttribute('aria-expanded', 'false');
         elements.locDisplay.focus();
     }
 }
@@ -4116,24 +4133,24 @@ function saveManualLocation() {
     }
 }
 
-function triggerAutoLocation() {
+function triggerAutoLocation(closeLocationEditor = false) {
     if (navigator.geolocation) {
-        elements.locName.innerText = "Detecting...";
+        setLocationName('Detecting…');
         navigator.geolocation.getCurrentPosition(
             pos => {
                 const { latitude, longitude } = pos.coords;
                 kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
                 fetchTimingsByCoords(latitude, longitude);
-                if (elements.locInputContainer.style.display === 'flex') toggleLocationInput();
+                if (closeLocationEditor && elements.locInputContainer.style.display === 'flex') toggleLocationInput(false);
             },
             () => {
-                elements.locName.innerText = "Access Denied. Using Makkah.";
+                setLocationName('Using Makkah');
                 fetchTimingsByCoords(21.4225, 39.8262); // Default
             },
             { enableHighAccuracy: false, timeout: 10000, maximumAge: 900000 }
         );
     } else {
-        elements.locName.innerText = "Geo Not Supported.";
+        setLocationName('Location unavailable');
         fetchTimingsByCoords(21.4225, 39.8262);
     }
 }
@@ -4484,10 +4501,11 @@ async function fetchAPI(url) {
         }
         // Truncate long timezone names
         if (locText.includes('/')) locText = locText.split('/').pop().replace(/_/g, ' ');
-        elements.locName.innerText = locText;
+        setLocationName(locText);
 
         currentTimings = t;
         renderTimetable(t);
+        updateSolarPosition(t);
         renderPrayerJourney(t);
         renderExtraTimes(t);
         calcNextPrayer(t);
@@ -4505,7 +4523,7 @@ async function fetchAPI(url) {
         elements.loader.style.display = 'grid';
         elements.loader.className = 'error-message';
         elements.loader.innerHTML = '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span>Prayer times could not be loaded. Check your connection or choose a manual location.</span>';
-        elements.locName.innerText = "Choose location";
+        setLocationName('Choose location');
         console.error('KuduPray timing request failed:', e);
     }
 }
@@ -4955,6 +4973,45 @@ function parsePrayerTime(value, baseDate = new Date()) {
     return result;
 }
 
+function updateSolarPosition(t) {
+    const solar = document.getElementById('solar-position');
+    if (!solar || !t) return;
+
+    const now = new Date();
+    const sunrise = parsePrayerTime(t.Sunrise, now);
+    const sunset = parsePrayerTime(t.Maghrib, now);
+    const zenith = parsePrayerTime(t.Dhuhr, now);
+    if (!sunrise || !sunset || sunset <= sunrise) return;
+
+    const progress = Math.max(0, Math.min(1, (now - sunrise) / (sunset - sunrise)));
+    const arcHeight = Math.sin(progress * Math.PI);
+    solar.style.setProperty('--solar-x', `${7 + (progress * 86)}%`);
+    solar.style.setProperty('--solar-rise', `${7 + (arcHeight * 62)}%`);
+
+    const sunriseTime = document.getElementById('solar-sunrise-time');
+    const zenithTimeLabel = document.getElementById('solar-zenith-time');
+    const sunsetTime = document.getElementById('solar-sunset-time');
+    const compactTime = (time) => time
+        ? time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+        : '--:--';
+    const zenithText = zenith
+        ? compactTime(zenith)
+        : '--:--';
+    if (sunriseTime) sunriseTime.textContent = compactTime(sunrise);
+    if (zenithTimeLabel) zenithTimeLabel.textContent = zenithText;
+    if (sunsetTime) sunsetTime.textContent = compactTime(sunset);
+
+    const zenithWindow = zenith ? Math.abs(now - zenith) <= 20 * 60 * 1000 : false;
+    const phaseText = now < sunrise ? 'Before dawn'
+        : now > sunset ? 'After dusk'
+            : zenithWindow ? 'Zenith'
+                : progress < 0.24 ? 'Dawn'
+                    : progress < 0.5 ? 'Morning'
+                        : progress < 0.78 ? 'Afternoon'
+                            : 'Dusk';
+    solar.dataset.phase = phaseText.toLowerCase().replace(/\s+/g, '-');
+}
+
 function calcNextPrayer(t) {
     const now = new Date();
     const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
@@ -5034,6 +5091,7 @@ function setNext(currentName, nextName, timeObj) {
 function tick() {
     const now = new Date();
     if (!nextEvent) return;
+    if (currentTimings) updateSolarPosition(currentTimings);
     const diff = nextEvent - now;
 
     // Progress Bar Update
@@ -5059,7 +5117,10 @@ function tick() {
                 new Notification("Prayer Time", { body: "It is now time for prayer." });
             }
         }
-        if (currentTimings) calcNextPrayer(currentTimings);
+        if (currentTimings) {
+            calcNextPrayer(currentTimings);
+            updateSolarPosition(currentTimings);
+        }
         return;
     }
 
@@ -6732,7 +6793,7 @@ window.kuduprayHandlers = [
     function (event) { loadDeenQuiz() },
     function (event) { toggleLocationInput() },
     function (event) { saveManualLocation() },
-    function (event) { triggerAutoLocation() },
+    function (event) { triggerAutoLocation(true) },
     function (event) { openGuide('purification') },
     function (event) { openGuide('structure') },
     function (event) { openGuide('daily') },

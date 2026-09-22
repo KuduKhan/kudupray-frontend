@@ -42066,3 +42066,591 @@ body.dark-mode #sunnah-card .sunnah-item {
     padding-block: 13px;
   }
 }
+
+/* Compact live solar path in the open schedule header space. */
+#schedule-card > .section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, 1.45fr) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+}
+
+#schedule-card > .section-header > :last-child {
+  justify-self: end;
+}
+
+.solar-position {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(118px, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  color: #4338ca;
+}
+
+.solar-position-track {
+  position: relative;
+  min-width: 118px;
+  height: 34px;
+  overflow: hidden;
+}
+
+.solar-position-arc {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: -39px;
+  height: 68px;
+  border: 1.5px solid rgba(124, 58, 237, 0.28);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0;
+}
+
+.solar-position-zenith {
+  position: absolute;
+  left: 50%;
+  top: 1px;
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  color: #8b5cf6;
+  border-radius: 50%;
+  background: rgba(245, 243, 255, 0.92);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+  transform: translateX(-50%);
+  font-size: 0.46rem;
+}
+
+.solar-position-sun {
+  position: absolute;
+  left: var(--solar-x, 7%);
+  bottom: var(--solar-rise, 7%);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #fbbf24, #f97316);
+  box-shadow: 0 4px 10px rgba(217, 119, 6, 0.25);
+  transform: translate(-50%, 50%);
+  transition: left 1.2s ease-out, bottom 1.2s ease-out;
+  font-size: 0.68rem;
+}
+
+body.dark-mode .solar-position { color: #ddd6fe; }
+body.dark-mode .solar-position-arc { border-color: rgba(196, 181, 253, 0.36); }
+body.dark-mode .solar-position-zenith { color: #ddd6fe; background: rgba(49, 46, 129, 0.72); }
+
+@media (max-width: 699px) {
+  #schedule-card > .section-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 7px;
+  }
+
+  .solar-position {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: min(100%, 280px);
+    justify-self: center;
+  }
+
+  #schedule-card > .section-header > :last-child {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 420px) {
+  .solar-position {
+    grid-template-columns: minmax(102px, 1fr) auto;
+  }
+
+  .solar-position-track { min-width: 102px; }
+}
+
+/* Keep the original header layout fixed: the solar indicator occupies only its unused centre space. */
+#schedule-card > .section-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+}
+
+#schedule-card > .section-header > :last-child {
+  justify-self: auto;
+}
+
+#schedule-card > .section-header > .solar-position {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: min(28vw, 255px);
+  min-width: 172px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+@media (max-width: 699px) {
+  #schedule-card > .section-header .section-title {
+    font-size: 0.88rem;
+    letter-spacing: -0.015em;
+  }
+
+  #schedule-card > .section-header > .solar-position {
+    grid-column: auto;
+    grid-row: auto;
+    width: 98px;
+    min-width: 98px;
+    gap: 0;
+  }
+
+
+  #schedule-card > .section-header > .solar-position .solar-position-track {
+    min-width: 98px;
+    height: 30px;
+  }
+
+  #schedule-card > .section-header > :last-child {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 599px) {
+  #schedule-card > .section-header .section-title {
+    width: 64px;
+    font-size: 0.88rem;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    text-transform: none;
+    white-space: normal;
+  }
+
+  #schedule-card #loc-display {
+    padding: 5px 9px !important;
+    font-size: 0.68rem !important;
+    border-radius: 16px !important;
+  }
+
+  #schedule-card #loc-display .fa-location-dot {
+    margin-right: 4px !important;
+  }
+
+  #schedule-card #loc-display .fa-pen-to-square {
+    margin-left: 5px !important;
+    font-size: 0.6rem !important;
+  }
+}
+
+@media (max-width: 359px) {
+  #schedule-card > .section-header .section-title {
+    font-size: 0.8rem;
+  }
+}
+
+/* Reserve a protected centre lane for the sun path without moving either header control. */
+#schedule-card > .section-header > :first-child,
+#schedule-card > .section-header > :last-child {
+  position: relative;
+  z-index: 2;
+}
+
+#schedule-card > .section-header > .solar-position {
+  z-index: 1;
+  width: clamp(210px, 31vw, 360px);
+  max-width: calc(100% - 260px);
+}
+
+@media (max-width: 699px) {
+  #schedule-card > .section-header {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center !important;
+    column-gap: 8px;
+  }
+
+  #schedule-card .section-header > div:last-child {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+
+  #schedule-card > .section-header > .solar-position {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: calc(100% - 10px);
+    min-width: 0;
+    max-width: none;
+    justify-self: center;
+    transform: none;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-track {
+    min-width: 0;
+  }
+}
+
+/* Premium solar-cycle glass treatment. */
+.solar-position {
+  box-sizing: border-box;
+  min-height: 42px;
+  padding: 4px 7px;
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 16% 100%, rgba(251, 191, 36, 0.16), transparent 36%),
+    radial-gradient(circle at 84% 0%, rgba(139, 92, 246, 0.13), transparent 39%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(245, 243, 255, 0.72));
+  box-shadow:
+    0 7px 18px rgba(79, 70, 229, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+}
+
+.solar-position-track {
+  height: 32px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(254, 252, 232, 0.25), rgba(237, 233, 254, 0.08));
+}
+
+.solar-position-arc {
+  border-color: rgba(124, 58, 237, 0.38);
+  border-top-style: dashed;
+  box-shadow: 0 -3px 10px rgba(139, 92, 246, 0.08);
+}
+
+.solar-position-horizon {
+  position: absolute;
+  right: 7%;
+  bottom: 4px;
+  left: 7%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.32), rgba(124, 58, 237, 0.4), rgba(245, 158, 11, 0.32));
+}
+
+.solar-position-zenith {
+  top: 0;
+  width: 15px;
+  height: 15px;
+  color: #7c3aed;
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 7px rgba(109, 40, 217, 0.14);
+}
+
+.solar-position-sun {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  background: radial-gradient(circle at 35% 30%, #fffef3 0 20%, #ffe58a 38%, #fbbf24 72%, #f59e0b 100%);
+  box-shadow:
+    0 0 0 3px rgba(255, 243, 184, 0.46),
+    0 0 12px 3px rgba(251, 191, 36, 0.82),
+    0 2px 5px rgba(180, 83, 9, 0.35);
+  animation: solar-pulse 3.2s ease-in-out infinite;
+}
+
+.solar-position[data-phase="zenith"] .solar-position-sun {
+  box-shadow:
+    0 0 0 5px rgba(255, 243, 184, 0.52),
+    0 0 16px 4px rgba(251, 191, 36, 0.94),
+    0 2px 6px rgba(180, 83, 9, 0.38);
+}
+
+body.dark-mode .solar-position {
+  border-color: rgba(196, 181, 253, 0.22);
+  background:
+    radial-gradient(circle at 16% 100%, rgba(245, 158, 11, 0.14), transparent 39%),
+    radial-gradient(circle at 84% 0%, rgba(139, 92, 246, 0.18), transparent 42%),
+    linear-gradient(145deg, rgba(38, 30, 66, 0.72), rgba(12, 29, 24, 0.68));
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+body.dark-mode .solar-position-track { background: rgba(255, 255, 255, 0.025); }
+body.dark-mode .solar-position-arc { border-color: rgba(196, 181, 253, 0.48); }
+body.dark-mode .solar-position-horizon { opacity: 0.8; }
+body.dark-mode .solar-position-zenith { color: #ddd6fe; border-color: rgba(221, 214, 254, 0.2); background: rgba(76, 48, 120, 0.7); }
+
+@keyframes solar-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.09); }
+}
+
+@media (max-width: 699px) {
+  #schedule-card > .section-header > .solar-position {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 34px;
+    padding: 2px 3px;
+    border-radius: 4px;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-track {
+    width: 100%;
+    min-width: 0;
+    height: 28px;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-sun {
+    width: 7px;
+    height: 7px;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-zenith {
+    width: 12px;
+    height: 12px;
+    font-size: 0.4rem;
+  }
+}
+
+/* Full desktop solar cycle: the mapped times follow its dawn-to-dusk arc. */
+#schedule-card > .section-header > .solar-position {
+  width: clamp(300px, 42vw, 520px);
+  max-width: calc(100% - 300px);
+  grid-template-columns: minmax(180px, 1fr) auto;
+  grid-template-rows: 34px auto;
+  column-gap: 10px;
+  row-gap: 1px;
+  min-height: 54px;
+  padding: 5px 9px 4px;
+}
+
+#schedule-card > .section-header > .solar-position .solar-position-track {
+  min-width: 180px;
+}
+
+.solar-position-times {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 0.48rem;
+  font-weight: 780;
+  line-height: 1.1;
+}
+
+.solar-position-times span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 0;
+}
+
+.solar-position-times span:nth-child(2) { justify-content: center; color: #7c3aed; }
+.solar-position-times span:last-child { justify-content: flex-end; }
+.solar-position-times em { font-style: normal; opacity: 0.82; }
+.solar-position-times strong { color: inherit; font-size: 0.53rem; font-variant-numeric: tabular-nums; }
+.solar-time-dawn strong { color: #b45309; }
+.solar-time-dusk strong { color: #7c3aed; }
+
+body.dark-mode .solar-position-times { color: #cbd5e1; }
+body.dark-mode .solar-position-times span:nth-child(2) { color: #ddd6fe; }
+body.dark-mode .solar-time-dawn strong { color: #fcd34d; }
+body.dark-mode .solar-time-dusk strong { color: #c4b5fd; }
+
+/* Premium city and country selector. */
+#schedule-card .location-selector-wrap {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+#schedule-card #loc-display.location-selector {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  gap: 6px;
+  padding: 6px 10px;
+  color: #315b50;
+  border: 1px solid rgba(16, 119, 91, 0.18);
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(230, 247, 240, 0.72));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94), 0 3px 10px rgba(5, 91, 70, 0.08);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 760;
+  line-height: 1;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+#schedule-card #loc-display.location-selector:hover {
+  border-color: rgba(16, 119, 91, 0.4);
+  background: linear-gradient(145deg, #ffffff, rgba(211, 243, 230, 0.86));
+  box-shadow: inset 0 1px 0 #fff, 0 5px 14px rgba(5, 91, 70, 0.13);
+  transform: translateY(-1px);
+}
+
+#schedule-card #loc-display.location-selector:focus-visible,
+#schedule-card .location-city-input:focus-visible,
+#schedule-card .location-action:focus-visible {
+  outline: 2px solid rgba(16, 185, 129, 0.72);
+  outline-offset: 2px;
+}
+
+#schedule-card #loc-display.location-selector .fa-location-dot {
+  margin: 0;
+  color: #059669;
+  font-size: 0.74rem;
+}
+
+#schedule-card #loc-display.location-selector #loc-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#schedule-card #loc-display.location-selector .fa-pen-to-square {
+  margin: 0 0 0 2px;
+  color: #0f766e;
+  font-size: 0.62rem;
+  opacity: 0.76;
+}
+
+#schedule-card #loc-input-container.location-editor {
+  align-items: center;
+  gap: 6px;
+  padding: 4px 5px;
+  border: 1px solid rgba(16, 119, 91, 0.17);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(245, 255, 251, 0.88), rgba(226, 246, 237, 0.68));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 5px 14px rgba(5, 91, 70, 0.06);
+}
+
+#schedule-card #manual-loc.location-city-input {
+  min-width: 0;
+  flex: 1 1 180px;
+  width: auto;
+  max-width: none;
+  padding: 6px 9px;
+  color: #164e3d;
+  border: 1px solid rgba(16, 119, 91, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 1px 3px rgba(5, 91, 70, 0.05);
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+#schedule-card #manual-loc.location-city-input::placeholder { color: #6b8b81; opacity: 1; }
+
+#schedule-card .location-action {
+  display: inline-grid;
+  flex: 0 0 30px;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+#schedule-card .location-action:hover { filter: brightness(1.05); transform: translateY(-1px); }
+#schedule-card .location-apply { background: linear-gradient(145deg, #059669, #047857); box-shadow: 0 4px 9px rgba(4, 120, 87, 0.25); }
+#schedule-card .location-detect { background: linear-gradient(145deg, #f59e0b, #d97706); box-shadow: 0 4px 9px rgba(217, 119, 6, 0.24); }
+#schedule-card .location-detect {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 5px;
+  width: auto;
+  padding: 0 8px;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+#schedule-card .location-detect-label { line-height: 1; }
+
+body.dark-mode #schedule-card #loc-display.location-selector {
+  color: #dcfce7;
+  border-color: rgba(167, 243, 208, 0.24);
+  background: linear-gradient(145deg, rgba(10, 74, 60, 0.78), rgba(13, 54, 47, 0.78));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-mode #schedule-card #loc-input-container.location-editor {
+  border-color: rgba(167, 243, 208, 0.17);
+  background: rgba(7, 54, 44, 0.68);
+}
+
+body.dark-mode #schedule-card #manual-loc.location-city-input {
+  color: #effcf6;
+  border-color: rgba(167, 243, 208, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+@media (max-width: 699px) {
+  #schedule-card > .section-header > .solar-position {
+    width: calc(100% - 10px);
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 28px auto;
+    min-height: 41px;
+    padding: 2px 4px;
+    row-gap: 0;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-track {
+    min-width: 0;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-times {
+    grid-column: 1;
+    gap: 2px;
+    font-size: 0.37rem;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-times em {
+    display: none;
+  }
+
+  #schedule-card > .section-header > .solar-position .solar-position-times strong {
+    font-size: 0.42rem;
+  }
+
+  #schedule-card #loc-display.location-selector {
+    gap: 4px;
+    padding: 5px 7px;
+    font-size: 0.62rem;
+  }
+
+  #schedule-card #loc-display.location-selector .fa-location-dot { font-size: 0.64rem; }
+  #schedule-card #loc-display.location-selector .fa-pen-to-square { display: none; }
+
+  #schedule-card #loc-input-container.location-editor {
+    gap: 6px;
+    padding: 4px;
+    border-radius: 10px;
+  }
+
+  #schedule-card #manual-loc.location-city-input {
+    flex-basis: 140px;
+    padding: 6px 8px;
+    font-size: 0.72rem;
+  }
+
+  #schedule-card .location-action {
+    flex-basis: 29px;
+    width: 29px;
+    height: 29px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+  }
+
+  #schedule-card .location-detect {
+    flex-basis: 29px;
+    width: 29px;
+    padding: 0;
+  }
+
+  #schedule-card .location-detect-label { display: none; }
+}
