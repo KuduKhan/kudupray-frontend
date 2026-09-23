@@ -827,46 +827,98 @@ export default function TabHome() {
             <h3 className="section-title">{"Today's Schedule"}</h3>
           </div>
 
-          <div className="location-selector-wrap">
+          <div style={{ textAlign: "right" }}>
             <div
               id="loc-display"
-              className="location-selector"
               onClick={(event) => dispatch(32, event)}
+              style={{
+                fontSize: "0.8rem",
+                color: "var(--text-sub)",
+                cursor: "pointer",
+                padding: "6px 14px",
+                borderRadius: "20px",
+                display: "inline-flex",
+                alignItems: "center",
+                background: "var(--glass-bg)",
+                border: "1px solid rgba(0,0,0,0.05)",
+                transition: "all 0.2s",
+                fontWeight: "600",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.02)",
+              }}
             >
-              <i className="fa-solid fa-location-dot" aria-hidden="true"></i>
+              <i
+                className="fa-solid fa-location-dot"
+                style={{ color: "var(--primary)", marginRight: "6px" }}
+              ></i>
               <span id="loc-name">{"Detecting..."}</span>
-              <i className="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+              <i
+                className="fa-solid fa-pen-to-square"
+                style={{
+                  fontSize: "0.7rem",
+                  opacity: "0.5",
+                  marginLeft: "8px",
+                }}
+              ></i>
             </div>
           </div>
         </div>
 
         <div
           id="loc-input-container"
-          className="location-editor"
-          style={{ display: "none" }}
+          style={{
+            display: "none",
+            justifyContent: "flex-end",
+            gap: "6px",
+            background: "rgba(0,0,0,0.02)",
+            padding: "10px",
+            borderRadius: "16px",
+            border: "1px solid rgba(0,0,0,0.04)",
+          }}
         >
           <input
             type="text"
             id="manual-loc"
-            className="location-city-input"
             placeholder="City, Country"
-            aria-label="City and country"
-            autoComplete="address-level2"
+            style={{
+              padding: "8px 14px",
+              borderRadius: "20px",
+              border: "1px solid #ccc",
+              width: "100%",
+              maxWidth: "200px",
+              fontSize: "0.85rem",
+              outline: "none",
+              boxShadow: "inset 0 1px 3px rgba(0,0,0,0.05)",
+            }}
           />
           <button
             type="button"
             onClick={(event) => dispatch(33, event)}
-            className="icon-btn location-action location-apply"
+            className="icon-btn"
             aria-label="Use entered location"
             title="Use entered location"
+            style={{
+              width: "36px",
+              height: "36px",
+              background: "var(--primary)",
+              color: "white",
+              border: "none",
+              boxShadow: "0 2px 5px rgba(4, 120, 87, 0.3)",
+            }}
           >
             <i className="fa-solid fa-check"></i>
           </button>
           <button
             type="button"
             onClick={(event) => dispatch(34, event)}
-            className="icon-btn location-action location-detect"
-            title="Use GPS"
+            className="icon-btn"
+            style={{
+              width: "36px",
+              height: "36px",
+              background: "var(--accent)",
+              color: "white",
+              border: "none",
+              boxShadow: "0 2px 5px rgba(217, 119, 6, 0.3)",
+            }}
           >
             <i className="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
           </button>

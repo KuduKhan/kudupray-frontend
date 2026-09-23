@@ -42658,26 +42658,3 @@ body.dark-mode #schedule-card #manual-loc.location-city-input {
 
   #schedule-card .location-detect-label { display: none; }
 }
-
-/* Restore the stable schedule header layout after removing the solar animation. */
-#schedule-card > .section-header {
-  display: flex !important;
-  grid-template-columns: none;
-  align-items: center;
-}
-
-#schedule-card > .section-header > :last-child { justify-self: auto; }
-
-@media (max-width: 699px) {
-  #schedule-card > .section-header {
-    display: flex !important;
-    grid-template-columns: none;
-    flex-wrap: wrap;
-  }
-
-  #schedule-card > .section-header .section-title {
-    width: auto;
-    font-size: inherit;
-    line-height: inherit;
-  }
-}
