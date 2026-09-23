@@ -40794,6 +40794,24 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   }
 }
 
+/* Keep the schedule heading compact and consistent with Sunnah & Night. */
+#schedule-card > .section-header .section-title {
+  width: max-content !important;
+  max-width: none;
+  min-width: max-content;
+  font-size: 1.05rem !important;
+  line-height: 1.2 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+
+@media (max-width: 1023px) {
+  #schedule-card > .section-header .section-title {
+    font-size: 1rem !important;
+  }
+}
+
 /* A compact, centered download action shares the Qur’an Reader selector rail. */
 #tab-quran-reader .quran-reader-toolbar-shell {
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 36px auto;
