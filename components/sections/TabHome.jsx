@@ -868,10 +868,10 @@ export default function TabHome() {
           style={{
             display: "none",
             justifyContent: "flex-end",
-            gap: "6px",
+            gap: "5px",
             background: "rgba(0,0,0,0.02)",
-            padding: "10px",
-            borderRadius: "16px",
+            padding: "6px 8px",
+            borderRadius: "12px",
             border: "1px solid rgba(0,0,0,0.04)",
           }}
         >
@@ -879,13 +879,17 @@ export default function TabHome() {
             type="text"
             id="manual-loc"
             placeholder="City, Country"
+            aria-label="City and country"
+            autoComplete="address-level2"
             style={{
-              padding: "8px 14px",
-              borderRadius: "20px",
+              padding: "6px 10px",
+              height: "32px",
+              lineHeight: "18px",
+              borderRadius: "16px",
               border: "1px solid #ccc",
               width: "100%",
               maxWidth: "200px",
-              fontSize: "0.85rem",
+              fontSize: "0.8rem",
               outline: "none",
               boxShadow: "inset 0 1px 3px rgba(0,0,0,0.05)",
             }}
@@ -897,8 +901,11 @@ export default function TabHome() {
             aria-label="Use entered location"
             title="Use entered location"
             style={{
-              width: "36px",
-              height: "36px",
+              width: "32px",
+              height: "32px",
+              minWidth: "32px",
+              minHeight: "32px",
+              padding: 0,
               background: "var(--primary)",
               color: "white",
               border: "none",
@@ -911,9 +918,14 @@ export default function TabHome() {
             type="button"
             onClick={(event) => dispatch(34, event)}
             className="icon-btn"
+            aria-label="Use current position"
+            title="Use current position"
             style={{
-              width: "36px",
-              height: "36px",
+              width: "32px",
+              height: "32px",
+              minWidth: "32px",
+              minHeight: "32px",
+              padding: 0,
               background: "var(--accent)",
               color: "white",
               border: "none",

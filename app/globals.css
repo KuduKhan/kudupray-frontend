@@ -19026,7 +19026,7 @@ body.dark-mode .support-contact-arrow {
   display: flex;
   flex-direction: column;
   gap: clamp(12px, 1.5vw, 16px);
-  padding-top: 18px;
+  padding-top: 14px;
 }
 
 #schedule-card>.section-header,
@@ -19108,7 +19108,7 @@ body.dark-mode .support-contact-arrow {
 @media (max-width: 599px) {
   #schedule-card {
     gap: 12px;
-    padding-top: 12px;
+    padding-top: 8px;
   }
 
   #schedule-card>.section-header {
