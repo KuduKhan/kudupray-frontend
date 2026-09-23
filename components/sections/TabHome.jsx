@@ -846,19 +846,15 @@ export default function TabHome() {
           </div>
 
           <div className="location-selector-wrap">
-            <button
-              type="button"
+            <div
               id="loc-display"
               className="location-selector"
               onClick={(event) => dispatch(32, event)}
-              aria-controls="loc-input-container"
-              aria-expanded="false"
-              aria-label="Change prayer-time location"
             >
               <i className="fa-solid fa-location-dot" aria-hidden="true"></i>
               <span id="loc-name">{"Detecting..."}</span>
               <i className="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-            </button>
+            </div>
           </div>
         </div>
 
@@ -888,11 +884,9 @@ export default function TabHome() {
             type="button"
             onClick={(event) => dispatch(34, event)}
             className="icon-btn location-action location-detect"
-            aria-label="Use current position"
-            title="Use current position"
+            title="Use GPS"
           >
             <i className="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
-            <span className="location-detect-label">{"Current"}</span>
           </button>
         </div>
         <div

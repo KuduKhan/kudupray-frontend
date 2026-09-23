@@ -3225,7 +3225,7 @@ function init() {
 }
 
 function initAccessibility() {
-    document.querySelectorAll('.guide-tile, .accordion-btn, .modal-close-btn, #loc-display:not(button)').forEach(el => {
+    document.querySelectorAll('.guide-tile, .accordion-btn, .modal-close-btn, #loc-display').forEach(el => {
         el.setAttribute('tabindex', '0');
         el.setAttribute('role', 'button');
         el.addEventListener('keydown', event => {
@@ -4085,21 +4085,6 @@ window.resetLocation = function () {
 }
 
 // === LOCATION LOGIC ===
-function setLocationName(name) {
-    const text = String(name || 'Choose location');
-    const apply = () => {
-        const locationName = document.getElementById('loc-name');
-        const locationDisplay = document.getElementById('loc-display');
-        if (locationName) {
-            locationName.textContent = text;
-            elements.locName = locationName;
-        }
-        if (locationDisplay) locationDisplay.title = `Prayer-time location: ${text}`;
-    };
-    apply();
-    window.requestAnimationFrame(apply);
-}
-
 function toggleLocationInput(forceOpen) {
     const shouldOpen = typeof forceOpen === 'boolean'
         ? forceOpen
@@ -4107,12 +4092,10 @@ function toggleLocationInput(forceOpen) {
     if (shouldOpen) {
         elements.locInputContainer.style.display = 'flex';
         elements.locDisplay.style.display = 'none';
-        elements.locDisplay.setAttribute('aria-expanded', 'true');
         elements.manualLocInput.focus();
     } else {
         elements.locInputContainer.style.display = 'none';
         elements.locDisplay.style.display = 'inline-flex';
-        elements.locDisplay.setAttribute('aria-expanded', 'false');
         elements.locDisplay.focus();
     }
 }
@@ -4133,24 +4116,24 @@ function saveManualLocation() {
     }
 }
 
-function triggerAutoLocation(closeLocationEditor = false) {
+function triggerAutoLocation() {
     if (navigator.geolocation) {
-        setLocationName('Detecting…');
+        elements.locName.innerText = "Detecting...";
         navigator.geolocation.getCurrentPosition(
             pos => {
                 const { latitude, longitude } = pos.coords;
                 kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
                 fetchTimingsByCoords(latitude, longitude);
-                if (closeLocationEditor && elements.locInputContainer.style.display === 'flex') toggleLocationInput(false);
+                if (elements.locInputContainer.style.display === 'flex') toggleLocationInput();
             },
             () => {
-                setLocationName('Using Makkah');
+                elements.locName.innerText = "Access Denied. Using Makkah.";
                 fetchTimingsByCoords(21.4225, 39.8262); // Default
             },
             { enableHighAccuracy: false, timeout: 10000, maximumAge: 900000 }
         );
     } else {
-        setLocationName('Location unavailable');
+        elements.locName.innerText = "Geo Not Supported.";
         fetchTimingsByCoords(21.4225, 39.8262);
     }
 }
@@ -4501,7 +4484,7 @@ async function fetchAPI(url) {
         }
         // Truncate long timezone names
         if (locText.includes('/')) locText = locText.split('/').pop().replace(/_/g, ' ');
-        setLocationName(locText);
+        elements.locName.innerText = locText;
 
         currentTimings = t;
         renderTimetable(t);
@@ -4523,7 +4506,7 @@ async function fetchAPI(url) {
         elements.loader.style.display = 'grid';
         elements.loader.className = 'error-message';
         elements.loader.innerHTML = '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span>Prayer times could not be loaded. Check your connection or choose a manual location.</span>';
-        setLocationName('Choose location');
+        elements.locName.innerText = "Choose location";
         console.error('KuduPray timing request failed:', e);
     }
 }
@@ -6793,7 +6776,7 @@ window.kuduprayHandlers = [
     function (event) { loadDeenQuiz() },
     function (event) { toggleLocationInput() },
     function (event) { saveManualLocation() },
-    function (event) { triggerAutoLocation(true) },
+    function (event) { triggerAutoLocation() },
     function (event) { openGuide('purification') },
     function (event) { openGuide('structure') },
     function (event) { openGuide('daily') },

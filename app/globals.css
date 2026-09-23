@@ -42518,7 +42518,7 @@ body.dark-mode .solar-time-dusk strong { color: #c4b5fd; }
 #schedule-card #loc-input-container.location-editor {
   align-items: center;
   gap: 6px;
-  padding: 4px 5px;
+  padding: 2px 4px;
   border: 1px solid rgba(16, 119, 91, 0.17);
   border-radius: 12px;
   background: linear-gradient(145deg, rgba(245, 255, 251, 0.88), rgba(226, 246, 237, 0.68));
@@ -42530,7 +42530,9 @@ body.dark-mode .solar-time-dusk strong { color: #c4b5fd; }
   flex: 1 1 180px;
   width: auto;
   max-width: none;
-  padding: 6px 9px;
+  padding: 4px 9px;
+  height: 28px;
+  line-height: 18px;
   color: #164e3d;
   border: 1px solid rgba(16, 119, 91, 0.2);
   border-radius: 8px;
@@ -42545,10 +42547,12 @@ body.dark-mode .solar-time-dusk strong { color: #c4b5fd; }
 
 #schedule-card .location-action {
   display: inline-grid;
-  flex: 0 0 30px;
+  flex: 0 0 28px;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
+  min-height: 0;
+  padding: 0;
   border: 1px solid transparent;
   border-radius: 9px;
   color: #fff;
@@ -42628,27 +42632,27 @@ body.dark-mode #schedule-card #manual-loc.location-city-input {
 
   #schedule-card #loc-input-container.location-editor {
     gap: 6px;
-    padding: 4px;
+    padding: 2px 4px;
     border-radius: 10px;
   }
 
   #schedule-card #manual-loc.location-city-input {
     flex-basis: 140px;
-    padding: 6px 8px;
+    padding: 4px 8px;
     font-size: 0.72rem;
   }
 
   #schedule-card .location-action {
-    flex-basis: 29px;
-    width: 29px;
-    height: 29px;
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
     border-radius: 8px;
     font-size: 0.72rem;
   }
 
   #schedule-card .location-detect {
-    flex-basis: 29px;
-    width: 29px;
+    flex-basis: 28px;
+    width: 28px;
     padding: 0;
   }
 
