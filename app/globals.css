@@ -4627,6 +4627,8 @@ body.dark-mode #tab-settings .settings-preferences-header>.preferences-info>summ
 }
 
 #tab-settings .lang-select {
+  appearance: none;
+  -webkit-appearance: none;
   min-width: 154px;
   min-height: 44px;
   padding: 0 35px 0 14px;
@@ -4938,7 +4940,7 @@ body.dark-mode #tab-settings .setting-action-btn i {
 
 @media (max-width: 560px) {
   #tab-settings .card {
-    padding: 15px 12px;
+    padding: 11px 10px;
   }
 
   #tab-settings .section-header {
@@ -4988,24 +4990,24 @@ body.dark-mode #tab-settings .setting-action-btn i {
   }
 
   #tab-settings .settings-menu-grid {
-    gap: 12px;
+    gap: 8px;
   }
 
   #tab-settings .setting-item {
-    gap: 12px;
-    padding: 13px 12px;
-    border-radius: 15px;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 13px;
   }
 
   #tab-settings .setting-label {
-    grid-template-columns: 34px minmax(0, 1fr);
-    column-gap: 9px;
+    grid-template-columns: 30px minmax(0, 1fr);
+    column-gap: 8px;
     font-size: 0.84rem;
   }
 
   #tab-settings .setting-label>i {
-    width: 34px !important;
-    height: 34px;
+    width: 30px !important;
+    height: 30px;
   }
 
   #tab-settings .setting-help {
@@ -19027,6 +19029,25 @@ body.dark-mode .support-contact-arrow {
   flex-direction: column;
   gap: clamp(12px, 1.5vw, 16px);
   padding-top: 14px;
+}
+
+@media (max-width: 560px) {
+  #tab-settings .settings-focus-panel {
+    margin: 6px 0 12px;
+    padding: 9px;
+    border-radius: 16px;
+  }
+
+  #tab-settings .settings-panel-note {
+    gap: 7px;
+    padding-bottom: 6px;
+  }
+
+  #tab-settings .settings-panel-note>i {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px 9px 9px 3px;
+  }
 }
 
 #schedule-card>.section-header,
@@ -36822,8 +36843,9 @@ body.dark-mode #tab-settings .lang-select:focus-visible {
   font-weight: 700;
   line-height: 1.2;
   cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
   transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -40796,6 +40818,10 @@ body > .developer-social-menu .quran-reciter-option:nth-child(5) > i { color: #3
   }
 }
 
+#tab-settings .lang-select::-ms-expand {
+  display: none;
+}
+
 /* Keep the schedule heading compact and consistent with Sunnah & Night. */
 #schedule-card > .section-header .section-title {
   width: max-content !important;
@@ -41534,6 +41560,19 @@ body.dark-mode #tab-quran-reader .quran-reader-download {
   font: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+/* The enhanced language trigger inherits .lang-select; keep its chevron in the same right inset as other app pickers. */
+#tab-settings .app-select-trigger.lang-select {
+  min-height: 42px;
+  padding: 4px 10px 4px 14px;
+}
+
+@media (min-width: 561px) {
+  #tab-settings .app-select-trigger.lang-select {
+    min-height: 42px;
+    padding-right: 10px;
+  }
 }
 
 #tab-quran-reader .quran-reader-download-panel > button:hover,

@@ -867,11 +867,12 @@ export default function TabHome() {
           id="loc-input-container"
           style={{
             display: "none",
+            alignItems: "center",
             justifyContent: "flex-end",
-            gap: "5px",
+            gap: "4px",
             background: "rgba(0,0,0,0.02)",
-            padding: "6px 8px",
-            borderRadius: "12px",
+            padding: "4px 6px",
+            borderRadius: "10px",
             border: "1px solid rgba(0,0,0,0.04)",
           }}
         >
@@ -882,13 +883,16 @@ export default function TabHome() {
             aria-label="City and country"
             autoComplete="address-level2"
             style={{
-              padding: "6px 10px",
-              height: "32px",
+              flex: "1 1 160px",
+              minWidth: 0,
+              boxSizing: "border-box",
+              padding: "5px 9px",
+              height: "30px",
               lineHeight: "18px",
-              borderRadius: "16px",
+              borderRadius: "15px",
               border: "1px solid #ccc",
-              width: "100%",
-              maxWidth: "200px",
+              width: "auto",
+              maxWidth: "220px",
               fontSize: "0.8rem",
               outline: "none",
               boxShadow: "inset 0 1px 3px rgba(0,0,0,0.05)",
@@ -901,10 +905,11 @@ export default function TabHome() {
             aria-label="Use entered location"
             title="Use entered location"
             style={{
-              width: "32px",
-              height: "32px",
-              minWidth: "32px",
-              minHeight: "32px",
+              width: "30px",
+              height: "30px",
+              minWidth: "30px",
+              minHeight: "30px",
+              flexShrink: 0,
               padding: 0,
               background: "var(--primary)",
               color: "white",
@@ -921,10 +926,11 @@ export default function TabHome() {
             aria-label="Use current position"
             title="Use current position"
             style={{
-              width: "32px",
-              height: "32px",
-              minWidth: "32px",
-              minHeight: "32px",
+              width: "30px",
+              height: "30px",
+              minWidth: "30px",
+              minHeight: "30px",
+              flexShrink: 0,
               padding: 0,
               background: "var(--accent)",
               color: "white",

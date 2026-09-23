@@ -92,18 +92,6 @@ export default function TabSettings() {
                     <option value="fr">{"French"}</option>
                     <option value="id">{"Indonesian"}</option>
                   </select>
-                  <i
-                    className="fa-solid fa-chevron-down"
-                    style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      fontSize: "0.7rem",
-                      pointerEvents: "none",
-                      opacity: "0.6",
-                    }}
-                  ></i>
                 </div>
               </div>
 
