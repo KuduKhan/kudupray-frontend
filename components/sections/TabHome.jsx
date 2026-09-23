@@ -827,24 +827,6 @@ export default function TabHome() {
             <h3 className="section-title">{"Today's Schedule"}</h3>
           </div>
 
-          <div
-            id="solar-position"
-            className="solar-position"
-            aria-label="Sun position from dawn to dusk"
-          >
-            <div className="solar-position-track" aria-hidden="true">
-              <span className="solar-position-arc"></span>
-              <span className="solar-position-horizon"></span>
-              <span className="solar-position-zenith"><i className="fa-solid fa-arrow-up"></i></span>
-              <span className="solar-position-sun"></span>
-            </div>
-            <div className="solar-position-times" aria-label="Solar schedule">
-              <span className="solar-time-dawn"><em>Sunrise</em><strong id="solar-sunrise-time">--:--</strong></span>
-              <span className="solar-time-zenith"><em>Zenith</em><strong id="solar-zenith-time">--:--</strong></span>
-              <span className="solar-time-dusk"><em>Sunset</em><strong id="solar-sunset-time">--:--</strong></span>
-            </div>
-          </div>
-
           <div className="location-selector-wrap">
             <div
               id="loc-display"

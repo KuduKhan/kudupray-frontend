@@ -4488,7 +4488,6 @@ async function fetchAPI(url) {
 
         currentTimings = t;
         renderTimetable(t);
-        updateSolarPosition(t);
         renderPrayerJourney(t);
         renderExtraTimes(t);
         calcNextPrayer(t);
@@ -4956,45 +4955,6 @@ function parsePrayerTime(value, baseDate = new Date()) {
     return result;
 }
 
-function updateSolarPosition(t) {
-    const solar = document.getElementById('solar-position');
-    if (!solar || !t) return;
-
-    const now = new Date();
-    const sunrise = parsePrayerTime(t.Sunrise, now);
-    const sunset = parsePrayerTime(t.Maghrib, now);
-    const zenith = parsePrayerTime(t.Dhuhr, now);
-    if (!sunrise || !sunset || sunset <= sunrise) return;
-
-    const progress = Math.max(0, Math.min(1, (now - sunrise) / (sunset - sunrise)));
-    const arcHeight = Math.sin(progress * Math.PI);
-    solar.style.setProperty('--solar-x', `${7 + (progress * 86)}%`);
-    solar.style.setProperty('--solar-rise', `${7 + (arcHeight * 62)}%`);
-
-    const sunriseTime = document.getElementById('solar-sunrise-time');
-    const zenithTimeLabel = document.getElementById('solar-zenith-time');
-    const sunsetTime = document.getElementById('solar-sunset-time');
-    const compactTime = (time) => time
-        ? time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
-        : '--:--';
-    const zenithText = zenith
-        ? compactTime(zenith)
-        : '--:--';
-    if (sunriseTime) sunriseTime.textContent = compactTime(sunrise);
-    if (zenithTimeLabel) zenithTimeLabel.textContent = zenithText;
-    if (sunsetTime) sunsetTime.textContent = compactTime(sunset);
-
-    const zenithWindow = zenith ? Math.abs(now - zenith) <= 20 * 60 * 1000 : false;
-    const phaseText = now < sunrise ? 'Before dawn'
-        : now > sunset ? 'After dusk'
-            : zenithWindow ? 'Zenith'
-                : progress < 0.24 ? 'Dawn'
-                    : progress < 0.5 ? 'Morning'
-                        : progress < 0.78 ? 'Afternoon'
-                            : 'Dusk';
-    solar.dataset.phase = phaseText.toLowerCase().replace(/\s+/g, '-');
-}
-
 function calcNextPrayer(t) {
     const now = new Date();
     const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
@@ -5074,7 +5034,6 @@ function setNext(currentName, nextName, timeObj) {
 function tick() {
     const now = new Date();
     if (!nextEvent) return;
-    if (currentTimings) updateSolarPosition(currentTimings);
     const diff = nextEvent - now;
 
     // Progress Bar Update
@@ -5102,7 +5061,6 @@ function tick() {
         }
         if (currentTimings) {
             calcNextPrayer(currentTimings);
-            updateSolarPosition(currentTimings);
         }
         return;
     }
