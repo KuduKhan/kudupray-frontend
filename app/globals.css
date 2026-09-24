@@ -42306,6 +42306,93 @@ body.dark-mode .solar-position-zenith { color: #ddd6fe; background: rgba(49, 46,
   }
 }
 
+/* Qur’an Reader minimize handle and persistent mini-player. */
+.quran-reader-header {
+  position: relative;
+}
+
+.quran-reader-minimize {
+  position: absolute;
+  grid-area: none !important;
+  top: 4px;
+  left: 50%;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 54px !important;
+  min-width: 54px !important;
+  height: 14px !important;
+  min-height: 14px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 99px !important;
+  background: transparent !important;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.quran-reader-minimize span {
+  display: block;
+  width: 34px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(7, 96, 73, 0.34);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: width 160ms ease, background 160ms ease;
+}
+
+.quran-reader-minimize:hover span,
+.quran-reader-minimize:focus-visible span {
+  width: 42px;
+  background: #087654;
+}
+
+.quran-reader-minimize:focus-visible {
+  outline: 3px solid rgba(16, 185, 129, 0.2);
+  outline-offset: 2px;
+}
+
+.quran-reader-player-mount {
+  display: contents;
+}
+
+body.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini-player {
+  position: fixed;
+  right: 12px;
+  bottom: 14px;
+  left: 12px;
+  z-index: 120;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini-player .quran-reader-player-guidance,
+body.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini-player .quran-reader-audio {
+  display: none;
+}
+
+body.dark-mode.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini-player {
+  background: transparent;
+}
+
+@media (max-width: 599px) {
+  .quran-reader-minimize {
+    top: 3px;
+  }
+
+  body.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini-player {
+    right: 8px;
+    bottom: calc(66px + env(safe-area-inset-bottom));
+    left: 8px;
+  }
+}
+
 @media (max-width: 359px) {
   #schedule-card > .section-header .section-title {
     font-size: 0.8rem;

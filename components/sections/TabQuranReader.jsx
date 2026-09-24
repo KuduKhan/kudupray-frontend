@@ -226,6 +226,15 @@ export default function TabQuranReader() {
           </div>
           <button
             type="button"
+            className="quran-reader-minimize"
+            onClick={(event) => dispatch(200, event)}
+            aria-label="Minimize Qur’an Reader"
+            title="Minimize Qur’an Reader"
+          >
+            <span aria-hidden="true"></span>
+          </button>
+          <button
+            type="button"
             className="modal-close-btn"
             onClick={(event) => dispatch(7, event)}
             aria-label="Return to Prayer Times"
@@ -248,6 +257,7 @@ export default function TabQuranReader() {
               </p>
             </div>
           </div>
+          <div id="quran-reader-player-mount" className="quran-reader-player-mount">
           <div className="quran-reader-audio-wrap">
             <p
               className="quran-reader-player-guidance"
@@ -352,6 +362,7 @@ export default function TabQuranReader() {
               aria-hidden="true"
               tabIndex="-1"
             ></audio>
+          </div>
           </div>
         </div>
       </article>

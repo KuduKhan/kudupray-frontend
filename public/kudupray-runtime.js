@@ -3087,7 +3087,60 @@ async function refreshQuranReaderCatalog() {
     }
 }
 
+window.minimizeQuranReader = function () {
+    const reader = document.getElementById('tab-quran-reader');
+    const playerWrap = reader?.querySelector('.quran-reader-audio-wrap');
+    if (!reader || !playerWrap) return;
+    closeQuranReaderPreferencePickers();
+    closeQuranReaderDownloadMenu();
+    closeQuranReaderMoreMenu();
+    document.body.classList.add('quran-reader-minimized');
+    playerWrap.classList.add('quran-reader-mini-player');
+    document.body.appendChild(playerWrap);
+    // Keep the reader hidden even if navigation is still rendering or the
+    // navigation button is unavailable in a compact layout.
+    const homePage = document.getElementById('tab-home');
+    document.querySelectorAll('.page, #tab-settings, #tab-guides, #tab-duas, #tab-support, #tab-home, #tab-quran-reader').forEach(page => {
+        const isHome = page === homePage;
+        page.classList.toggle('active', isHome);
+        page.hidden = !isHome;
+        page.setAttribute('aria-hidden', String(!isHome));
+    });
+    document.body.classList.remove('quran-reader-active', 'fullscreen-menu-active', 'dua-library-active', 'nav-hidden', 'quran-reader-nav-hidden');
+    document.querySelectorAll('.nav-item').forEach(button => {
+        const isHome = button.getAttribute('aria-label') === 'Prayer times';
+        button.classList.toggle('active', isHome);
+        button.setAttribute('aria-current', isHome ? 'page' : 'false');
+    });
+    reader.classList.remove('active');
+    reader.hidden = true;
+    reader.setAttribute('aria-hidden', 'true');
+    if (homePage) {
+        homePage.classList.add('active');
+        homePage.hidden = false;
+        homePage.setAttribute('aria-hidden', 'false');
+    }
+};
+
+// The reader is rendered by React while the player lifecycle is managed by
+// this runtime. Keep a delegated native listener as a fallback so the handle
+// remains reliable during hydration and tab transitions.
+document.addEventListener('click', event => {
+    const trigger = event.target instanceof Element ? event.target.closest('.quran-reader-minimize') : null;
+    if (!trigger) return;
+    event.preventDefault();
+    window.minimizeQuranReader();
+}, true);
+
 window.openQuranReader = function () {
+    const restoringMinimizedReader = document.body.classList.contains('quran-reader-minimized');
+    document.body.classList.remove('quran-reader-minimized');
+    const playerWrap = document.querySelector('.quran-reader-audio-wrap.quran-reader-mini-player');
+    const playerMount = document.getElementById('quran-reader-player-mount');
+    if (playerWrap && playerMount) {
+        playerMount.appendChild(playerWrap);
+        playerWrap.classList.remove('quran-reader-mini-player');
+    }
     hydrateQuranReader();
     bindQuranReaderAudio();
     bindQuranReaderDownloadMenu();
@@ -3101,10 +3154,19 @@ window.openQuranReader = function () {
     if (quranNavButton) window.nav('quran-reader', quranNavButton);
     if (window.matchMedia('(max-width: 599px)').matches) document.body.classList.add('quran-reader-nav-hidden');
     void refreshQuranReaderCatalog();
-    void loadQuranReaderSurah(quranReaderState.surahNumber);
+    if (restoringMinimizedReader && quranReaderState.ayahs.length) {
+        // The mini-player keeps the active audio element and its current time.
+        // Restore the reader surface without reloading the surah or interrupting playback.
+        updateQuranReaderAudioMeta();
+        setQuranReaderActiveAyah(quranReaderState.activeAyahIndex);
+        syncQuranPlayer();
+    } else {
+        void loadQuranReaderSurah(quranReaderState.surahNumber);
+    }
 };
 
 window.closeQuranReader = function () {
+    document.body.classList.remove('quran-reader-minimized');
     quranDownload.intent++;
     quranDownload.controller?.abort();
     closeQuranSpeedPicker();
@@ -6907,6 +6969,7 @@ window.kuduprayHandlers = [
     function (event) { shiftIslamicCalendar(1) },
     function (event) { showIslamicCalendarToday() }
 ];
+window.kuduprayHandlers[200] = function () { window.minimizeQuranReader?.(); };
 // Start once per document, after all React sections have hydrated.
 init();
 window.kuduprayReady = true;
