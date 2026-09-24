@@ -6696,6 +6696,17 @@ function openSupportEmail(action, trigger) {
     window.location.href = mailto;
 }
 
+const buyMeACoffeeUrl = 'https://www.buymeacoffee.com/karimomar3c';
+
+window.openSupportContribute = function (trigger) {
+    const opened = window.open(buyMeACoffeeUrl, '_blank', 'noopener,noreferrer');
+    if (opened) opened.opener = null;
+    setSupportActionStatus(
+        opened ? 'Opening Buy Me a Coffee in a new tab.' : 'Open Buy Me a Coffee to support KuduPray.',
+        trigger
+    );
+};
+
 function getKuduPrayShareData() {
     const canonicalUrl = document.querySelector('link[rel="canonical"][href]')?.href;
     const liveUrl = /^https?:$/i.test(window.location.protocol) ? window.location.href : '';
@@ -6945,7 +6956,7 @@ window.kuduprayHandlers = [
     function (event) { selectArabicTutorPrompt('forms', this) },
     function (event) { selectArabicTutorPrompt('root', this) },
     function (event) { closeArabicStudioPage() },
-    function (event) { startSupportAction('contribute', this) },
+    function (event) { openSupportContribute(this) },
     function (event) { shareApp(this) },
     function (event) { rateApp(this) },
     function (event) { suggestFeature(this) },
