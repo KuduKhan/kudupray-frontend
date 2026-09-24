@@ -42404,13 +42404,18 @@ body.quran-reader-minimized #back-to-top {
 }
 
 @media (max-width: 599px) {
+  /* Keep footer-to-navigation clearance consistent with or without audio. */
+  body > .app-footer {
+    margin-bottom: calc(136px + env(safe-area-inset-bottom)) !important;
+  }
+
   .quran-reader-minimize {
     top: 3px;
   }
 
   body.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini-player {
     right: 8px;
-    bottom: calc(66px + env(safe-area-inset-bottom));
+    bottom: calc(76px + env(safe-area-inset-bottom));
     left: 8px;
   }
 
@@ -42432,6 +42437,12 @@ body.quran-reader-minimized #back-to-top {
   body.quran-reader-minimized {
     padding-bottom: 0 !important;
   }
+
+  /* When the player is off, keep the footer just above the mobile navigation. */
+  body:not(.quran-reader-minimized):not(.quran-reader-active) > .app-footer {
+    margin-bottom: calc(4px + env(safe-area-inset-bottom)) !important;
+  }
+
 }
 
 @media (max-width: 359px) {
