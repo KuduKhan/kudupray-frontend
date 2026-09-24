@@ -6969,7 +6969,7 @@ window.kuduprayHandlers = [
     function (event) { shiftIslamicCalendar(1) },
     function (event) { showIslamicCalendarToday() }
 ];
-window.kuduprayHandlers[200] = function () { window.minimizeQuranReader?.(); };
+window.kuduprayHandlers[207] = function () { window.minimizeQuranReader?.(); };
 // Start once per document, after all React sections have hydrated.
 init();
 window.kuduprayReady = true;

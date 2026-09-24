@@ -42381,6 +42381,28 @@ body.dark-mode.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini
   background: transparent;
 }
 
+/* Keep the minimized player in a clear dock instead of covering the active page. */
+body.quran-reader-minimized .page.active {
+  padding-bottom: 88px !important;
+}
+
+/* Give the footer its own trailing clearance while the floating player is open. */
+body.quran-reader-minimized > .app-footer {
+  margin-bottom: 88px !important;
+}
+
+/* Lift Back to top above the minimized player without changing its normal position. */
+body.quran-reader-minimized #back-to-top {
+  bottom: calc(116px + env(safe-area-inset-bottom)) !important;
+}
+
+@media (min-width: 600px) {
+  /* Focused menus keep the same footer clearance as the Dua menu, even with audio minimized. */
+  body.quran-reader-minimized.fullscreen-menu-active > .app-footer {
+    margin-bottom: 104px !important;
+  }
+}
+
 @media (max-width: 599px) {
   .quran-reader-minimize {
     top: 3px;
@@ -42391,11 +42413,130 @@ body.dark-mode.quran-reader-minimized .quran-reader-audio-wrap.quran-reader-mini
     bottom: calc(66px + env(safe-area-inset-bottom));
     left: 8px;
   }
+
+  body.quran-reader-minimized .page.active {
+    /* The footer carries the dock clearance; keep the page itself compact. */
+    padding-bottom: 20px !important;
+  }
+
+  body.quran-reader-minimized > .app-footer {
+    width: calc(100% - 16px);
+    margin-bottom: calc(136px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: 18px !important;
+  }
+
+  body.quran-reader-minimized #back-to-top {
+    bottom: calc(150px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body.quran-reader-minimized {
+    padding-bottom: 0 !important;
+  }
 }
 
 @media (max-width: 359px) {
   #schedule-card > .section-header .section-title {
     font-size: 0.8rem;
+  }
+}
+
+/* Desktop reader controls: place the minimize handle directly before Surah. */
+.quran-reader-minimize-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  #tab-quran-reader .quran-reader-header > .quran-reader-minimize {
+    display: none !important;
+  }
+
+  #tab-quran-reader .quran-reader-toolbar-shell {
+    grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1.18fr) 40px 40px !important;
+    align-items: center;
+  }
+
+  #tab-quran-reader .quran-reader-minimize-desktop { grid-area: 1 / 1 / 2 / 2 !important; }
+  #tab-quran-reader .quran-reader-player-surah { grid-column: 2; grid-row: 1; }
+  #tab-quran-reader .quran-reader-player-reciter { grid-column: 3; grid-row: 1; }
+  #tab-quran-reader .quran-reader-download { grid-column: 4; grid-row: 1; }
+  #tab-quran-reader .quran-reader-more { grid-column: 5; grid-row: 1; }
+
+  #tab-quran-reader .quran-reader-more,
+  #tab-quran-reader .quran-reader-more > summary,
+  #tab-quran-reader .quran-reader-more > summary:hover,
+  #tab-quran-reader .quran-reader-more[open] > summary,
+  #tab-quran-reader .quran-reader-more > summary:focus-visible {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 6;
+  }
+
+  #tab-quran-reader .quran-reader-more > summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid rgba(4, 120, 87, 0.14) !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 3px 9px rgba(4, 120, 87, 0.06);
+    color: #08765a;
+  }
+
+  #tab-quran-reader .quran-reader-more > summary:hover,
+  #tab-quran-reader .quran-reader-more > summary:focus-visible {
+    border-color: rgba(4, 120, 87, 0.24) !important;
+    background: rgba(4, 120, 87, 0.08) !important;
+    color: var(--primary);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 3px 10px rgba(6, 78, 59, 0.08);
+    outline: none;
+  }
+
+  #tab-quran-reader .quran-reader-minimize-desktop {
+    position: static;
+    display: grid !important;
+    place-items: center;
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: 1px solid rgba(4, 120, 87, 0.14) !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 3px 9px rgba(4, 120, 87, 0.06);
+    transform: none;
+    color: #08765a;
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+  }
+
+  #tab-quran-reader .quran-reader-minimize-desktop span {
+    width: 17px;
+    height: 3px;
+    border-radius: 99px;
+    background: #087654;
+    box-shadow: none;
+  }
+
+  #tab-quran-reader .quran-reader-minimize-desktop:hover,
+  #tab-quran-reader .quran-reader-minimize-desktop:focus-visible {
+    border-color: rgba(4, 120, 87, 0.24) !important;
+    color: var(--primary);
+    background: rgba(4, 120, 87, 0.08) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 3px 10px rgba(6, 78, 59, 0.08);
+    outline: none;
+  }
+
+  #tab-quran-reader .quran-reader-minimize-desktop:hover span,
+  #tab-quran-reader .quran-reader-minimize-desktop:focus-visible span {
+    width: 20px;
   }
 }
 

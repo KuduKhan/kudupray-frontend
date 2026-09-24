@@ -33,6 +33,15 @@ export default function TabQuranReader() {
             aria-label="Qur’an reading controls"
           >
             <div className="search-wrapper quran-reader-toolbar-shell">
+              <button
+                type="button"
+                className="quran-reader-minimize quran-reader-minimize-desktop"
+                onClick={(event) => dispatch(207, event)}
+                aria-label="Minimize Qur’an Reader"
+                title="Minimize Qur’an Reader"
+              >
+                <span aria-hidden="true"></span>
+              </button>
               <div className="quran-reader-toolbar-segment quran-reader-player-surah">
                 <select
                   id="quran-reader-surah"
@@ -124,7 +133,16 @@ export default function TabQuranReader() {
                 </div>
               </details>
               <details className="quran-reader-more quran-reader-toolbar-segment">
-                <summary aria-label="More Qur’an reading options">
+                <summary
+                  aria-label="More Qur’an reading options"
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const menu = event.currentTarget.parentElement;
+                    if (menu) menu.open = !menu.open;
+                  }}
+                >
                   <i className="fa-solid fa-gear" aria-hidden="true"></i>
                 </summary>
                 <div className="quran-reader-more-panel">
@@ -227,7 +245,7 @@ export default function TabQuranReader() {
           <button
             type="button"
             className="quran-reader-minimize"
-            onClick={(event) => dispatch(200, event)}
+            onClick={(event) => dispatch(207, event)}
             aria-label="Minimize Qur’an Reader"
             title="Minimize Qur’an Reader"
           >
