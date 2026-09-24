@@ -38,7 +38,7 @@ export default function KuduPray() {
       <Toast />
       <Script
         id="kudupray-runtime"
-        src="/kudupray-runtime.js?v=20260924e"
+        src="/kudupray-runtime.js?v=20260924f"
         strategy="afterInteractive"
       />
     </>

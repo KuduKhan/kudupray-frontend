@@ -6,7 +6,7 @@ const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://kudupray.com").rep
 );
 const siteName = "KuduPray";
 const siteDescription =
-  "A peaceful Islamic companion for prayer times, Qibla, Qur’an reading, duas, Ruqyah, and daily guidance.";
+  "KuduPray is a peaceful Islamic companion with accurate prayer times, a Qibla finder, Qur’an reading, Adhan audio, daily duas, Ruqyah, and practical Muslim guidance.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -21,11 +21,19 @@ export const metadata = {
   publisher: "KuduPray",
   keywords: [
     "Islamic prayer times",
+    "Muslim prayer times",
+    "prayer time calculator",
     "Qibla finder",
+    "Qur'an reader online",
     "Quran reader",
+    "Adhan player",
     "daily duas",
+    "Islamic duas",
     "Ruqyah",
+    "Arabic transliteration",
+    "Sunnah guidance",
     "Islamic companion",
+    "free Islamic app",
   ],
   alternates: {
     canonical: "/",
@@ -51,6 +59,10 @@ export const metadata = {
     description: siteDescription,
     images: ["/brand/kudupray-lockup.png"],
   },
+  manifest: "/manifest.webmanifest",
+  category: "lifestyle",
+  classification: "Islamic prayer and Qur'an study companion",
+  referrer: "origin-when-cross-origin",
   robots: {
     index: true,
     follow: true,
@@ -90,7 +102,7 @@ export default function RootLayout({ children }) {
         founder: { "@type": "Person", name: "Mufasa Khan" },
       },
       {
-        "@type": "SoftwareApplication",
+        "@type": "WebApplication",
         "@id": `${siteUrl}/#application`,
         name: siteName,
         applicationCategory: "LifestyleApplication",
@@ -98,6 +110,14 @@ export default function RootLayout({ children }) {
         url: siteUrl,
         description: siteDescription,
         image: `${siteUrl}/brand/kudupray-lockup.png`,
+        featureList: [
+          "Prayer times and Adhan audio",
+          "Qibla finder",
+          "Online Qur'an reader",
+          "Daily duas and Ruqyah",
+          "Arabic transliteration and translations",
+        ],
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
         publisher: { "@id": `${siteUrl}/#organization` },
       },
       {

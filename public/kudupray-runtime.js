@@ -6659,17 +6659,17 @@ window.copyDua = function (text) {
 
 const supportActionDrafts = Object.freeze({
     contribute: {
-        to: 'support@kudupray.com',
+        to: 'karim.omar3130@gmail.com',
         subject: 'Supporting KuduPray',
         message: `Assalamu alaikum,\n\nI would like to support KuduPray and help keep its worship tools free and accessible. Please let me know which kind of help would be most useful right now.\n\nI am interested in: [contributing / sharing / testing / translation / other]\n\nJazakumullahu khayran,`
     },
     review: {
-        to: 'feedback@kudupray.com',
+        to: 'karim.omar3130@gmail.com',
         subject: 'My KuduPray Review',
         message: `Hello KuduPray team,\n\nI would like to share an honest review.\n\nWhat I have found helpful:\n- \n\nOne thing that could be improved:\n- \n\nMay this feedback be quoted anonymously? [Yes / No]\n\nThank you,`
     },
     feedback: {
-        to: 'feedback@kudupray.com',
+        to: 'karim.omar3130@gmail.com',
         subject: 'KuduPray Feedback or Feature Idea',
         message: `Hello KuduPray team,\n\nI would like to share feedback.\n\nPage or feature:\n\nWhat I expected:\n\nWhat happened or what I would improve:\n\nSteps to reproduce, if relevant:\n\nDevice or browser (optional):\n\nPlease omit sensitive personal information. Thank you!`
     }

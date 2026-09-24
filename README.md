@@ -49,6 +49,17 @@ npm run build
 The streaming regression checks immediate play, streaming fallback, cached replay, failure isolation, retries, cancellation, and yielding downloads during buffering. I also smoke-tested the running app in Microsoft Edge, including settings, duas, dhikr, Qur’an controls, and the fixed player at desktop and mobile widths.
 
 Framework reference: [Next.js App Router documentation](https://nextjs.org/docs/app).
+
+## Search engine visibility
+
+The app publishes metadata, Open Graph cards, JSON-LD application data,
+`/robots.txt`, `/sitemap.xml`, and `/manifest.webmanifest`. Set
+`NEXT_PUBLIC_SITE_URL` to the canonical production URL before deployment so
+the canonical links and sitemap point to the live site. To verify ownership in
+Google Search Console, set `GOOGLE_SITE_VERIFICATION` to the token supplied by
+Google, deploy, then submit `https://<your-domain>/sitemap.xml` in Search
+Console. Indexing and rankings still depend on Google crawling the deployed
+site and on the usefulness and authority of the published content.
 # kudupray-frontend
 
 ## Offline Qur’an release checks
