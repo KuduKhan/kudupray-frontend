@@ -1,8 +1,3 @@
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://kudupray.com").replace(
-  /\/$/,
-  "",
-);
-
 export default function manifest() {
   return {
     name: "KuduPray | Premium Islamic Companion",
@@ -17,10 +12,10 @@ export default function manifest() {
     lang: "en",
     icons: [
       {
-        src: `${siteUrl}/brand/kudupray-emblem.png`,
-        sizes: "512x512",
+        src: "/brand/kudupray-emblem.png",
+        sizes: "760x675",
         type: "image/png",
-        purpose: "any maskable",
+        purpose: "any",
       },
     ],
   };

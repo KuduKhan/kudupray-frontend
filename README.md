@@ -60,29 +60,16 @@ Google Search Console, set `GOOGLE_SITE_VERIFICATION` to the token supplied by
 Google, deploy, then submit `https://<your-domain>/sitemap.xml` in Search
 Console. Indexing and rankings still depend on Google crawling the deployed
 site and on the usefulness and authority of the published content.
-# kudupray-frontend
+## Reader release checks
 
-## Offline Qur’an release checks
+The reader offers full-surah and ayah-by-ayah audio downloads. Browser downloads
+are separate from the playback cache; this app does not guarantee offline app
+access or persistent storage of all recitations.
 
-“Download all surahs” first saves the production app shell and all 114 surahs in
-the currently selected translation (including Arabic and transliteration), then
-saves the reciter’s audio. Keep the tab open during preparation and download.
-Other translations need an online visit or download before offline use.
-Downloads resume by skipping files already in Cache Storage. Browser storage
-can be evicted or manually cleared; the completion message reports whether
-persistent storage was granted. Folder export, when available, is a separate copy.
+Before release, check playback, seeking, reciter changes, and download options
+on Android Chrome and iOS Safari. Minimize and restore during playback, visit
+Settings, then close the reader and confirm the floating player disappears.
 
-Before release on Android Chrome and iOS Safari:
-
-1. Finish a recitation download, close the browser, enable airplane mode, and reopen the same origin.
-2. Open the reader, play and seek an ayah, then switch surahs.
-3. Pause/resume a partial download and verify saved files are retained.
-4. Simulate full/blocked storage and confirm the error stays visible.
-5. Test supported folder export, cancellation, a full destination, and partial recitations.
-6. Confirm export/removal cannot run during a download or another export/removal.
-
-`npm test` includes fallback count/Juz, persistent reader data, resume, storage
-errors, operation guards, export failure, service-worker byte ranges, and shell
-preparation regression tests. These tests use synthetic fixtures; real device
-backgrounding, eviction, audio-CDN availability, and folder permissions still
-require the device checks above.
+`npm test` covers playback fallback and cancellation, restricted preference
+storage, and closing both the full and minimized reader. External audio services
+and real-device background playback still need device testing.

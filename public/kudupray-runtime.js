@@ -3091,6 +3091,9 @@ window.minimizeQuranReader = function () {
     const reader = document.getElementById('tab-quran-reader');
     const playerWrap = reader?.querySelector('.quran-reader-audio-wrap');
     if (!reader || !playerWrap) return;
+    closeQuranSpeedPicker();
+    closeQuranSurahPicker();
+    closeQuranReciterPicker();
     closeQuranReaderPreferencePickers();
     closeQuranReaderDownloadMenu();
     closeQuranReaderMoreMenu();
@@ -3167,6 +3170,12 @@ window.openQuranReader = function () {
 
 window.closeQuranReader = function () {
     document.body.classList.remove('quran-reader-minimized');
+    const playerWrap = document.querySelector('.quran-reader-audio-wrap.quran-reader-mini-player');
+    const playerMount = document.getElementById('quran-reader-player-mount');
+    if (playerWrap && playerMount) {
+        playerMount.appendChild(playerWrap);
+        playerWrap.classList.remove('quran-reader-mini-player');
+    }
     quranDownload.intent++;
     quranDownload.controller?.abort();
     closeQuranSpeedPicker();
@@ -3992,7 +4001,7 @@ function buildPageVisualOverviews() {
             title: 'Choose a way to help',
             description: 'Contribute only if and how it feels right—every form of support is appreciated.',
             items: [
-                ['fa-mug-hot', 35, 'Contribute', 'Ask about supporting ongoing upkeep'],
+                ['fa-mug-hot', 35, 'Contribute', 'Support KuduPray on Buy Me a Coffee'],
                 ['fa-share-nodes', 202, 'Share', 'Recommend KuduPray thoughtfully'],
                 ['fa-lightbulb', 46, 'Feedback', 'Report an issue or suggest an improvement'],
                 ['fa-star', 320, 'Review', 'Share an honest experience']
@@ -6701,10 +6710,8 @@ const buyMeACoffeeUrl = 'https://www.buymeacoffee.com/karimomar3c';
 window.openSupportContribute = function (trigger) {
     const opened = window.open(buyMeACoffeeUrl, '_blank', 'noopener,noreferrer');
     if (opened) opened.opener = null;
-    setSupportActionStatus(
-        opened ? 'Opening Buy Me a Coffee in a new tab.' : 'Open Buy Me a Coffee to support KuduPray.',
-        trigger
-    );
+    // With noopener, a successful window.open may also return null.
+    setSupportActionStatus('Continue on Buy Me a Coffee to support KuduPray.', trigger);
 };
 
 function getKuduPrayShareData() {
@@ -6724,6 +6731,7 @@ function copySupportLink(data) {
 }
 
 window.startSupportAction = function (action, trigger) {
+    if (action === 'contribute') return window.openSupportContribute(trigger);
     openSupportEmail(action, trigger);
 };
 

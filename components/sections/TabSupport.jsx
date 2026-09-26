@@ -125,18 +125,19 @@ export default function TabSupport() {
               </p>
               <div className="support-orbit">
                 <div className="support-action-grid">
-                  <button
-                    type="button"
-                    onClick={(event) => dispatch(183, event)}
+                  <a
+                    href="https://www.buymeacoffee.com/karimomar3c"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="support-tile support-contribute"
-                    aria-label="Ask how to support KuduPray"
+                    aria-label="Support KuduPray on Buy Me a Coffee (opens in a new tab)"
                   >
                     <span className="tile-icon icon-amber">
                       <i className="fa-solid fa-mug-hot"></i>
                     </span>
                     <span className="tile-title">{"Contribute"}</span>
-                    <span className="tile-sub">{"Ask how to help"}</span>
-                  </button>
+                    <span className="tile-sub">{"Buy Me a Coffee"}</span>
+                  </a>
 
                   <button
                     type="button"
