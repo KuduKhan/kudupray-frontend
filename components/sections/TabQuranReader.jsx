@@ -291,7 +291,7 @@ export default function TabQuranReader() {
               aria-label="Qur’an audio player"
               hidden={true}
             >
-              <div className="quran-player-transport" role="group" aria-label="Surah and ayah navigation">
+              <div className="quran-player-transport" role="group" aria-label="Surah navigation">
                 <button type="button" id="quran-player-previous" aria-label="Previous surah" title="Previous surah" disabled={true}>
                   <i className="fa-solid fa-backward-step" aria-hidden="true"></i>
                 </button>

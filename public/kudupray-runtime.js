@@ -1582,13 +1582,17 @@ function syncQuranSurahPicker() {
     document.getElementById('quran-reader-surah').value = String(surah.number);
 }
 
-function closeQuranSurahPicker(restoreFocus = false) {
-    const panel = document.getElementById('quran-surah-picker');
+function closeQuranPicker(panelId, triggerId, restoreFocus = false) {
+    const panel = document.getElementById(panelId);
     if (!panel || panel.hidden) return;
     panel.hidden = true;
-    const trigger = document.getElementById('quran-surah-trigger');
-    trigger.setAttribute('aria-expanded', 'false');
-    if (restoreFocus) trigger.focus({ preventScroll: true });
+    const trigger = document.getElementById(triggerId);
+    trigger?.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) trigger?.focus({ preventScroll: true });
+}
+
+function closeQuranSurahPicker(restoreFocus = false) {
+    closeQuranPicker('quran-surah-picker', 'quran-surah-trigger', restoreFocus);
 }
 
 function getQuranReaderSurahJuzLabel(surah) {
@@ -1771,12 +1775,7 @@ function syncQuranReciterPicker() {
 }
 
 function closeQuranReciterPicker(restoreFocus = false) {
-    const panel = document.getElementById('quran-reciter-picker');
-    if (!panel || panel.hidden) return;
-    panel.hidden = true;
-    const trigger = document.getElementById('quran-reciter-trigger');
-    trigger.setAttribute('aria-expanded', 'false');
-    if (restoreFocus) trigger.focus({ preventScroll: true });
+    closeQuranPicker('quran-reciter-picker', 'quran-reciter-trigger', restoreFocus);
 }
 
 function positionQuranReciterPicker() {
@@ -2584,8 +2583,8 @@ function syncQuranPlayer() {
     const next = document.getElementById('quran-player-next');
     const repeat = document.getElementById('quran-player-repeat');
     const autoplay = document.getElementById('quran-player-autoplay');
-    if (previous) previous.disabled = quranReaderState.surahNumber <= 1 || !quranReaderState.ayahs.length;
-    if (next) next.disabled = quranReaderState.surahNumber >= 114 || !quranReaderState.ayahs.length;
+    if (previous) previous.disabled = quranReaderState.surahNumber <= 1;
+    if (next) next.disabled = quranReaderState.surahNumber >= 114;
     if (repeat) {
         repeat.setAttribute('aria-pressed', String(quranReaderState.repeatSurah));
         repeat.setAttribute('aria-label', `Repeat surah ${quranReaderState.repeatSurah ? 'on' : 'off'}`);
@@ -2600,12 +2599,7 @@ function syncQuranPlayer() {
 }
 
 function closeQuranSpeedPicker(restoreFocus = false) {
-    const panel = document.getElementById('quran-speed-picker');
-    if (!panel || panel.hidden) return;
-    panel.hidden = true;
-    const trigger = document.getElementById('quran-speed-trigger');
-    trigger.setAttribute('aria-expanded', 'false');
-    if (restoreFocus) trigger.focus({ preventScroll: true });
+    closeQuranPicker('quran-speed-picker', 'quran-speed-trigger', restoreFocus);
 }
 
 function closeQuranReaderMoreMenu() {
@@ -2691,6 +2685,16 @@ function initQuranSpeedPicker() {
     window.visualViewport?.addEventListener('resize', position);
 }
 
+function navigateQuranReaderSurah(delta) {
+    const current = Number(quranReaderState.surahNumber);
+    const target = current + Number(delta);
+    if (!Number.isInteger(current) || !Number.isInteger(target) || target < 1 || target > 114) return;
+    const audio = getQuranReaderActiveAudio();
+    const wasPlaying = Boolean(audio && !audio.paused && !audio.ended);
+    setQuranReaderStatus(`Loading surah ${target}…`);
+    window.selectQuranReaderSurah(target, { play: wasPlaying });
+}
+
 function bindQuranPlayer() {
     const player = document.getElementById('quran-player');
     if (!player || player.dataset.bound) return;
@@ -2703,14 +2707,8 @@ function bindQuranPlayer() {
         else void startQuranDownloadedPlayback();
         syncQuranPlayer();
     });
-    const navigateSurah = delta => {
-        const target = quranReaderState.surahNumber + delta;
-        if (target < 1 || target > 114 || !quranReaderState.ayahs.length) return;
-        const wasPlaying = Boolean(getQuranReaderActiveAudio() && !getQuranReaderActiveAudio().paused && !getQuranReaderActiveAudio().ended);
-        window.selectQuranReaderSurah(target, { play: wasPlaying });
-    };
-    document.getElementById('quran-player-previous')?.addEventListener('click', () => navigateSurah(-1));
-    document.getElementById('quran-player-next')?.addEventListener('click', () => navigateSurah(1));
+    document.getElementById('quran-player-previous')?.addEventListener('click', () => navigateQuranReaderSurah(-1));
+    document.getElementById('quran-player-next')?.addEventListener('click', () => navigateQuranReaderSurah(1));
     document.getElementById('quran-player-repeat')?.addEventListener('click', event => {
         quranReaderState.repeatSurah = !quranReaderState.repeatSurah;
         try { kuduStorage.setItem('kudu_quran_reader_repeat', String(quranReaderState.repeatSurah)); } catch (error) { /* Optional device preference. */ }
