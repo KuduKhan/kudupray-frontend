@@ -2204,7 +2204,7 @@ window.setQuranReaderNumbering = function (useArabic) {
     quranReaderState.arabicNumbers = Boolean(useArabic);
     document.body.classList.toggle('quran-reader-english-numerals', !quranReaderState.arabicNumbers);
     document.querySelectorAll('.quran-reader-ayah-number[data-number]').forEach(marker => {
-        marker.textContent = formatQuranReaderAyahNumber(marker.dataset.number);
+        setQuranSurahNumberBadge(marker, marker.dataset.number);
     });
     syncQuranSurahPicker();
     const surahPicker = document.getElementById('quran-surah-picker');
@@ -3072,9 +3072,9 @@ function renderQuranReaderSurah(payload, translationInfo) {
         verse.setAttribute('aria-label', `Play ayah ${ayah.numberInSurah}`);
         verse.addEventListener('click', () => window.playQuranReaderAyah(index));
         const verseNumber = document.createElement('span');
-        verseNumber.className = 'quran-reader-ayah-number';
+        verseNumber.className = 'quran-reader-ayah-number quran-surah-badge';
         verseNumber.dataset.number = String(ayah.numberInSurah);
-        verseNumber.textContent = formatQuranReaderAyahNumber(ayah.numberInSurah);
+        setQuranSurahNumberBadge(verseNumber, ayah.numberInSurah);
         verseNumber.dir = 'ltr';
         verseNumber.setAttribute('aria-hidden', 'true');
         const arabicText = document.createElement('p');
