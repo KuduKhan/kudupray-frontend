@@ -1,6 +1,149 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { dispatch } from "../runtime-events";
+
+function DhikrSelector({ children }) {
+  const rootRef = useRef(null);
+  const selectRef = useRef(null);
+  const listRef = useRef(null);
+  const [options, setOptions] = useState([]);
+  const [selected, setSelected] = useState("");
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const select = selectRef.current;
+    if (!select) return undefined;
+
+    const syncSelection = (value = select.value) => setSelected(value);
+    const handleOutsidePointer = (event) => {
+      if (!rootRef.current?.contains(event.target)) setOpen(false);
+    };
+    const handleSavedSelection = (event) => syncSelection(event.detail);
+    const handleNativeChange = () => syncSelection();
+
+    setOptions(
+      Array.from(select.options, (option) => ({
+        value: option.value,
+        label: option.textContent.trim(),
+      })),
+    );
+    syncSelection();
+    select.addEventListener("change", handleNativeChange);
+    window.addEventListener("tasbih-phrase-sync", handleSavedSelection);
+    document.addEventListener("pointerdown", handleOutsidePointer);
+
+    return () => {
+      select.removeEventListener("change", handleNativeChange);
+      window.removeEventListener("tasbih-phrase-sync", handleSavedSelection);
+      document.removeEventListener("pointerdown", handleOutsidePointer);
+    };
+  }, []);
+
+  const selectedOption = options.find((option) => option.value === selected) || options[0];
+
+  function chooseOption(value) {
+    const select = selectRef.current;
+    if (!select) return;
+    select.value = value;
+    setSelected(value);
+    setOpen(false);
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+    rootRef.current?.querySelector(".tasbih-select-trigger")?.focus();
+  }
+
+  function handleListKeyDown(event) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setOpen(false);
+      rootRef.current?.querySelector(".tasbih-select-trigger")?.focus();
+      return;
+    }
+    const buttons = Array.from(
+      listRef.current?.querySelectorAll('[role="option"]') || [],
+    );
+    const currentIndex = buttons.indexOf(document.activeElement);
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowDown") nextIndex = Math.min(currentIndex + 1, buttons.length - 1);
+    else if (event.key === "ArrowUp") nextIndex = Math.max(currentIndex - 1, 0);
+    else if (event.key === "Home") nextIndex = 0;
+    else if (event.key === "End") nextIndex = buttons.length - 1;
+    else if (event.key === "PageDown") nextIndex = Math.min(currentIndex + 6, buttons.length - 1);
+    else if (event.key === "PageUp") nextIndex = Math.max(currentIndex - 6, 0);
+    else return;
+    event.preventDefault();
+    buttons[nextIndex]?.focus();
+  }
+
+  function openList() {
+    setOpen(true);
+    requestAnimationFrame(() => {
+      const buttons = Array.from(
+        listRef.current?.querySelectorAll('[role="option"]') || [],
+      );
+      (buttons.find((button) => button.dataset.value === selected) || buttons[0])?.focus();
+    });
+  }
+
+  return (
+    <div
+      ref={rootRef}
+      className={`tasbih-select-wrap${open ? " is-open" : ""}`}
+    >
+      <select
+        ref={selectRef}
+        className="tasbih-native-select"
+        id="tasbih-phrase"
+        aria-hidden="true"
+        tabIndex={-1}
+        onChange={(event) => dispatch(25, event)}
+      >
+        {children}
+      </select>
+      <button
+        type="button"
+        className="tasbih-select-trigger"
+        aria-label="Choose a dhikr"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls="tasbih-phrase-options"
+        onClick={() => (open ? setOpen(false) : openList())}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+            event.preventDefault();
+            openList();
+          }
+        }}
+      >
+        <span>{selectedOption?.label || "Choose a dhikr"}</span>
+        <i className="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div
+        ref={listRef}
+        id="tasbih-phrase-options"
+        className="tasbih-select-menu"
+        role="listbox"
+        aria-label="Dhikr phrases"
+        hidden={!open}
+        onKeyDown={handleListKeyDown}
+      >
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            role="option"
+            aria-selected={option.value === selected}
+            data-value={option.value}
+            className="tasbih-select-option"
+            onClick={() => chooseOption(option.value)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function TabHome() {
   return (
@@ -509,13 +652,7 @@ export default function TabHome() {
                 </button>
               </div>
             </div>
-            <div className="tasbih-select-wrap">
-              <select
-                className="tasbih-select"
-                id="tasbih-phrase"
-                aria-label="Choose a dhikr"
-                onChange={(event) => dispatch(25, event)}
-              >
+            <DhikrSelector>
                 <option value="SubḥānAllāh">
                   {"SubḥānAllāh · Glory be to Allah"}
                 </option>
@@ -600,8 +737,7 @@ export default function TabHome() {
                 <option value="Rabbi zidnī ʿilmā">
                   {"Rabbi zidnī ʿilmā · My Lord, increase me in knowledge"}
                 </option>
-              </select>
-            </div>
+            </DhikrSelector>
             <div className="tasbih-phrase-display" aria-live="polite">
               <strong id="tasbih-phrase-arabic" lang="ar" dir="rtl">
                 {"سُبْحَانَ ٱللَّٰهِ"}

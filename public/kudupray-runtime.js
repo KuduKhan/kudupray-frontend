@@ -1422,7 +1422,10 @@ function initDailyCompanion() {
     } catch (error) { /* Start with a clean counter if saved data is invalid. */ }
 
     const phraseSelect = document.getElementById('tasbih-phrase');
-    if (phraseSelect) phraseSelect.value = tasbihState.phrase;
+    if (phraseSelect) {
+        phraseSelect.value = tasbihState.phrase;
+        window.dispatchEvent(new CustomEvent('tasbih-phrase-sync', { detail: tasbihState.phrase }));
+    }
     renderTasbihCounter();
     if (navigator.onLine !== false) {
         void window.refreshQuranVerse(true);
