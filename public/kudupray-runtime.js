@@ -590,6 +590,27 @@ const DAILY_QURAN_VERSES = [
     }
 ];
 
+const DAILY_VERSE_SURAH_LABELS = Object.freeze({
+    2: 'Al-Baqarah · The Cow',
+    3: 'Āl ʿImrān · The Family of Imran',
+    13: 'Ar-Raʿd · The Thunder',
+    15: 'Al-Hijr · The Rocky Tract',
+    20: 'Ṭā-Hā · Ṭā-Hā',
+    39: 'Az-Zumar · The Groups',
+    65: 'At-Talaq · The Divorce',
+    94: 'Ash-Sharh · The Relief'
+});
+
+function getDailyVerseSurahLabel(verse) {
+    if (verse?.surahName && verse?.surahTranslation) return `${verse.surahName} · ${verse.surahTranslation}`;
+    const surahNumber = Number(String(verse?.reference || '').match(/Qur’an\s+(\d+):/)?.[1]);
+    const catalogEntry = quranReaderState.catalog?.[surahNumber - 1];
+    if (catalogEntry?.englishName && catalogEntry?.englishNameTranslation) {
+        return `${catalogEntry.englishName} · ${catalogEntry.englishNameTranslation}`;
+    }
+    return DAILY_VERSE_SURAH_LABELS[surahNumber] || (catalogEntry?.englishName ? `Surah ${catalogEntry.englishName}` : '');
+}
+
 const DAILY_HADITHS = [
     {
         text: 'Actions are judged by intentions, and every person will have only what they intended.',
@@ -1179,6 +1200,8 @@ async function fetchLiveQuranVerse() {
                 transliteration: transliteration?.text || '',
                 text: english.text,
                 reference: `Qur’an ${verseKey}`,
+                surahName: arabic.surah.englishName,
+                surahTranslation: arabic.surah.englishNameTranslation,
                 url: `https://quran.com/${arabic.surah.number}/${arabic.numberInSurah}`,
                 live: true,
                 fetchedAt: Date.now()
@@ -1229,6 +1252,7 @@ function renderQuranVerse(animate = false) {
     transliteration.textContent = verse.transliteration || '';
     transliteration.hidden = !verse.transliteration;
     document.getElementById('daily-verse-text').textContent = verse.text;
+    document.getElementById('daily-verse-surah').textContent = getDailyVerseSurahLabel(verse);
     document.getElementById('daily-verse-reference').textContent = verse.reference;
     renderReflectionStatus('daily-verse-index', verse, currentVerseIndex, DAILY_QURAN_VERSES.length);
     document.getElementById('daily-verse-source').href = verse.url;
@@ -1578,7 +1602,7 @@ function syncQuranSurahPicker() {
     const surah = getQuranReaderSurah(quranReaderState.surahNumber);
     const trigger = document.getElementById('quran-surah-trigger');
     if (!surah || !trigger) return;
-    document.getElementById('quran-surah-selected-number').textContent = formatQuranReaderAyahNumber(surah.number);
+    setQuranSurahNumberBadge(document.getElementById('quran-surah-selected-number'), surah.number);
     document.getElementById('quran-surah-selected-name').textContent = surah.englishName;
     trigger.title = formatQuranReaderSurah(surah);
     trigger.setAttribute('aria-label', `Select a surah: ${formatQuranReaderSurah(surah)}`);
@@ -1641,7 +1665,7 @@ function renderQuranSurahPickerList() {
         option.setAttribute('role', 'option');
         option.setAttribute('aria-selected', String(surah.number === quranReaderState.surahNumber));
         option.setAttribute('aria-label', formatQuranReaderSurah(surah));
-        const badge = document.createElement('span'); badge.className = 'quran-surah-badge'; badge.textContent = formatQuranReaderAyahNumber(surah.number); badge.setAttribute('aria-hidden', 'true');
+        const badge = document.createElement('span'); badge.className = 'quran-surah-badge'; badge.setAttribute('aria-hidden', 'true'); setQuranSurahNumberBadge(badge, surah.number);
         const copy = document.createElement('span'); copy.className = 'quran-surah-option-copy';
         const name = document.createElement('span'); name.textContent = surah.englishName;
         const detail = document.createElement('small'); detail.textContent = [surah.englishNameTranslation, (surah.numberOfAyahs || QURAN_SURAH_AYAH_COUNTS[surah.number - 1]) ? `${surah.numberOfAyahs || QURAN_SURAH_AYAH_COUNTS[surah.number - 1]} ayahs` : ''].filter(Boolean).join(' · ');
@@ -2127,6 +2151,53 @@ function formatQuranReaderAyahNumber(number) {
     return quranReaderState.arabicNumbers
         ? value.replace(/[0-9]/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)])
         : value;
+}
+
+let quranSurahBadgeMeasureContext = null;
+
+function centerQuranSurahBadgeGlyph(element, text) {
+    if (!element || !text) return;
+    const computed = window.getComputedStyle(element);
+    if (!quranSurahBadgeMeasureContext) {
+        quranSurahBadgeMeasureContext = document.createElement('canvas').getContext('2d');
+    }
+    if (!quranSurahBadgeMeasureContext) return;
+    quranSurahBadgeMeasureContext.font = `${computed.fontStyle} ${computed.fontWeight} ${computed.fontSize} ${computed.fontFamily}`;
+    const metrics = quranSurahBadgeMeasureContext.measureText(text);
+    const ascent = metrics.actualBoundingBoxAscent;
+    const descent = metrics.actualBoundingBoxDescent;
+    const fontAscent = metrics.fontBoundingBoxAscent;
+    const fontDescent = metrics.fontBoundingBoxDescent;
+    if (![ascent, descent, fontAscent, fontDescent].every(Number.isFinite)) return;
+
+    // Match the glyph ink center to the line-box center using the font's measured bounds.
+    const centerShift = ((ascent - descent) - (fontAscent - fontDescent)) / 2;
+    element.style.setProperty('--quran-glyph-center-shift', `${centerShift}px`);
+}
+
+function setQuranSurahNumberBadge(element, number) {
+    if (!element) return;
+    const ornament = document.createElement('span');
+    ornament.className = 'quran-surah-number-ornament';
+    ornament.textContent = '۝';
+    ornament.setAttribute('aria-hidden', 'true');
+    const value = document.createElement('span');
+    value.className = 'quran-surah-number-value';
+    const digits = document.createElement('span');
+    digits.className = 'quran-surah-number-digits';
+    digits.textContent = formatQuranReaderAyahNumber(number);
+    digits.dataset.length = String(String(number ?? '').length);
+    value.append(digits);
+    element.replaceChildren(ornament, value);
+    centerQuranSurahBadgeGlyph(ornament, ornament.textContent);
+    centerQuranSurahBadgeGlyph(digits, digits.textContent);
+    if (document.fonts?.ready) {
+        document.fonts.ready.then(() => {
+            if (!element.isConnected) return;
+            centerQuranSurahBadgeGlyph(ornament, ornament.textContent);
+            centerQuranSurahBadgeGlyph(digits, digits.textContent);
+        });
+    }
 }
 
 window.setQuranReaderNumbering = function (useArabic) {

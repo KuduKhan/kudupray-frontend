@@ -498,6 +498,7 @@ export default function TabHome() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <span id="daily-verse-surah"></span>
                   <span id="daily-verse-reference">{"Qur’an"}</span>
                   <i
                     className="fa-solid fa-arrow-up-right-from-square"
@@ -787,10 +788,6 @@ export default function TabHome() {
                 {"Target 33"}
               </span>
             </div>
-            <p className="tasbih-save-note">
-              <i className="fa-solid fa-floppy-disk" aria-hidden="true"></i>
-              {" Each dhikr keeps its own count automatically."}
-            </p>
           </article>
         </div>
         <div

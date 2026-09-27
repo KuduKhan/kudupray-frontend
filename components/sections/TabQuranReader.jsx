@@ -63,7 +63,10 @@ export default function TabQuranReader() {
                     id="quran-surah-selected-number"
                     aria-hidden="true"
                   >
-                    {"1"}
+                    <span className="quran-surah-number-ornament" aria-hidden="true">{"۝"}</span>
+                    <span className="quran-surah-number-value">
+                      <span className="quran-surah-number-digits" data-length="1">{"١"}</span>
+                    </span>
                   </span>
                   <span
                     className="quran-reciter-name"
