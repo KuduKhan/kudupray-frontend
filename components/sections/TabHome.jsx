@@ -200,14 +200,7 @@ export default function TabHome() {
           <div className="companion-menu-intro">
             <div>
               <span>{"Choose a practice"}</span>
-              <small>
-                {"Open one focused tool and continue at your own pace."}
-              </small>
             </div>
-            <strong>
-              <i className="fa-solid fa-star" aria-hidden="true"></i>
-              {" 4 daily tools"}
-            </strong>
           </div>
           <button
             type="button"
@@ -369,9 +362,6 @@ export default function TabHome() {
                   ></i>
                 </a>
                 <div className="reflection-tools">
-                  <span className="reflection-index" id="daily-verse-index">
-                    {"1 of 8"}
-                  </span>
                   <button
                     type="button"
                     className="reflection-copy"
@@ -455,9 +445,6 @@ export default function TabHome() {
                   ></i>
                 </a>
                 <div className="reflection-tools">
-                  <span className="reflection-index" id="daily-hadith-index">
-                    {"1 of 8"}
-                  </span>
                   <button
                     type="button"
                     className="reflection-copy"
