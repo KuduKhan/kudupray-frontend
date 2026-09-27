@@ -601,9 +601,6 @@ export default function TabHome() {
                   {"Rabbi zidnī ʿilmā · My Lord, increase me in knowledge"}
                 </option>
               </select>
-              <span className="tasbih-select-arrow" aria-hidden="true">
-                <i className="fa-solid fa-chevron-down"></i>
-              </span>
             </div>
             <div className="tasbih-phrase-display" aria-live="polite">
               <strong id="tasbih-phrase-arabic" lang="ar" dir="rtl">

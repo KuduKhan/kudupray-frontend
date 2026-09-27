@@ -24538,9 +24538,13 @@ body.dark-mode .reflection-copy.is-copied {
   font-size: 0.79rem;
   font-weight: 600;
   outline: none;
-  -webkit-appearance: none;
-  appearance: none;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-image: none !important;
   cursor: pointer;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
   text-align: center;
   text-align-last: center;
   text-overflow: ellipsis;
@@ -24552,40 +24556,7 @@ body.dark-mode .reflection-copy.is-copied {
 
 .tasbih-select option {
   text-align: center;
-}
-
-.tasbih-select::-ms-expand {
-  display: none;
-}
-
-.tasbih-select-arrow {
-  position: absolute;
-  top: 50%;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(217, 119, 6, 0.13);
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  color: #b45309;
-  background: linear-gradient(145deg,
-      rgba(254, 243, 199, 0.9),
-      rgba(255, 255, 255, 0.72));
-  box-shadow:
-    0 5px 12px rgba(217, 119, 6, 0.09),
-    inset 0 1px 0 rgba(255, 255, 255, 0.82);
-  pointer-events: none;
-  transform: translateY(-50%);
-  transition:
-    transform 0.22s ease,
-    color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.tasbih-select-arrow i {
-  font-size: 0.69rem;
+  padding: 7px 10px;
 }
 
 .tasbih-select-wrap:hover .tasbih-select {
@@ -24593,22 +24564,9 @@ body.dark-mode .reflection-copy.is-copied {
   background: rgba(255, 255, 255, 0.72);
 }
 
-.tasbih-select-wrap:hover .tasbih-select-arrow {
-  color: #92400e;
-  box-shadow:
-    0 7px 16px rgba(217, 119, 6, 0.13),
-    inset 0 1px 0 rgba(255, 255, 255, 0.88);
-}
-
 .tasbih-select-wrap:focus-within .tasbih-select {
   border-color: rgba(217, 119, 6, 0.35);
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.11);
-}
-
-.tasbih-select-wrap:focus-within .tasbih-select-arrow {
-  color: #92400e;
-  background: linear-gradient(145deg, #fef3c7, #fff);
-  transform: translateY(-50%) rotate(180deg);
 }
 
 .tasbih-phrase-display {
@@ -25089,25 +25047,9 @@ body.dark-mode .tasbih-select option {
   color: #111827;
 }
 
-body.dark-mode .tasbih-select-arrow {
-  color: #fbbf24;
-  border-color: rgba(245, 158, 11, 0.14);
-  background: linear-gradient(145deg,
-      rgba(245, 158, 11, 0.12),
-      rgba(255, 255, 255, 0.035));
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-
 body.dark-mode .tasbih-select-wrap:hover .tasbih-select {
   border-color: rgba(245, 158, 11, 0.2);
   background: rgba(255, 255, 255, 0.065);
-}
-
-body.dark-mode .tasbih-select-wrap:focus-within .tasbih-select-arrow {
-  color: #fde68a;
-  background: rgba(245, 158, 11, 0.13);
 }
 
 body.dark-mode .tasbih-count-button {
@@ -36735,11 +36677,6 @@ body.dark-mode .quran-reader-arabic.is-active {
   border-radius: inherit;
 }
 
-.tasbih-select-arrow {
-  border-radius: 50%;
-  box-shadow: 0 5px 12px rgba(217, 119, 6, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.82);
-}
-
 body.dark-mode :is(#tab-settings .lang-select, .glass-select, .tasbih-select, #schedule-card .alarm-select-shell, .quran-reader-player-surah, .quran-reader-player-reciter) {
   border-color: rgba(255, 255, 255, 0.12);
   background: rgba(29, 29, 31, 0.82);
@@ -43175,4 +43112,86 @@ body.dark-mode #schedule-card #manual-loc.location-city-input {
   .companion-modal :is(.reflection-content, .tasbih-select-wrap) {
     margin-top: 0;
   }
+}
+
+/* Match the Dhikr picker to the app's glass fields and keep one native arrow. */
+.companion-modal .tasbih-select-wrap {
+  --tasbih-picker-surface: #f7fcfa;
+  position: relative;
+  isolation: isolate;
+  min-height: 42px;
+  height: 42px;
+  border: 1px solid rgba(4, 120, 87, 0.16);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #fff, var(--tasbih-picker-surface));
+  box-shadow:
+    0 7px 18px rgba(4, 120, 87, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.companion-modal .tasbih-select {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 12px 0 14px;
+  border: 0;
+  border-radius: inherit;
+  color: #174c3b;
+  background: transparent !important;
+  font-size: 0.75rem;
+  font-weight: 780;
+  line-height: 1.2;
+  text-align: left;
+  text-align-last: left;
+  -webkit-appearance: auto !important;
+  -moz-appearance: auto !important;
+  appearance: auto !important;
+}
+
+.companion-modal .tasbih-select option {
+  padding: 8px 12px;
+  color: #173f32;
+  background: #f8fcfa;
+  font-weight: 600;
+  text-align: left;
+}
+
+.companion-modal .tasbih-select-wrap:hover {
+  border-color: rgba(4, 120, 87, 0.28);
+  box-shadow:
+    0 9px 20px rgba(4, 120, 87, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.companion-modal .tasbih-select-wrap:focus-within {
+  border-color: rgba(4, 120, 87, 0.42);
+  box-shadow:
+    0 0 0 3px rgba(16, 185, 129, 0.13),
+    0 9px 22px rgba(4, 120, 87, 0.12),
+    inset 0 1px 0 #fff;
+}
+
+body.dark-mode .companion-modal .tasbih-select-wrap {
+  --tasbih-picker-surface: #1d2923;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(145deg, #202d26, var(--tasbih-picker-surface));
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .companion-modal .tasbih-select {
+  color: #f4f4f5;
+}
+
+body.dark-mode .companion-modal .tasbih-select option {
+  color: #f4f4f5;
+  background: #1d2923;
+}
+
+body.dark-mode .companion-modal .tasbih-select-wrap:focus-within {
+  border-color: rgba(52, 211, 153, 0.5);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.14), 0 9px 22px rgba(0, 0, 0, 0.3);
 }
