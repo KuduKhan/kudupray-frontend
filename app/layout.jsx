@@ -1,17 +1,13 @@
 import "./globals.css";
-
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://kudupray.com").replace(
-  /\/$/,
-  "",
-);
+import { siteUrl } from "./site-url";
 const siteName = "KuduPray";
 const siteDescription =
-  "KuduPray is a peaceful Islamic companion with accurate prayer times, a Qibla finder, Qur’an reading, Adhan audio, daily duas, Ruqyah, and practical Muslim guidance.";
+  "A free Islamic companion for prayer times, Qibla direction, Qur’an reading and audio, daily duas, dhikr, Ruqyah, and practical worship guidance.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "KuduPray | Premium Islamic Companion",
+    default: "KuduPray | Prayer Times, Qibla, Qur’an & Daily Duas",
     template: "%s | KuduPray",
   },
   description: siteDescription,
@@ -42,7 +38,7 @@ export const metadata = {
     type: "website",
     url: siteUrl,
     siteName,
-    title: "KuduPray | Premium Islamic Companion",
+    title: "KuduPray | Prayer Times, Qibla, Qur’an & Daily Duas",
     description: siteDescription,
     images: [
       {
@@ -55,7 +51,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "KuduPray | Premium Islamic Companion",
+    title: "KuduPray | Prayer Times, Qibla, Qur’an & Daily Duas",
     description: siteDescription,
     images: ["/brand/kudupray-lockup.png"],
   },

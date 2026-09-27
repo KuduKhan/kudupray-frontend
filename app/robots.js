@@ -1,7 +1,4 @@
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://kudupray.com").replace(
-  /\/$/,
-  "",
-);
+import { siteUrl } from "./site-url";
 
 export default function robots() {
   return {
@@ -12,6 +9,5 @@ export default function robots() {
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
   };
 }
