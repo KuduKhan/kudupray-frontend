@@ -43699,15 +43699,20 @@ body.dark-mode .qibla-action:disabled {
   transform: none;
 }
 
-/* Keep the close control in its own track so the surah name and translation
-   always retain their full, unobstructed area in either theme. */
+/* Restore the stable three-track reader header; reserve room for Close within
+   the right track so light and dark layouts remain identical. */
 @media (min-width: 1280px) {
   body.quran-reader-active #tab-quran-reader .quran-reader-header {
-    grid-template-columns: minmax(180px, 0.8fr) minmax(400px, 560px) minmax(180px, 1fr) 44px;
-    grid-template-areas: "heading toolbar current close";
+    grid-template-columns: minmax(0, 1fr) minmax(400px, 560px) minmax(0, 1fr);
+    grid-template-areas: "heading toolbar current";
+  }
+
+  #tab-quran-reader .quran-reader-header > .quran-reader-current-surah {
+    box-sizing: border-box;
+    padding-right: 56px !important;
   }
 
   #tab-quran-reader .quran-reader-header > .modal-close-btn {
-    grid-area: close;
+    grid-area: 1 / 3;
   }
 }
