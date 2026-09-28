@@ -1602,7 +1602,11 @@ function syncQuranSurahPicker() {
     const surah = getQuranReaderSurah(quranReaderState.surahNumber);
     const trigger = document.getElementById('quran-surah-trigger');
     if (!surah || !trigger) return;
-    setQuranSurahNumberBadge(document.getElementById('quran-surah-selected-number'), surah.number);
+    const selectedNumber = document.getElementById('quran-surah-selected-number');
+    if (selectedNumber) {
+        selectedNumber.textContent = formatQuranReaderAyahNumber(surah.number);
+        selectedNumber.dir = 'ltr';
+    }
     document.getElementById('quran-surah-selected-name').textContent = surah.englishName;
     trigger.title = formatQuranReaderSurah(surah);
     trigger.setAttribute('aria-label', `Select a surah: ${formatQuranReaderSurah(surah)}`);
@@ -2204,7 +2208,7 @@ window.setQuranReaderNumbering = function (useArabic) {
     quranReaderState.arabicNumbers = Boolean(useArabic);
     document.body.classList.toggle('quran-reader-english-numerals', !quranReaderState.arabicNumbers);
     document.querySelectorAll('.quran-reader-ayah-number[data-number]').forEach(marker => {
-        setQuranSurahNumberBadge(marker, marker.dataset.number);
+        marker.textContent = formatQuranReaderAyahNumber(marker.dataset.number);
     });
     syncQuranSurahPicker();
     const surahPicker = document.getElementById('quran-surah-picker');
@@ -3072,9 +3076,9 @@ function renderQuranReaderSurah(payload, translationInfo) {
         verse.setAttribute('aria-label', `Play ayah ${ayah.numberInSurah}`);
         verse.addEventListener('click', () => window.playQuranReaderAyah(index));
         const verseNumber = document.createElement('span');
-        verseNumber.className = 'quran-reader-ayah-number quran-surah-badge';
+        verseNumber.className = 'quran-reader-ayah-number';
         verseNumber.dataset.number = String(ayah.numberInSurah);
-        setQuranSurahNumberBadge(verseNumber, ayah.numberInSurah);
+        verseNumber.textContent = formatQuranReaderAyahNumber(ayah.numberInSurah);
         verseNumber.dir = 'ltr';
         verseNumber.setAttribute('aria-hidden', 'true');
         const arabicText = document.createElement('p');
