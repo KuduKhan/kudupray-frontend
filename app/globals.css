@@ -18715,7 +18715,6 @@ body.dark-mode :is(.dua-trans, .transliteration-layer) {
 
   body.dark-mode :is(.page-visual-card,
     .visual-guide-card,
-    .prayer-item,
     .sunnah-item,
     .setting-item,
     .info-stat) {
@@ -18725,13 +18724,6 @@ body.dark-mode :is(.dua-trans, .transliteration-layer) {
     box-shadow:
       inset 0 1px rgba(255, 255, 255, 0.025),
       0 8px 20px rgba(0, 0, 0, 0.17) !important;
-  }
-
-  body.dark-mode .prayer-item.active {
-    border-color: rgba(52, 211, 153, 0.42) !important;
-    background: linear-gradient(145deg,
-        rgba(6, 78, 59, 0.68),
-        rgba(11, 48, 37, 0.64)) !important;
   }
 
   body.dark-mode :is(.visual-guide-copy, .visual-explainer-body) {
@@ -43472,4 +43464,250 @@ body.dark-mode #tab-quran-reader #quran-surah-selected-number.quran-surah-badge 
 
 body.quran-reader-english-numerals #tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
   font-size: 0.88rem;
+}
+
+/* Cohesive emerald-smoke dark theme: charcoal glass, readable edges, calm green light. */
+body.dark-mode {
+  --primary: #4adea3;
+  --primary-dark: #d9f5e8;
+  --accent: #f2c66d;
+  --text-main: #f1f7f4;
+  --text-sub: #b2c3bb;
+  --glass-bg: rgba(12, 23, 19, 0.88);
+  --glass-border: 1px solid rgba(110, 231, 183, 0.2);
+  --glass-shadow: 0 18px 48px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  --frost-bg: rgba(13, 25, 20, 0.84);
+  --frost-bg-strong: rgba(16, 31, 25, 0.96);
+  --frost-edge: rgba(110, 231, 183, 0.24);
+  --frost-line: rgba(110, 231, 183, 0.14);
+  --frost-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.34),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --frost-shadow-hover:
+    0 26px 70px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(74, 222, 163, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(16, 110, 75, 0.24), transparent 34rem),
+    radial-gradient(ellipse at 94% 12%, rgba(36, 82, 63, 0.18), transparent 38rem),
+    radial-gradient(ellipse at 50% 100%, rgba(34, 48, 42, 0.22), transparent 46rem),
+    linear-gradient(160deg, #070b09 0%, #0b1210 52%, #101512 100%);
+  color-scheme: dark;
+}
+
+body.dark-mode :is(
+  .card,
+  .mini-card,
+  .timer-card,
+  .dua-card,
+  .guide-tile,
+  .support-tile,
+  .info-disclosure,
+  .info-glass-card,
+  .desktop-page-heading,
+  .visual-learning,
+  .search-row,
+  .settings-focus-panel,
+  .modal-card,
+  .islamic-calendar-card,
+  .info-popup-card
+) {
+  border-color: var(--frost-edge);
+  box-shadow: var(--frost-shadow);
+  -webkit-backdrop-filter: blur(22px) saturate(135%);
+  backdrop-filter: blur(22px) saturate(135%);
+}
+
+body.dark-mode :is(
+  .settings-focus-panel,
+  .setting-item,
+  .prayer-item,
+  .sunnah-item,
+  .panel-content,
+  .disclosure-body,
+  .search-box,
+  .lang-select,
+  .glass-select,
+  .tasbih-select,
+  .info-disclosure,
+  .info-disclosure[open] > summary,
+  .quran-reader-toolbar-segment,
+  .quran-reader-current-surah,
+  .quran-reader-verse
+) {
+  border-color: rgba(110, 231, 183, 0.19);
+}
+
+body.dark-mode .quran-reciter-picker.app-select-options .app-select-option,
+body.dark-mode .quran-reciter-picker.quran-reader-preference-options .quran-reader-preference-option {
+  border-color: transparent;
+  color: #e4f2eb;
+  background: transparent;
+}
+
+body.dark-mode .quran-reciter-picker.app-select-options .app-select-option:hover,
+body.dark-mode .quran-reciter-picker.app-select-options .app-select-option:focus-visible,
+body.dark-mode .quran-reciter-picker.quran-reader-preference-options .quran-reader-preference-option:hover,
+body.dark-mode .quran-reciter-picker.quran-reader-preference-options .quran-reader-preference-option:focus-visible {
+  outline: none;
+  color: #b9f5d7;
+  background: rgba(52, 211, 153, 0.12);
+}
+
+body.dark-mode .quran-reciter-picker.app-select-options .app-select-option[aria-selected="true"],
+body.dark-mode .quran-reciter-picker.quran-reader-preference-options .quran-reader-preference-option[aria-selected="true"] {
+  border-color: rgba(74, 222, 163, 0.26);
+  color: #c6f7dd;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.09));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+body.dark-mode #tab-settings .settings-focus-panel {
+  background:
+    radial-gradient(circle at 100% 0, rgba(52, 211, 153, 0.08), transparent 42%),
+    linear-gradient(145deg, rgba(14, 31, 24, 0.9), rgba(10, 21, 18, 0.82));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-mode #tab-settings .setting-item {
+  color: #edf7f2;
+  background: linear-gradient(145deg, rgba(28, 46, 38, 0.86), rgba(17, 31, 25, 0.84));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 7px 18px rgba(0, 0, 0, 0.16);
+}
+
+body.dark-mode #tab-settings .setting-help,
+body.dark-mode #tab-settings .settings-panel-note small,
+body.dark-mode .desktop-page-heading p,
+body.dark-mode .info-disclosure .disclosure-body,
+body.dark-mode .dua-trans,
+body.dark-mode .dua-eng,
+body.dark-mode .panel-content,
+body.dark-mode .disclosure-body {
+  color: #b9c9c1;
+}
+
+body.dark-mode #tab-settings .setting-action-btn,
+body.dark-mode #tab-settings .setting-action-btn:hover,
+body.dark-mode #tab-settings .setting-action-btn:focus-visible {
+  border-color: rgba(242, 198, 109, 0.28);
+  color: #f5dfa9;
+  background:
+    radial-gradient(circle at 100% 0, rgba(242, 198, 109, 0.12), transparent 42%),
+    linear-gradient(145deg, rgba(43, 39, 27, 0.92), rgba(22, 29, 24, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 22px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode #tab-settings .setting-action-btn i {
+  color: #f2c66d;
+  background: rgba(242, 198, 109, 0.12);
+}
+
+body.dark-mode .floating-nav {
+  border-color: rgba(110, 231, 183, 0.26);
+  background: linear-gradient(145deg, rgba(15, 36, 27, 0.94), rgba(8, 20, 16, 0.9));
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.075);
+}
+
+body.dark-mode .floating-nav::before {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.065), transparent 46%, rgba(52, 211, 153, 0.075));
+}
+
+body.dark-mode .nav-item.active,
+body.dark-mode .nav-item[aria-current="page"] {
+  border-color: rgba(74, 222, 163, 0.3);
+  background: linear-gradient(145deg, rgba(52, 211, 153, 0.18), rgba(52, 211, 153, 0.075));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 5px 16px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-mode .nav-item span,
+body.dark-mode .nav-item.active span,
+body.dark-mode .nav-item[aria-current="page"] span {
+  color: #e6f5ee;
+}
+
+body.dark-mode :is(
+  .companion-modal,
+  .companion-modal-card,
+  .companion-menu-tile,
+  .quran-reader-more-panel,
+  .quran-surah-picker,
+  .quran-reciter-picker,
+  .footer-social-popover
+) {
+  border-color: rgba(110, 231, 183, 0.23);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.065);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+}
+
+body.dark-mode #tab-companion .companion-menu-tile {
+  border-color: rgba(var(--companion-tile-rgb), 0.3);
+  background:
+    radial-gradient(circle at 100% 0, rgba(var(--companion-tile-rgb), 0.18), transparent 48%),
+    linear-gradient(145deg, rgba(25, 39, 32, 0.82), rgba(13, 21, 17, 0.86));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.065), 0 13px 32px rgba(0, 0, 0, 0.26);
+}
+
+body.dark-mode #tab-companion .companion-menu-icon {
+  border: 1px solid rgba(var(--companion-tile-rgb), 0.34);
+  color: rgb(var(--companion-tile-rgb));
+  background: linear-gradient(145deg, rgba(var(--companion-tile-rgb), 0.2), rgba(20, 34, 27, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+body.dark-mode #tab-settings :is(.section-icon, .settings-panel-note > i, .setting-label > i) {
+  border: 1px solid rgba(110, 231, 183, 0.19);
+  background: linear-gradient(145deg, rgba(52, 211, 153, 0.13), rgba(15, 31, 24, 0.84));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 5px 14px rgba(0, 0, 0, 0.17);
+}
+
+body.dark-mode :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select):focus-visible,
+body.dark-mode :is(button, a, summary, [role="button"]):focus-visible {
+  outline: 2px solid rgba(74, 222, 163, 0.74);
+  outline-offset: 2px;
+}
+
+body.dark-mode ::selection {
+  color: #f3fff8;
+  background: rgba(16, 185, 129, 0.42);
+}
+
+body.dark-mode {
+  scrollbar-color: rgba(74, 222, 163, 0.42) rgba(9, 17, 13, 0.72);
+}
+
+/* Keep the Qibla actions readable above its dark green glass surface. */
+body.dark-mode .qibla-action {
+  border: 1px solid rgba(253, 230, 138, 0.55);
+  color: #17271e;
+  background: linear-gradient(145deg, #ffe6a3, #f2bf56);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.55);
+}
+
+body.dark-mode .qibla-action.secondary {
+  border-color: rgba(110, 231, 183, 0.34);
+  color: #e7fff3;
+  background: linear-gradient(145deg, rgba(52, 211, 153, 0.2), rgba(9, 42, 31, 0.74));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .qibla-action:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Keep the close control in its own track so the surah name and translation
+   always retain their full, unobstructed area in either theme. */
+@media (min-width: 1280px) {
+  body.quran-reader-active #tab-quran-reader .quran-reader-header {
+    grid-template-columns: minmax(180px, 0.8fr) minmax(400px, 560px) minmax(180px, 1fr) 44px;
+    grid-template-areas: "heading toolbar current close";
+  }
+
+  #tab-quran-reader .quran-reader-header > .modal-close-btn {
+    grid-area: close;
+  }
 }
