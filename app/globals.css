@@ -43699,6 +43699,72 @@ body.dark-mode .qibla-action:disabled {
   transform: none;
 }
 
+/* Match the selected Surah badge's centering and dimensions to the reciter portrait. */
+#tab-quran-reader #quran-surah-trigger {
+  box-sizing: border-box;
+  align-items: center;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 2px 10px 2px 2px !important;
+}
+
+#tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
+  box-sizing: border-box;
+  align-self: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  flex-basis: 36px;
+  flex-shrink: 0;
+}
+
+/* Keep Settings as a centered 40px toolbar control on every viewport. */
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  flex: 0 0 40px;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+}
+
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:hover,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more[open] > summary,
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary:focus-visible {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: inherit !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  line-height: 1;
+  list-style: none;
+}
+
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more > summary > i {
+  display: block;
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1;
+  transform: none;
+}
+
 /* Restore the stable three-track reader header; reserve room for Close within
    the right track so light and dark layouts remain identical. */
 @media (min-width: 1280px) {
