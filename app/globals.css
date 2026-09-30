@@ -32943,6 +32943,29 @@ body.dark-mode .quran-reciter-check {
   font-weight: 850;
 }
 
+.adhan-voice-group + .adhan-voice-group {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(4, 120, 87, 0.12);
+}
+
+.adhan-voice-group-heading {
+  padding: 7px 11px 4px;
+  color: #08765a;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+body.dark-mode .adhan-voice-group + .adhan-voice-group {
+  border-top-color: rgba(110, 231, 183, 0.18);
+}
+
+body.dark-mode .adhan-voice-group-heading {
+  color: #8fe5bd;
+}
+
 .quran-reader-arabic {
   margin: 0;
   padding: 15px 17px;
@@ -42981,6 +43004,225 @@ body.dark-mode .solar-position-times span:nth-child(2) { color: #ddd6fe; }
 body.dark-mode .solar-time-dawn strong { color: #fcd34d; }
 body.dark-mode .solar-time-dusk strong { color: #c4b5fd; }
 
+/* The prayer alarm tile doubles as a compact, live sun-position panel. */
+#schedule-card .prayer-alarm {
+  grid-template-rows: minmax(0, 1fr) 32px;
+  align-content: stretch;
+  gap: 6px;
+  padding: 8px;
+}
+
+#schedule-card .alarm-sun-panel {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 2px;
+}
+
+#schedule-card .alarm-sun-heading {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgba(236, 253, 245, 0.77);
+  font-size: 0.56rem;
+  font-weight: 760;
+  line-height: 1.15;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+#schedule-card .alarm-sun-heading strong {
+  flex: 0 1 auto;
+  max-width: 58%;
+  padding: 2px 7px;
+  border: 1px solid rgba(253, 230, 138, 0.24);
+  border-radius: 999px;
+  background: rgba(1, 28, 22, 0.22);
+  text-align: center;
+  overflow: hidden;
+  color: #fde68a;
+  font-size: 0.54rem;
+  font-weight: 780;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+#schedule-card .alarm-solar-position {
+  min-height: 0;
+  height: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(30px, 1fr) auto;
+  align-content: center;
+  gap: 2px;
+  padding: 0;
+  color: #fef3c7;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#schedule-card .alarm-solar-position .solar-position-track {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 30px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(3, 35, 29, 0.08));
+}
+
+#schedule-card .alarm-solar-position .solar-position-arc {
+  left: 5%;
+  right: 5%;
+  bottom: -40px;
+  height: 68px;
+  border-color: rgba(253, 230, 138, 0.42);
+  border-top-style: solid;
+  box-shadow: 0 -3px 10px rgba(251, 191, 36, 0.08);
+}
+
+#schedule-card .alarm-solar-position .solar-position-horizon {
+  right: 6%;
+  bottom: 2px;
+  left: 6%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(253, 230, 138, 0.15), rgba(253, 230, 138, 0.75), rgba(253, 230, 138, 0.15));
+}
+
+#schedule-card .alarm-solar-position .solar-position-zenith {
+  top: 0;
+  width: 12px;
+  height: 12px;
+  color: #fde68a;
+  border: 1px solid rgba(253, 230, 138, 0.3);
+  background: rgba(8, 70, 56, 0.75);
+  box-shadow: 0 0 0 2px rgba(253, 230, 138, 0.08);
+  font-size: 0.4rem;
+}
+
+#schedule-card .alarm-solar-position .solar-position-sun {
+  left: var(--solar-x, 7%);
+  bottom: var(--solar-rise, 9%);
+  width: 9px;
+  height: 9px;
+  color: #fff8db;
+  border: 0;
+  background: radial-gradient(circle at 35% 30%, #fffef3 0 20%, #ffe58a 40%, #fbbf24 100%);
+  box-shadow: 0 0 0 3px rgba(255, 243, 184, 0.24), 0 0 10px 2px rgba(251, 191, 36, 0.65);
+  font-size: 0;
+}
+
+#schedule-card .alarm-solar-position .solar-position-sun i { display: none; }
+
+#schedule-card .alarm-solar-position .solar-position-times {
+  color: rgba(236, 253, 245, 0.69);
+  font-size: 0.48rem;
+  line-height: 1.05;
+}
+
+#schedule-card .alarm-solar-position .solar-position-times span:nth-child(2) { color: #fde68a; }
+#schedule-card .alarm-solar-position .solar-position-times strong { color: inherit; font-size: 0.5rem; }
+#schedule-card .alarm-solar-position .solar-time-dawn strong,
+#schedule-card .alarm-solar-position .solar-time-dusk strong { color: #fff; }
+
+#schedule-card .alarm-controls-row {
+  grid-template-columns: minmax(0, 1fr) 32px;
+  height: 34px;
+  gap: 7px;
+}
+
+#schedule-card .alarm-select-shell { height: 34px; }
+
+#schedule-card .alarm-sun-heading span { flex: 0 0 auto; }
+
+#schedule-card .adhan-picker-trigger {
+  gap: 5px;
+  padding: 2px 7px 2px 4px;
+}
+
+#schedule-card .adhan-picker-trigger .quran-reciter-avatar {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  flex-basis: 28px;
+}
+
+#schedule-card .adhan-picker-trigger .quran-reciter-name {
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal;
+  line-height: 1.05;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+#schedule-card .alarm-toggle-button {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #d1fae5;
+  border-color: rgba(209, 250, 229, 0.35);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.11);
+  font-size: 0.75rem;
+}
+
+#schedule-card .prayer-alarm.alarm-active .alarm-toggle-button {
+  color: #fff4bf;
+  border-color: rgba(253, 230, 138, 0.55);
+  background: rgba(251, 191, 36, 0.2);
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.1), inset 0 1px rgba(255, 255, 255, 0.15);
+}
+
+#schedule-card .alarm-toggle-button:disabled { cursor: not-allowed; opacity: 0.55; }
+
+#adhan-voice-list [data-voice].is-previewing {
+  border-color: rgba(16, 185, 129, 0.55);
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: inset 3px 0 #10b981;
+}
+
+body.dark-mode #schedule-card .alarm-solar-position {
+  background: transparent;
+  box-shadow: none;
+}
+
+body.dark-mode #schedule-card .alarm-solar-position .solar-position-track {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(0, 0, 0, 0.12));
+}
+
+@media (max-width: 699px) {
+  #schedule-card .prayer-alarm {
+    gap: 5px;
+    padding: 7px;
+  }
+
+  #schedule-card .alarm-controls-row { grid-template-columns: minmax(0, 1fr) 30px; height: 32px; gap: 5px; }
+  #schedule-card .alarm-select-shell { height: 32px; }
+  #schedule-card .alarm-toggle-button { width: 30px; min-width: 30px; height: 30px; min-height: 30px; }
+  #schedule-card .adhan-picker-trigger .quran-reciter-avatar { width: 26px; min-width: 26px; height: 26px; flex-basis: 26px; }
+  #schedule-card .adhan-picker-trigger { gap: 4px; padding-right: 5px; }
+
+  #schedule-card .alarm-sun-heading { font-size: 0.53rem; }
+  #schedule-card .alarm-sun-heading strong { font-size: 0.5rem; }
+  #schedule-card .alarm-solar-position .solar-position-track { min-height: 28px; }
+}
+
+#schedule-card .alarm-solar-position[data-phase="solar-noon"] .solar-position-sun {
+  box-shadow: 0 0 0 4px rgba(255, 243, 184, 0.34), 0 0 13px 3px rgba(251, 191, 36, 0.84);
+}
+
 /* Premium city and country selector. */
 #schedule-card .location-selector-wrap {
   display: flex;
@@ -43232,6 +43474,56 @@ body.dark-mode #schedule-card #manual-loc.location-city-input {
   .companion-modal :is(.reflection-content, .tasbih-select-wrap) {
     margin-top: 0;
   }
+}
+
+@media (min-width: 700px) {
+  #schedule-card .alarm-sun-panel,
+  #schedule-card .alarm-sun-heading,
+  #schedule-card .alarm-solar-position,
+  #schedule-card .alarm-solar-position .solar-position-track,
+  #schedule-card .alarm-solar-position .solar-position-times {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times {
+    grid-column: 1 / -1;
+  }
+
+  #schedule-card .alarm-controls-row,
+  #schedule-card .alarm-select-shell {
+    height: 36px;
+  }
+
+  #schedule-card .adhan-picker-trigger .quran-reciter-avatar {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 3px;
+    font-size: 0.56rem;
+    line-height: 1.1;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times span {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    white-space: nowrap;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times span:nth-child(2) { align-items: center; }
+  #schedule-card .alarm-solar-position .solar-position-times span:last-child { align-items: flex-end; }
+  #schedule-card .alarm-solar-position .solar-position-times em { font-size: 0.55rem; font-weight: 700; }
+  #schedule-card .alarm-solar-position .solar-position-times strong { font-size: 0.64rem; font-weight: 850; font-variant-numeric: tabular-nums; }
 }
 
 /* Match the Dhikr picker to the app's glass fields and keep one native arrow. */
@@ -43773,6 +44065,32 @@ body.dark-mode .qibla-action:disabled {
   transform: none;
 }
 
+/* Keep the selected Adhan name readable without pushing past the alarm tile. */
+#schedule-card .adhan-picker-trigger .quran-reciter-avatar {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  flex-basis: 28px;
+}
+
+#schedule-card .adhan-picker-trigger .quran-reciter-name {
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal;
+  line-height: 1.05;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@media (max-width: 699px) {
+  #schedule-card .adhan-picker-trigger .quran-reciter-avatar {
+    width: 26px;
+    min-width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+  }
+}
+
 /* Match the Adhan reciter portrait to the Reader's 34px selector badges. */
 #schedule-card .adhan-picker-trigger .quran-reciter-avatar {
   box-sizing: border-box;
@@ -43803,5 +44121,138 @@ body.dark-mode .qibla-action:disabled {
 
   #tab-quran-reader .quran-reader-header > .modal-close-btn {
     grid-area: 1 / 3;
+  }
+}
+
+/* Keep the sun-position feature close to the top edge of the alarm card. */
+#schedule-card .prayer-alarm {
+  padding-top: 0.5px;
+}
+
+/* Use the compact phone-view rhythm for the alarm controls on every screen. */
+#schedule-card .prayer-alarm { padding-inline: 7px; }
+
+#schedule-card .alarm-controls-row {
+  height: 38px;
+  grid-template-columns: minmax(0, 1fr) 30px;
+  gap: 5px;
+}
+
+#schedule-card .alarm-select-shell {
+  height: 38px;
+  min-height: 0;
+}
+
+#schedule-card .adhan-picker-trigger {
+  height: 100%;
+  min-height: 0;
+  gap: 4px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 5px;
+}
+
+#schedule-card .adhan-picker-trigger .quran-reciter-avatar {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  flex-basis: 30px;
+}
+
+#schedule-card .alarm-toggle-button {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  min-height: 30px;
+}
+
+#schedule-card .alarm-sun-heading { font-size: 0.53rem; }
+#schedule-card .alarm-sun-heading strong { font-size: 0.5rem; }
+
+@media (min-width: 700px) {
+  /* Match the phone inset while letting both rows fill the padded tile width. */
+  #schedule-card .prayer-alarm {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 14px;
+  }
+
+  #schedule-card .alarm-sun-panel,
+  #schedule-card .alarm-controls-row {
+    box-sizing: border-box;
+    grid-column: 1;
+    justify-self: stretch;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+/* Let the moving sun use the full lane between its heading and selector. */
+#schedule-card .prayer-alarm { gap: 4px; }
+
+#schedule-card .alarm-solar-position {
+  grid-template-rows: minmax(38px, 1fr) auto;
+  gap: 2px;
+}
+
+#schedule-card .alarm-solar-position .solar-position-track {
+  min-height: 38px;
+}
+
+#schedule-card .alarm-solar-position .solar-position-arc {
+  bottom: -26px;
+  height: calc(100% + 26px);
+}
+
+@media (max-width: 699px) {
+  #schedule-card .alarm-controls-row,
+  #schedule-card .alarm-select-shell {
+    height: 36px;
+  }
+
+  #schedule-card .adhan-picker-trigger .quran-reciter-avatar {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+  }
+
+  #schedule-card .alarm-solar-position {
+    grid-template-rows: minmax(24px, 1fr) auto;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-track {
+    min-height: 24px;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 3px;
+    font-size: 0.56rem;
+    line-height: 1.1;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times span {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    white-space: nowrap;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times span:nth-child(2) { align-items: center; }
+  #schedule-card .alarm-solar-position .solar-position-times span:last-child { align-items: flex-end; }
+
+  #schedule-card .alarm-solar-position .solar-position-times em {
+    font-size: 0.55rem;
+    font-weight: 700;
+  }
+
+  #schedule-card .alarm-solar-position .solar-position-times strong {
+    font-size: 0.64rem;
+    font-weight: 850;
+    font-variant-numeric: tabular-nums;
   }
 }

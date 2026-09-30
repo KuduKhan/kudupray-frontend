@@ -366,13 +366,31 @@ const elements = {
 };
 
 let nextEvent = null;
+let nextPrayerName = null;
 let prevEventTime = null; // New for progress bar
 let currentTimings = null;
+let currentSunCoordinates = null;
+let currentSolarTimeZone = null;
 let countdownTimer = null;
 let lastAlarmKey = null;
 const ADHAN_API_BASE = 'https://alfurqan.online';
+const FAJR_ADHAN_VOICES = [
+    {
+        id: 'fajr-haram-madani', name: 'Fajr Adhan · Al-Haram Al-Madani', location: 'Madinah, Saudi Arabia', category: 'fajr',
+        source: 'https://github.com/Kiwifu/adhan-mp3',
+        audioUrl: 'https://raw.githubusercontent.com/Kiwifu/adhan-mp3/main/Adhan_Fajr_Al_Haram_Al_Madani_%28%D8%A3%D8%B0%D8%A7%D9%86_%D8%A7%D9%84%D9%81%D8%AC%D8%B1_%D8%A7%D9%84%D8%AD%D8%B1%D9%85_%D8%A7%D9%84%D9%85%D8%AF%D9%86%D9%8A%29.mp3'
+    },
+    {
+        id: 'fajr-cairo', name: 'Fajr Adhan · Cairo', location: 'Cairo, Egypt', category: 'fajr',
+        source: 'https://github.com/Kiwifu/adhan-mp3',
+        audioUrl: 'https://raw.githubusercontent.com/Kiwifu/adhan-mp3/main/Adhan_Fajr_Cairo_Egypt_%28%D8%A3%D8%B0%D8%A7%D9%86_%D8%A7%D9%84%D9%81%D8%AC%D8%B1_%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9_%D9%85%D8%B5%D8%B1%29.mp3'
+    }
+];
 let adhanCatalog = [];
 let adhanAudio = null;
+let adhanPreviewPrayer = 'Dhuhr';
+let adhanPreviewVoiceId = null;
+let adhanAudioIsPreview = false;
 const adhanAudioCache = new Map();
 const adhanAudioEventsBound = new WeakSet();
 let adhanCatalogLoadFailed = false;
@@ -4615,6 +4633,12 @@ async function fetchAPI(url) {
         const d = data.data.date;
         const meta = data.data.meta;
 
+        currentSunCoordinates = {
+            latitude: Number(meta.latitude),
+            longitude: Number(meta.longitude)
+        };
+        currentSolarTimeZone = meta.timezone || null;
+
         updateQibla(meta.latitude, meta.longitude);
 
         // Update UI
@@ -4702,29 +4726,28 @@ function renderTimetable(t) {
             `;
     });
 
-    // Compact alarm controls share the sixth grid cell with the Adhan voice choice.
+    // The former alarm tile now hosts the sun path and its alarm action.
     const isAlarmOn = kuduStorage.getItem('kudu_alarm') === 'true';
-    const alarmIcon = isAlarmOn ? 'fa-bell' : 'fa-bell-slash';
-    const alarmColor = isAlarmOn ? 'icon-emerald' : 'icon-purple'; // Purple for OFF/Settings feel
     const alarmClass = isAlarmOn ? 'alarm-active' : '';
-    const alarmLabel = isAlarmOn ? 'ON' : 'OFF';
+    const alarmLabel = isAlarmOn ? 'Turn prayer alarm off' : 'Turn prayer alarm on';
 
     html += `
             <div class="prayer-item prayer-alarm ${alarmClass}" id="alarm-tile">
-                <button type="button" class="alarm-toggle-button" id="alarm-toggle-button" onclick="toggleAlarm()"
-                        aria-pressed="${isAlarmOn}" aria-label="Prayer alarm: ${alarmLabel}">
-                    <span class="tile-icon ${alarmColor}" id="alarm-status-icon" aria-hidden="true">
-                        <i class="fa-solid ${alarmIcon}"></i>
-                    </span>
-                    <span class="alarm-copy">
-                        <span class="prayer-name">Alarm</span>
-                        <small>Tap to ${isAlarmOn ? 'disable' : 'enable'}</small>
-                    </span>
-                    <span class="alarm-state-chip" aria-hidden="true">
-                        <span class="alarm-state-dot"></span>
-                        <span id="alarm-state-text">${alarmLabel}</span>
-                    </span>
-                </button>
+                <div class="alarm-sun-panel" aria-label="Sun position from sunrise to sunset">
+                    <div class="alarm-sun-heading"><span>Sun position</span><strong id="alarm-sun-phase">Daylight</strong></div>
+                    <div class="solar-position alarm-solar-position" id="alarm-solar-position" data-phase="daylight" role="img" aria-label="Sun position during daylight">
+                        <div class="solar-position-track" aria-hidden="true">
+                            <span class="solar-position-arc"></span><span class="solar-position-horizon"></span>
+                            <span class="solar-position-zenith"><i class="fa-solid fa-sun"></i></span>
+                            <span class="solar-position-sun"><i class="fa-solid fa-sun"></i></span>
+                        </div>
+                        <div class="solar-position-times" aria-hidden="true">
+                            <span class="solar-time-dawn"><em>Rise</em><strong id="alarm-sunrise-time">--:--</strong></span>
+                            <span><em>Elevation</em><strong id="alarm-sun-now-time">--°</strong></span>
+                            <span class="solar-time-dusk"><em>Set</em><strong id="alarm-sunset-time">--:--</strong></span>
+                        </div>
+                    </div>
+                </div>
                 <div class="alarm-controls-row" role="group" aria-label="Adhan controls">
                     <div class="alarm-select-shell">
                         <select class="alarm-card-adhan-select" id="alarm-card-adhan-select"
@@ -4735,22 +4758,126 @@ function renderTimetable(t) {
                             <span class="quran-reciter-avatar" aria-hidden="true">♪</span><span class="quran-reciter-name">Loading voices…</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                         </button>
                     </div>
-                    <button type="button" class="alarm-preview-button" id="alarm-card-preview-button"
-                            onclick="toggleAdhanPreview()" aria-pressed="false" aria-label="Play selected Adhan preview"
-                            title="Play selected Adhan preview" disabled>
-                        <i class="fa-solid fa-play" aria-hidden="true"></i>
+                    <button type="button" class="alarm-preview-button alarm-toggle-button" id="alarm-toggle-button"
+                            onclick="toggleAlarm()" aria-pressed="${isAlarmOn}" aria-label="${alarmLabel}"
+                            title="${alarmLabel}">
+                        <i class="fa-solid ${isAlarmOn ? 'fa-bell' : 'fa-bell-slash'}" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
         `;
 
     elements.timetable.innerHTML = html;
+    updateSolarPosition(t);
     syncAdhanCardControls();
+}
+
+function parseSolarMinutes(value) {
+    const match = String(value || '').match(/(\d{1,2}):(\d{2})/);
+    if (!match) return null;
+    let hour = Number(match[1]);
+    const minute = Number(match[2]);
+    if (/\bpm\b/i.test(value) && hour < 12) hour += 12;
+    if (/\bam\b/i.test(value) && hour === 12) hour = 0;
+    return hour * 60 + minute;
+}
+
+function calculateSolarPosition(date, latitude, longitude) {
+    const radians = Math.PI / 180;
+    const julianDay = date.getTime() / 86400000 + 2440587.5;
+    const centuries = (julianDay - 2451545) / 36525;
+    const meanLongitude = ((280.46646 + centuries * (36000.76983 + centuries * 0.0003032)) % 360 + 360) % 360;
+    const meanAnomaly = (357.52911 + centuries * (35999.05029 - 0.0001537 * centuries)) * radians;
+    const equationCenter = Math.sin(meanAnomaly) * (1.914602 - centuries * (0.004817 + 0.000014 * centuries))
+        + Math.sin(2 * meanAnomaly) * (0.019993 - 0.000101 * centuries)
+        + Math.sin(3 * meanAnomaly) * 0.000289;
+    const trueLongitude = (meanLongitude + equationCenter) * radians;
+    const omega = (125.04 - 1934.136 * centuries) * radians;
+    const apparentLongitude = trueLongitude - (0.00569 + 0.00478 * Math.sin(omega)) * radians;
+    const obliquity = (23 + (26 + (21.448 - centuries * (46.815 + centuries * (0.00059 - centuries * 0.001813))) / 60) / 60
+        + 0.00256 * Math.cos(omega)) * radians;
+    const declination = Math.asin(Math.sin(obliquity) * Math.sin(apparentLongitude));
+    const rightAscension = Math.atan2(Math.cos(obliquity) * Math.sin(apparentLongitude), Math.cos(apparentLongitude));
+    const siderealDegrees = (280.46061837 + 360.98564736629 * (julianDay - 2451545)
+        + 0.000387933 * centuries ** 2 - centuries ** 3 / 38710000 + longitude) % 360;
+    const hourAngle = ((siderealDegrees * radians - rightAscension + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+    const lat = latitude * radians;
+    const elevation = Math.asin(Math.sin(lat) * Math.sin(declination)
+        + Math.cos(lat) * Math.cos(declination) * Math.cos(hourAngle));
+    const sunriseAltitude = -0.833 * radians;
+    const denominator = Math.cos(lat) * Math.cos(declination);
+    const cosSunriseAngle = denominator === 0 ? NaN
+        : (Math.sin(sunriseAltitude) - Math.sin(lat) * Math.sin(declination)) / denominator;
+    const sunriseHourAngle = Math.acos(Math.max(-1, Math.min(1, cosSunriseAngle)));
+    const polarCondition = !Number.isFinite(cosSunriseAngle) || cosSunriseAngle < -1 || cosSunriseAngle > 1;
+    const maxElevation = Math.PI / 2 - Math.abs(lat - declination);
+    const maxSinElevation = Math.sin(Math.max(0.01, maxElevation));
+    return {
+        elevation: elevation / radians,
+        hourAngle: hourAngle / radians,
+        daylightProgress: polarCondition ? (hourAngle + Math.PI) / (Math.PI * 2)
+            : (hourAngle + sunriseHourAngle) / (2 * sunriseHourAngle),
+        altitudeProgress: Math.max(0, Math.min(1, Math.sin(Math.max(0, elevation)) / maxSinElevation)),
+        polarCondition
+    };
+}
+
+function updateSolarPosition(timings = currentTimings) {
+    const panel = document.getElementById('alarm-solar-position');
+    if (!panel || !timings) return;
+    const rise = parseSolarMinutes(timings.Sunrise);
+    const set = parseSolarMinutes(timings.Sunset);
+    if (rise == null || set == null || set <= rise || !currentSunCoordinates
+        || !Number.isFinite(currentSunCoordinates.latitude) || !Number.isFinite(currentSunCoordinates.longitude)) {
+        panel.dataset.phase = 'unavailable';
+        panel.setAttribute('aria-label', 'Sun position unavailable until location data is loaded');
+        const phaseNode = document.getElementById('alarm-sun-phase');
+        if (phaseNode) phaseNode.textContent = 'Location needed';
+        return;
+    }
+    const now = new Date();
+    const sun = calculateSolarPosition(now, currentSunCoordinates.latitude, currentSunCoordinates.longitude);
+    const progress = Math.max(0, Math.min(1, sun.daylightProgress));
+    const x = 7 + progress * 86;
+    const y = 8 + sun.altitudeProgress * 50;
+    const phase = sun.polarCondition
+        ? (sun.elevation >= 0 ? 'polar-day' : 'polar-night')
+        : sun.elevation < -0.833 ? (sun.hourAngle < 0 ? 'before-sunrise' : 'after-sunset')
+            : Math.abs(sun.hourAngle) <= 7 ? 'solar-noon' : sun.hourAngle < 0 ? 'morning' : 'afternoon';
+    const phaseLabels = {
+        'before-sunrise': 'Before sunrise', morning: 'Morning', 'solar-noon': 'Solar noon',
+        afternoon: 'Afternoon', 'after-sunset': 'After sunset',
+        'polar-day': 'Sun above horizon', 'polar-night': 'Sun below horizon'
+    };
+    const phaseLabel = phaseLabels[phase];
+    panel.style.setProperty('--solar-x', `${x}%`);
+    panel.style.setProperty('--solar-rise', `${y}%`);
+    panel.dataset.phase = phase;
+    panel.setAttribute('aria-label', `${phaseLabel}. Solar elevation ${Math.round(sun.elevation)} degrees. Sunrise ${formatTime(timings.Sunrise).replace(/<[^>]+>/g, '')}, sunset ${formatTime(timings.Sunset).replace(/<[^>]+>/g, '')}`);
+    const phaseNode = document.getElementById('alarm-sun-phase');
+    const nowNode = document.getElementById('alarm-sun-now-time');
+    const riseNode = document.getElementById('alarm-sunrise-time');
+    const setNode = document.getElementById('alarm-sunset-time');
+    if (phaseNode) {
+        phaseNode.textContent = phaseLabel;
+        phaseNode.title = `Solar elevation ${Math.round(sun.elevation)}°`;
+    }
+    if (nowNode) {
+        nowNode.textContent = `${Math.round(sun.elevation)}°`;
+        nowNode.title = `Current solar elevation; ${new Intl.DateTimeFormat(undefined, { timeZone: currentSolarTimeZone || undefined, hour: 'numeric', minute: '2-digit' }).format(now)} local time`;
+    }
+    if (riseNode) riseNode.textContent = formatTime(timings.Sunrise).replace(/<[^>]+>/g, '').trim();
+    if (setNode) setNode.textContent = formatTime(timings.Sunset).replace(/<[^>]+>/g, '').trim();
 }
 
 function getSelectedAdhan() {
     const selectedId = kuduStorage.getItem('kudu_adhan_voice');
-    return adhanCatalog.find(adhan => adhan.id === selectedId) || adhanCatalog[0] || null;
+    return adhanCatalog.find(adhan => adhan.id === selectedId && adhan.category !== 'fajr') || adhanCatalog.find(adhan => adhan.category !== 'fajr') || null;
+}
+
+function getSelectedFajrAdhan() {
+    const selectedId = kuduStorage.getItem('kudu_adhan_fajr_voice');
+    return adhanCatalog.find(adhan => adhan.id === selectedId && adhan.category === 'fajr') || adhanCatalog.find(adhan => adhan.category === 'fajr') || null;
 }
 
 function getPreloadedAdhanAudio(adhan) {
@@ -4764,7 +4891,11 @@ function getPreloadedAdhanAudio(adhan) {
     }
     if (!adhanAudioEventsBound.has(audio)) {
         const syncIfCurrent = () => {
-            if (adhanAudio === audio) syncAdhanPreviewButtons(false);
+            if (adhanAudio === audio && audio.paused) {
+                adhanAudioIsPreview = false;
+                adhanPreviewVoiceId = null;
+                syncAdhanPreviewButtons(false);
+            }
         };
         audio.addEventListener('ended', syncIfCurrent);
         audio.addEventListener('pause', syncIfCurrent);
@@ -4798,11 +4929,19 @@ function hydrateAdhanSelect(select) {
     }
     const selectedAdhan = getSelectedAdhan();
     select.replaceChildren();
-    adhanCatalog.forEach(adhan => {
-        const option = document.createElement('option');
-        option.value = adhan.id;
-        option.textContent = `${adhan.name}${adhan.location && adhan.location !== 'Unknown' ? ` · ${adhan.location}` : ''}`;
-        select.appendChild(option);
+    [
+        { label: 'Fajr only · morning Adhan', voices: adhanCatalog.filter(adhan => adhan.category === 'fajr') },
+        { label: 'Other prayer times · general Adhan', voices: adhanCatalog.filter(adhan => adhan.category !== 'fajr') }
+    ].filter(group => group.voices.length).forEach(group => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = group.label;
+        group.voices.forEach(adhan => {
+            const option = document.createElement('option');
+            option.value = adhan.id;
+            option.textContent = `${adhan.name}${adhan.location && adhan.location !== 'Unknown' ? ` · ${adhan.location}` : ''}`;
+            optgroup.appendChild(option);
+        });
+        select.appendChild(optgroup);
     });
     if (selectedAdhan) select.value = selectedAdhan.id;
     select.disabled = false;
@@ -4832,11 +4971,16 @@ function syncAdhanPicker() {
     const trigger = document.getElementById('adhan-picker-trigger');
     if (!trigger) return;
     const selected = getSelectedAdhan();
+    const selectedFajr = getSelectedFajrAdhan();
     trigger.disabled = !selected;
     const label = selected ? selected.name : adhanCatalogLoadFailed ? 'Voices unavailable' : 'Loading voices…';
     trigger.querySelector('.quran-reciter-name').textContent = label;
-    trigger.title = selected ? [selected.name, selected.location !== 'Unknown' ? selected.location : ''].filter(Boolean).join(' · ') : label;
-    trigger.setAttribute('aria-label', `Choose Adhan voice: ${label}`);
+    trigger.title = selected
+        ? `Other prayer times: ${selected.name} · Fajr only: ${selectedFajr?.name || 'Fajr voice unavailable'}`
+        : label;
+    trigger.setAttribute('aria-label', selected
+        ? `Choose Adhan voices. Other prayer times: ${selected.name}. Fajr only: ${selectedFajr?.name || 'unavailable'}.`
+        : `Choose Adhan voice: ${label}`);
     if (selected && trigger.dataset.voice !== selected.id) {
         trigger.querySelector('.quran-reciter-avatar').replaceWith(createAdhanVoiceAvatar(selected));
         trigger.dataset.voice = selected.id;
@@ -4848,7 +4992,10 @@ function syncAdhanPicker() {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); if (document.getElementById('adhan-voice-picker')?.hidden !== false) window.toggleAdhanPicker(); }
         });
     }
-    document.querySelectorAll('#adhan-voice-list [role="option"]').forEach(option => option.setAttribute('aria-selected', String(option.dataset.voice === selected?.id)));
+    document.querySelectorAll('#adhan-voice-list [role="option"]').forEach(option => {
+        const isFajr = option.dataset.category === 'fajr';
+        option.setAttribute('aria-selected', String(option.dataset.voice === (isFajr ? selectedFajr?.id : selected?.id)));
+    });
 }
 
 window.toggleAdhanPicker = function () {
@@ -4885,19 +5032,40 @@ window.toggleAdhanPicker = function () {
     }
     const list = document.getElementById('adhan-voice-list');
     const selected = getSelectedAdhan();
+    const selectedFajr = getSelectedFajrAdhan();
     list.replaceChildren();
-    adhanCatalog.forEach(adhan => {
-        const option = document.createElement('button'); option.type = 'button'; option.className = 'quran-reciter-option'; option.tabIndex = -1;
-        option.dataset.voice = adhan.id; option.setAttribute('role', 'option'); option.setAttribute('aria-selected', String(adhan.id === selected?.id));
-        option.setAttribute('aria-label', [adhan.name, adhan.location !== 'Unknown' ? adhan.location : ''].filter(Boolean).join(' · '));
-        const copy = document.createElement('span'); copy.className = 'adhan-voice-copy';
-        const name = document.createElement('span'); name.textContent = adhan.name;
-        const location = document.createElement('small'); location.textContent = adhan.location && adhan.location !== 'Unknown' ? adhan.location : 'Adhan recitation';
-        copy.append(name, location);
-        const check = document.createElement('span'); check.className = 'quran-reciter-check'; check.textContent = '✓'; check.setAttribute('aria-hidden', 'true');
-        option.append(createAdhanVoiceAvatar(adhan), copy, check);
-        option.addEventListener('click', () => { window.setAdhanSelection(adhan.id); syncAdhanPicker(); });
-        list.append(option);
+    list.setAttribute('aria-multiselectable', 'true');
+    const voiceGroups = [
+        { label: 'Fajr only · morning Adhan', voices: adhanCatalog.filter(adhan => adhan.category === 'fajr') },
+        { label: 'Other prayer times · general Adhan', voices: adhanCatalog.filter(adhan => adhan.category !== 'fajr') }
+    ].filter(group => group.voices.length);
+    voiceGroups.forEach(group => {
+        const section = document.createElement('div');
+        section.className = 'adhan-voice-group';
+        section.setAttribute('role', 'group');
+        section.setAttribute('aria-label', group.label);
+        const heading = document.createElement('div');
+        heading.className = 'adhan-voice-group-heading';
+        heading.textContent = group.label;
+        section.appendChild(heading);
+        group.voices.forEach(adhan => {
+            const option = document.createElement('button'); option.type = 'button'; option.className = 'quran-reciter-option'; option.tabIndex = -1;
+            option.dataset.voice = adhan.id;
+            option.dataset.category = adhan.category === 'fajr' ? 'fajr' : 'general';
+            option.setAttribute('role', 'option');
+            option.setAttribute('aria-selected', String(adhan.id === (adhan.category === 'fajr' ? selectedFajr?.id : selected?.id)));
+            option.setAttribute('aria-pressed', 'false');
+            option.setAttribute('aria-label', [adhan.name, adhan.location !== 'Unknown' ? adhan.location : ''].filter(Boolean).join(' · '));
+            const copy = document.createElement('span'); copy.className = 'adhan-voice-copy';
+            const name = document.createElement('span'); name.textContent = adhan.name;
+            const location = document.createElement('small'); location.textContent = adhan.category === 'fajr' ? `${adhan.location} · Fajr-specific` : adhan.location && adhan.location !== 'Unknown' ? adhan.location : 'Adhan recitation';
+            copy.append(name, location);
+            const check = document.createElement('span'); check.className = 'quran-reciter-check'; check.textContent = '✓'; check.setAttribute('aria-hidden', 'true');
+            option.append(createAdhanVoiceAvatar(adhan), copy, check);
+            option.addEventListener('click', () => window.toggleAdhanVoicePreview(adhan.id));
+            section.append(option);
+        });
+        list.append(section);
     });
     panel.hidden = false; trigger.setAttribute('aria-expanded', 'true');
     positionQuranPicker(panel, trigger, 350);
@@ -4916,22 +5084,23 @@ function focusAdhanOption(option) {
 function syncAdhanCardControls() {
     hydrateAdhanSelect(document.getElementById('alarm-card-adhan-select'));
     syncAdhanPicker();
-    const previewButton = document.getElementById('alarm-card-preview-button');
-    if (previewButton) previewButton.disabled = !adhanCatalog.length;
     syncAdhanPreviewButtons();
 }
 
 function syncAdhanPreviewButtons(isPlaying = Boolean(adhanAudio && !adhanAudio.paused)) {
-    const cardButton = document.getElementById('alarm-card-preview-button');
-    if (!cardButton) return;
-    cardButton.classList.toggle('is-playing', isPlaying);
-    cardButton.setAttribute('aria-pressed', String(isPlaying));
-    cardButton.setAttribute('aria-label', isPlaying ? 'Stop Adhan preview' : 'Play selected Adhan preview');
-    cardButton.title = isPlaying ? 'Stop Adhan preview' : 'Play selected Adhan preview';
-    cardButton.innerHTML = `<i class="fa-solid ${isPlaying ? 'fa-stop' : 'fa-play'}" aria-hidden="true"></i>`;
+    const previewActive = isPlaying && adhanAudioIsPreview;
+    document.querySelectorAll('#adhan-voice-list [data-voice]').forEach(option => {
+        const playing = previewActive && option.dataset.voice === adhanPreviewVoiceId;
+        option.classList.toggle('is-previewing', playing);
+        option.setAttribute('aria-pressed', String(playing));
+        const name = option.querySelector('.adhan-voice-copy > span')?.textContent || 'Adhan';
+        option.title = playing ? `Stop preview · ${name}` : `Preview ${name}`;
+    });
 }
 
 function stopAdhanPlayback() {
+    adhanAudioIsPreview = false;
+    adhanPreviewVoiceId = null;
     if (adhanAudio) {
         adhanAudio.pause();
         try { adhanAudio.currentTime = 0; } catch (error) { /* Metadata may still be loading. */ }
@@ -4939,8 +5108,10 @@ function stopAdhanPlayback() {
     syncAdhanPreviewButtons(false);
 }
 
-async function playSelectedAdhan(isPreview = false) {
-    const selectedAdhan = getSelectedAdhan();
+async function playSelectedAdhan(isPreview = false, prayerName = adhanPreviewPrayer) {
+    const isFajr = prayerName === 'Fajr';
+    adhanPreviewPrayer = isFajr ? 'Fajr' : 'Dhuhr';
+    const selectedAdhan = isFajr ? getSelectedFajrAdhan() : getSelectedAdhan();
     if (!selectedAdhan) {
         showToast('Adhan voices are not available right now.');
         return false;
@@ -4949,14 +5120,18 @@ async function playSelectedAdhan(isPreview = false) {
     if (!preparedAudio) return false;
     if (adhanAudio && adhanAudio !== preparedAudio && !adhanAudio.paused) adhanAudio.pause();
     adhanAudio = preparedAudio;
+    adhanAudioIsPreview = isPreview;
+    adhanPreviewVoiceId = isPreview ? selectedAdhan.id : null;
     if (adhanAudio.readyState === HTMLMediaElement.HAVE_NOTHING) adhanAudio.load();
     try { adhanAudio.currentTime = 0; } catch (error) { /* Playback will begin once metadata is ready. */ }
     try {
         await adhanAudio.play();
         syncAdhanPreviewButtons(true);
-        if (isPreview) showToast(`Previewing ${selectedAdhan.name}`);
+        if (isPreview) showToast(`Previewing ${isFajr ? 'Fajr' : 'general'} Adhan · ${selectedAdhan.name}`);
         return true;
     } catch (error) {
+        adhanAudioIsPreview = false;
+        adhanPreviewVoiceId = null;
         syncAdhanPreviewButtons(false);
         if (isPreview) showToast('Your browser blocked audio playback.');
         return false;
@@ -4969,14 +5144,21 @@ async function initAdhanCatalog() {
         const response = await fetch(`${ADHAN_API_BASE}/api/v1/athan/list`);
         if (!response.ok) throw new Error('Adhan API request failed');
         const payload = await response.json();
-        adhanCatalog = (payload.athans || []).map(adhan => ({
+        const regularVoices = (payload.athans || []).map(adhan => ({
             ...adhan,
             audioUrl: new URL(adhan.audioUrl, ADHAN_API_BASE).href
         }));
+        adhanCatalog = [...FAJR_ADHAN_VOICES, ...regularVoices];
         if (!adhanCatalog.length) throw new Error('No Adhan recordings returned');
         const savedVoice = kuduStorage.getItem('kudu_adhan_voice');
-        const selectedVoice = adhanCatalog.some(adhan => adhan.id === savedVoice) ? savedVoice : adhanCatalog[0].id;
-        kuduStorage.setItem('kudu_adhan_voice', selectedVoice);
+        const migratedFajrVoice = adhanCatalog.find(adhan => adhan.id === savedVoice && adhan.category === 'fajr');
+        const savedFajrVoice = kuduStorage.getItem('kudu_adhan_fajr_voice') || migratedFajrVoice?.id;
+        const selectedFajrVoice = adhanCatalog.some(adhan => adhan.id === savedFajrVoice && adhan.category === 'fajr')
+            ? savedFajrVoice
+            : (adhanCatalog.find(adhan => adhan.category === 'fajr')?.id || '');
+        const selectedVoice = regularVoices.some(adhan => adhan.id === savedVoice) ? savedVoice : (regularVoices[0]?.id || '');
+        if (selectedVoice) kuduStorage.setItem('kudu_adhan_voice', selectedVoice);
+        if (selectedFajrVoice) kuduStorage.setItem('kudu_adhan_fajr_voice', selectedFajrVoice);
         preloadAdhanSources();
         syncAdhanCardControls();
     } catch (error) {
@@ -4987,20 +5169,37 @@ async function initAdhanCatalog() {
             adhanSelect.replaceChildren(Object.assign(document.createElement('option'), { textContent: 'Voices unavailable' }));
             adhanSelect.disabled = true;
         }
-        const previewButton = document.getElementById('alarm-card-preview-button');
-        if (previewButton) previewButton.disabled = true;
     }
 }
 
 window.setAdhanSelection = function (adhanId) {
-    if (!adhanCatalog.some(adhan => adhan.id === adhanId)) return;
+    const selected = adhanCatalog.find(adhan => adhan.id === adhanId);
+    if (!selected) return;
     stopAdhanPlayback();
-    kuduStorage.setItem('kudu_adhan_voice', adhanId);
-    adhanAudio = getPreloadedAdhanAudio(adhanCatalog.find(adhan => adhan.id === adhanId));
+    const isFajr = selected.category === 'fajr';
+    adhanPreviewPrayer = isFajr ? 'Fajr' : 'Dhuhr';
+    kuduStorage.setItem(isFajr ? 'kudu_adhan_fajr_voice' : 'kudu_adhan_voice', adhanId);
+    adhanAudio = getPreloadedAdhanAudio(selected);
     if (adhanAudio && adhanAudio.readyState === HTMLMediaElement.HAVE_NOTHING) adhanAudio.load();
     const select = document.getElementById('alarm-card-adhan-select');
     if (select) select.value = adhanId;
+    syncAdhanPreviewButtons(false);
     syncAdhanPicker();
+};
+
+window.toggleAdhanVoicePreview = async function (adhanId) {
+    const voice = adhanCatalog.find(adhan => adhan.id === adhanId);
+    if (!voice) return;
+    const isThisPreviewPlaying = adhanAudioIsPreview && adhanPreviewVoiceId === adhanId && adhanAudio && !adhanAudio.paused;
+    if (isThisPreviewPlaying) {
+        stopAdhanPlayback();
+        showToast('Adhan preview stopped');
+        syncAdhanPicker();
+        return;
+    }
+    window.setAdhanSelection(adhanId);
+    syncAdhanPicker();
+    await playSelectedAdhan(true, voice.category === 'fajr' ? 'Fajr' : 'Dhuhr');
 };
 
 window.toggleAdhanPreview = async function () {
@@ -5020,38 +5219,23 @@ function toggleAlarm() {
     // Update the compact alarm controls in place so the selected Adhan is preserved.
     const tile = document.getElementById('alarm-tile');
     const toggleButton = document.getElementById('alarm-toggle-button');
-    const iconDiv = document.getElementById('alarm-status-icon');
-    const stateText = document.getElementById('alarm-state-text');
-    const description = tile?.querySelector('.alarm-copy small');
-    if (!tile || !toggleButton || !iconDiv || !stateText) {
+    if (!tile || !toggleButton) {
         if (!newState) stopAdhanPlayback();
         return;
     }
 
+    toggleButton.setAttribute('aria-pressed', String(newState));
+    toggleButton.setAttribute('aria-label', newState ? 'Turn prayer alarm off' : 'Turn prayer alarm on');
+    toggleButton.title = newState ? 'Prayer alarm on · click to turn off' : 'Prayer alarm off · click to turn on';
+    toggleButton.innerHTML = `<i class="fa-solid ${newState ? 'fa-bell' : 'fa-bell-slash'}" aria-hidden="true"></i>`;
     if (newState) {
         tile.classList.add('alarm-active');
-        toggleButton.setAttribute('aria-pressed', 'true');
-        toggleButton.setAttribute('aria-label', 'Prayer alarm: ON');
-        // Update to ON style
-        iconDiv.className = 'tile-icon icon-emerald';
-        iconDiv.innerHTML = '<i class="fa-solid fa-bell"></i>';
-        stateText.innerText = 'ON';
-        if (description) description.innerText = 'Tap to disable';
-
         showToast('Prayer Alarm Enabled');
         if ("Notification" in window && Notification.permission === "default") {
             Notification.requestPermission().catch(() => { });
         }
     } else {
         tile.classList.remove('alarm-active');
-        toggleButton.setAttribute('aria-pressed', 'false');
-        toggleButton.setAttribute('aria-label', 'Prayer alarm: OFF');
-        // Update to OFF style
-        iconDiv.className = 'tile-icon icon-purple';
-        iconDiv.innerHTML = '<i class="fa-solid fa-bell-slash"></i>';
-        stateText.innerText = 'OFF';
-        if (description) description.innerText = 'Tap to enable';
-
         showToast('Prayer Alarm Disabled');
         stopAdhanPlayback();
     }
@@ -5151,6 +5335,7 @@ function calcNextPrayer(t) {
 
 function setNext(currentName, nextName, timeObj) {
     nextEvent = timeObj;
+    nextPrayerName = nextName;
 
     // Handle Jumuah labels
     const isFriday = new Date().getDay() === 5;
@@ -5180,6 +5365,7 @@ function setNext(currentName, nextName, timeObj) {
 
 function tick() {
     const now = new Date();
+    updateSolarPosition(currentTimings);
     if (!nextEvent) return;
     const diff = nextEvent - now;
 
@@ -5201,7 +5387,7 @@ function tick() {
         if (kuduStorage.getItem('kudu_alarm') === 'true' && diff > -2000 && lastAlarmKey !== alarmKey) {
             lastAlarmKey = alarmKey;
             showToast("It's time for prayer!");
-            playSelectedAdhan();
+            playSelectedAdhan(false, nextPrayerName);
             if ("Notification" in window && Notification.permission === "granted") {
                 new Notification("Prayer Time", { body: "It is now time for prayer." });
             }
