@@ -44130,7 +44130,7 @@ body.dark-mode .qibla-action:disabled {
 }
 
 /* Use the compact phone-view rhythm for the alarm controls on every screen. */
-#schedule-card .prayer-alarm { padding-inline: 7px; }
+#schedule-card .prayer-alarm { padding-inline: 10px; }
 
 #schedule-card .alarm-controls-row {
   height: 38px;
