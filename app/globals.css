@@ -43705,18 +43705,26 @@ body.dark-mode .qibla-action:disabled {
   align-items: center;
   height: 40px !important;
   min-height: 40px !important;
-  padding: 2px 10px 2px 2px !important;
+  padding: 0 10px 0 2px !important;
 }
 
-#tab-quran-reader #quran-surah-selected-number.quran-surah-badge {
+#tab-quran-reader #quran-surah-trigger,
+#tab-quran-reader #quran-reciter-trigger {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 2px !important;
+}
+
+#tab-quran-reader #quran-surah-selected-number.quran-surah-badge,
+#tab-quran-reader #quran-reciter-selected-avatar.quran-reciter-avatar {
   box-sizing: border-box;
   align-self: center;
   aspect-ratio: 1;
   overflow: hidden;
-  width: 36px;
-  min-width: 36px;
-  height: 36px;
-  flex-basis: 36px;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  flex-basis: 34px;
   flex-shrink: 0;
 }
 
