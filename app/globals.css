@@ -43773,6 +43773,21 @@ body.dark-mode .qibla-action:disabled {
   transform: none;
 }
 
+/* Match the Adhan reciter portrait to the Reader's 34px selector badges. */
+#schedule-card .adhan-picker-trigger .quran-reciter-avatar {
+  box-sizing: border-box;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  flex-basis: 34px;
+  flex-shrink: 0;
+}
+
+/* Align the portrait's left inset with the selector's 4px vertical inset. */
+#schedule-card .adhan-picker-trigger {
+  padding-left: 4px !important;
+}
+
 /* Restore the stable three-track reader header; reserve room for Close within
    the right track so light and dark layouts remain identical. */
 @media (min-width: 1280px) {
