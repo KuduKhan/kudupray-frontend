@@ -43160,6 +43160,7 @@ body.dark-mode .solar-time-dusk strong { color: #c4b5fd; }
   line-height: 1.05;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 #schedule-card .alarm-toggle-button {
@@ -44080,6 +44081,7 @@ body.dark-mode .qibla-action:disabled {
   line-height: 1.05;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 @media (max-width: 699px) {

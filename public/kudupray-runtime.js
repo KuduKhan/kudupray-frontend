@@ -4824,15 +4824,24 @@ function calculateSolarPosition(date, latitude, longitude) {
 
 function updateSolarPosition(timings = currentTimings) {
     const panel = document.getElementById('alarm-solar-position');
-    if (!panel || !timings) return;
-    const rise = parseSolarMinutes(timings.Sunrise);
-    const set = parseSolarMinutes(timings.Sunset);
+    if (!panel) return;
+    const rise = parseSolarMinutes(timings?.Sunrise);
+    const set = parseSolarMinutes(timings?.Sunset);
     if (rise == null || set == null || set <= rise || !currentSunCoordinates
         || !Number.isFinite(currentSunCoordinates.latitude) || !Number.isFinite(currentSunCoordinates.longitude)) {
         panel.dataset.phase = 'unavailable';
         panel.setAttribute('aria-label', 'Sun position unavailable until location data is loaded');
         const phaseNode = document.getElementById('alarm-sun-phase');
-        if (phaseNode) phaseNode.textContent = 'Location needed';
+        if (phaseNode) {
+            phaseNode.textContent = 'Location needed';
+            phaseNode.removeAttribute('title');
+        }
+        for (const id of ['alarm-sun-now-time', 'alarm-sunrise-time', 'alarm-sunset-time']) {
+            const node = document.getElementById(id);
+            if (node) { node.textContent = '—'; node.removeAttribute('title'); }
+        }
+        panel.style.removeProperty('--solar-x');
+        panel.style.removeProperty('--solar-rise');
         return;
     }
     const now = new Date();
@@ -5280,8 +5289,9 @@ function formatTime(time24) {
 
 function parsePrayerTime(value, baseDate = new Date()) {
     const match = String(value || '').match(/^(\d{1,2}):(\d{2})/);
-    if (!match) return null;
+    if (!match || Number(match[1]) > 23 || Number(match[2]) > 59) return null;
     const result = new Date(baseDate);
+    if (!Number.isFinite(result.getTime())) return null;
     result.setHours(Number(match[1]), Number(match[2]), 0, 0);
     return result;
 }
@@ -5289,48 +5299,29 @@ function parsePrayerTime(value, baseDate = new Date()) {
 function calcNextPrayer(t) {
     const now = new Date();
     const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-    let nextP = null;
-    let currentP = null;
-    let nextTimeObj = null;
-
-    for (let i = 0; i < prayers.length; i++) {
-        let p = prayers[i];
-        const pTime = parsePrayerTime(t[p], now);
-        if (!pTime) continue;
-
-        if (pTime > now) {
-            nextP = p;
-            nextTimeObj = pTime;
-
-            // Current prayer is the one right before the next one
-            currentP = i === 0 ? 'Isha' : prayers[i - 1];
-
-            // Set previous time for progress bar
-            if (i > 0) {
-                let prevP = prayers[i - 1];
-                prevEventTime = parsePrayerTime(t[prevP], now);
-            } else {
-                // Before Fajr, previous is yesterday's Isha
-                prevEventTime = parsePrayerTime(t['Isha'], now);
-                prevEventTime.setDate(prevEventTime.getDate() - 1);
-            }
-
-            break;
-        }
+    const schedule = prayers.map(name => ({ name, time: parsePrayerTime(t?.[name], now) }))
+        .filter(prayer => prayer.time);
+    if (!schedule.length) {
+        nextEvent = null;
+        prevEventTime = null;
+        nextPrayerName = null;
+        elements.nextLabel.textContent = 'Prayer times unavailable';
+        elements.nextTime.textContent = '—';
+        elements.countdown.textContent = '--:--:--';
+        document.querySelectorAll('.prayer-item').forEach(el => el.classList.remove('active', 'next-up'));
+        document.querySelectorAll('.journey-stop').forEach(el => el.classList.remove('current', 'next'));
+        const progress = document.getElementById('time-progress');
+        if (progress) progress.style.width = '0%';
+        return;
     }
-
-    // If no next prayer found today, next is tomorrow's Fajr
-    if (!nextP) {
-        nextP = 'Fajr';
-        currentP = 'Isha'; // Current is Isha of today
-
-        nextTimeObj = parsePrayerTime(t['Fajr'], now);
-        nextTimeObj.setDate(nextTimeObj.getDate() + 1);
-
-        prevEventTime = parsePrayerTime(t['Isha'], now);
-    }
-
-    setNext(currentP, nextP, nextTimeObj);
+    const nextIndex = schedule.findIndex(prayer => prayer.time > now);
+    const next = schedule[nextIndex < 0 ? 0 : nextIndex];
+    const previous = schedule[(nextIndex <= 0 ? schedule.length : nextIndex) - 1];
+    const nextTime = new Date(next.time);
+    prevEventTime = new Date(previous.time);
+    if (nextIndex < 0) nextTime.setDate(nextTime.getDate() + 1);
+    else if (nextIndex === 0) prevEventTime.setDate(prevEventTime.getDate() - 1);
+    setNext(previous.name, next.name, nextTime);
 }
 
 function setNext(currentName, nextName, timeObj) {
