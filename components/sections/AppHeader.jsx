@@ -81,8 +81,16 @@ export default function AppHeader() {
               <strong id="next-time">{"--:--"}</strong>
             </span>
           </div>
-          <div className="header-countdown-time" id="countdown" aria-live="off">
-            {"--:--:--"}
+          <div className="header-clock-row">
+            <div className="header-countdown-time" id="countdown" aria-live="off">
+              {"--:--:--"}
+            </div>
+            <div className="header-current-time">
+              <span>{"Current time"}</span>
+              <time id="header-current-time" lang="ar" dir="ltr" aria-live="off">
+                {"--:--:--"}
+              </time>
+            </div>
           </div>
           <div className="header-progress-track" aria-hidden="true">
             <div className="progress-fill" id="time-progress"></div>

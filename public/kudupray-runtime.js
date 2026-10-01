@@ -3362,6 +3362,10 @@ function init() {
     initScrollAwareChrome();
     initAppSelectPickers();
     observeAppSelectPickers();
+    // Keep the clock live even while location or prayer data is unavailable.
+    tick();
+    clearInterval(countdownTimer);
+    countdownTimer = setInterval(tick, 1000);
 
     // Date
     const today = new Date();
@@ -5379,8 +5383,27 @@ function setNext(currentName, nextName, timeObj) {
     document.getElementById(`journey-${nextName}`)?.classList.add('next');
 }
 
+let headerClockFormatter = null;
+let headerClockTimeZone = null;
+
+function updateHeaderClock(now) {
+    const clock = document.getElementById('header-current-time');
+    if (!clock) return;
+    const timeZone = currentSolarTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (!headerClockFormatter || headerClockTimeZone !== timeZone) {
+        headerClockFormatter = new Intl.DateTimeFormat('ar-EG-u-nu-arab', {
+            timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
+        });
+        headerClockTimeZone = timeZone;
+        clock.title = `Current time · ${timeZone.replaceAll('_', ' ')} · 24-hour clock`;
+    }
+    clock.textContent = headerClockFormatter.format(now);
+    clock.dateTime = now.toISOString();
+}
+
 function tick() {
     const now = new Date();
+    updateHeaderClock(now);
     updateSolarPosition(currentTimings);
     if (!nextEvent) return;
     const diff = nextEvent - now;

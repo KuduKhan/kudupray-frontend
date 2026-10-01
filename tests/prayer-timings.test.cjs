@@ -32,3 +32,18 @@ test('unavailable sun data clears previously displayed location values', () => {
   assert.equal(nodes['alarm-sunrise-time'].textContent, '—');
   assert.equal(nodes['alarm-sunset-time'].textContent, '—');
 });
+
+test('header clock uses Arabic numerals, handles midnight and follows location timezone changes', () => {
+  const clock = {};
+  const ctx = { Intl, currentSolarTimeZone: 'UTC', document: { getElementById: () => clock } };
+  vm.createContext(ctx);
+  vm.runInContext(runtime.slice(runtime.indexOf('let headerClockFormatter ='), runtime.indexOf('function tick()')), ctx);
+  const now = new Date('2026-10-01T00:05:09Z');
+  ctx.updateHeaderClock(now);
+  assert.equal(clock.textContent, '٠٠:٠٥:٠٩');
+  assert.equal(clock.dateTime, now.toISOString());
+  ctx.currentSolarTimeZone = 'Asia/Riyadh';
+  ctx.updateHeaderClock(now);
+  assert.equal(clock.textContent, '٠٣:٠٥:٠٩');
+  assert.match(clock.title, /Asia\/Riyadh/);
+});
