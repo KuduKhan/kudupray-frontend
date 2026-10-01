@@ -42274,7 +42274,7 @@ body.dark-mode #sunnah-card .sunnah-val {
 
 /* Final palette reset: retain the original colour system in both themes. */
 body:not(.dark-mode) #sunnah-card {
-  border-color: rgba(99, 102, 241, 0.14);
+  border-color: rgba(99, 102, 241, 0.24);
   background:
     radial-gradient(circle at 100% 0, rgba(139, 92, 246, 0.13), transparent 32%),
     radial-gradient(circle at 0 100%, rgba(245, 158, 11, 0.09), transparent 31%),
@@ -42286,7 +42286,7 @@ body:not(.dark-mode) #sunnah-card .section-title { color: #312e81; }
 body:not(.dark-mode) #sunnah-card .section-header { border-bottom-color: rgba(99, 102, 241, 0.1); }
 
 body:not(.dark-mode) #sunnah-card .section-header > .sunnah-note > summary {
-  border-color: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.3);
   color: #4338ca;
   background:
     radial-gradient(circle at 100% 0, rgba(245, 158, 11, 0.1), transparent 42%),
@@ -42326,7 +42326,10 @@ body:not(.dark-mode) #sunnah-card .sunnah-item .tile-icon {
 
 body:not(.dark-mode) #sunnah-card .sunnah-label,
 body:not(.dark-mode) #sunnah-card .sunnah-context { color: var(--sunnah-deep); }
-body:not(.dark-mode) #sunnah-card .sunnah-val { color: rgb(var(--sunnah-rgb)); }
+body:not(.dark-mode) #sunnah-card .sunnah-val {
+  color: var(--sunnah-deep);
+  text-shadow: none;
+}
 body:not(.dark-mode) #sunnah-card .sunnah-context {
   border-color: rgba(var(--sunnah-rgb), 0.1);
   background: rgba(var(--sunnah-rgb), 0.055);
@@ -42336,33 +42339,37 @@ body.dark-mode #sunnah-card .sunnah-item {
   border-color: rgba(var(--sunnah-rgb), 0.19);
   background:
     radial-gradient(circle at 94% 4%, rgba(var(--sunnah-rgb), 0.15), transparent 40%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+    linear-gradient(145deg, rgba(22, 43, 34, 0.96), rgba(10, 25, 19, 0.94));
 }
 
 body.dark-mode #sunnah-card .sunnah-item .tile-icon {
-  color: var(--sunnah-rgb);
+  color: #ede9fe;
+  color: color-mix(in srgb, rgb(var(--sunnah-rgb)) 35%, #ffffff);
   border-color: rgba(var(--sunnah-rgb), 0.2);
   background: linear-gradient(145deg, rgba(var(--sunnah-rgb), 0.16), rgba(255, 255, 255, 0.035));
 }
 
 body.dark-mode #sunnah-card .sunnah-label { color: #e9e5ff; }
-body.dark-mode #sunnah-card .sunnah-val { color: var(--sunnah-rgb); }
+body.dark-mode #sunnah-card .sunnah-val {
+  color: #ede9fe;
+  color: color-mix(in srgb, rgb(var(--sunnah-rgb)) 35%, #ffffff);
+}
 body.dark-mode #sunnah-card .sunnah-context {
-  color: #cbd5e1;
+  color: #e2e8f0;
   border-color: rgba(var(--sunnah-rgb), 0.16);
   background: rgba(var(--sunnah-rgb), 0.09);
 }
 
 /* Carry the night-time guidance outline through each of the four time cards. */
 body:not(.dark-mode) #sunnah-card .sunnah-item {
-  border-color: rgba(124, 58, 237, 0.24);
+  border-color: rgba(124, 58, 237, 0.36);
   box-shadow:
     0 10px 24px rgba(99, 102, 241, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 body.dark-mode #sunnah-card .sunnah-item {
-  border-color: rgba(167, 139, 250, 0.3);
+  border-color: rgba(167, 139, 250, 0.45);
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -44190,6 +44197,33 @@ body.dark-mode .qibla-action:disabled {
     width: 100%;
     max-width: none;
     margin-inline: 0;
+  }
+}
+
+/* Tablet schedule: give labels and Adhan controls the same breathing room as the phone. */
+@media (min-width: 600px) and (max-width: 1199px) {
+  #schedule-card #timetable {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  #schedule-card #timetable > .prayer-item {
+    min-width: 0;
+    min-height: 154px;
+  }
+
+  #schedule-card .solar-position-times {
+    font-size: 0.66rem;
+  }
+
+  #schedule-card .solar-position-times strong {
+    font-size: 0.76rem;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  #schedule-card #timetable {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
