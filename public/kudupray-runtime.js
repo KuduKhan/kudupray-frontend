@@ -3655,6 +3655,26 @@ const islamicNumericFormatter = new Intl.DateTimeFormat('en-u-ca-islamic', { day
 const islamicShortFormatter = new Intl.DateTimeFormat('en-u-ca-islamic', { day: 'numeric', month: 'short', year: 'numeric' });
 const gregorianLongFormatter = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
+// Local SVG symbols are shared by day cells, occasion details and the monthly list.
+const CALENDAR_OCCASION_SYMBOLS = {
+    '1-1': ['new-year', '<path d="M16 3a8.5 8.5 0 1 0 5 13A7 7 0 0 1 16 3Z"/><path d="m19 3 .6 1.4L21 5l-1.4.6L19 7l-.6-1.4L17 5l1.4-.6Z"/>'],
+    '1-10': ['fasting', '<path d="M3 17h18M6 14a6 6 0 0 1 12 0M12 3v3M4 7l2 2M20 7l-2 2M5 21h14"/>'],
+    '3-12': ['remembrance', '<path d="M12 6v15M3 4c3-1 6 0 9 2 3-2 6-3 9-2v15c-3-1-6 0-9 2-3-2-6-3-9-2Z"/><path d="M6 9h3M15 9h3M6 13h3M15 13h3"/>'],
+    '7-27': ['journey', '<path d="M4 21V11h16v10M9 21v-6h6v6M8 11c0-3 4-5 4-5s4 2 4 5M2 21h20M5 8V4M19 8V4"/><path d="m12 1 .5 1.5L14 3l-1.5.5L12 5l-.5-1.5L10 3l1.5-.5Z"/>'],
+    '8-15': ['night', '<path d="M14 3a8 8 0 1 0 7 13A7 7 0 0 1 14 3Z"/><path d="m19 4 .6 1.4L21 6l-1.4.6L19 8l-.6-1.4L17 6l1.4-.6ZM17 11h.01"/>'],
+    '9-1': ['ramadan', '<path d="M9 5h6l3 4-2 11H8L6 9ZM6 9h12M8 16h8M12 9v7M10 5V3h4v2M9 22h6"/>'],
+    '9-27': ['qadr', '<path d="M12 11v10M3 9c3-1 6 0 9 2 3-2 6-3 9-2v10c-3-1-6 0-9 2-3-2-6-3-9-2Z"/><path d="m12 2 1 2 2 1-2 1-1 2-1-2-2-1 2-1ZM4 4h.01M20 4h.01"/>'],
+    '10-1': ['eid-fitr', '<path d="M4 21V11h16v10M9 21v-6h6v6M8 11c0-3 4-5 4-5s4 2 4 5M2 21h20M5 7V4M19 7V4M12 2v1"/>'],
+    '12-8': ['hajj', '<path d="m4 7 8-4 8 4v13H4ZM4 7h16M4 11h16M15 20v-5h3v5M12 3v4"/><path d="M7 11v9"/>'],
+    '12-9': ['arafah', '<path d="m2 21 8-15 5 8 3-4 4 11ZM7 12l3-1 3 1M10 6V2h5l-2 2 2 2Z"/>'],
+    '12-10': ['eid-adha', '<path d="M8 7a3 3 0 0 1 5-1 3 3 0 0 1 4 3 3 3 0 0 1 2 5 3 3 0 0 1-3 4H7a4 4 0 0 1-3-6 3 3 0 0 1 4-5ZM7 18v3M16 18v3"/><path d="M17 10h3v5h-3M20 12h.01"/>']
+};
+
+function calendarOccasionIcon(event, extraClass = '') {
+    const [symbol, paths] = CALENDAR_OCCASION_SYMBOLS[`${event.month}-${event.day}`] || ['occasion', '<path d="m12 3 3 6 6 1-4 5 1 6-6-3-6 3 1-6-4-5 6-1Z"/>'];
+    return `<svg class="calendar-occasion-icon ${extraClass}" data-symbol="${symbol}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths}</svg>`;
+}
+
 function sameCalendarDay(first, second) {
     return first.getFullYear() === second.getFullYear() && first.getMonth() === second.getMonth() && first.getDate() === second.getDate();
 }
@@ -3781,7 +3801,7 @@ function renderIslamicCalendarDetails() {
     const events = getIslamicEventsForDate(islamicCalendarSelectedDate, hijri);
     dateTarget.innerHTML = `<strong>${gregorianLongFormatter.format(islamicCalendarSelectedDate)}</strong><span>${hijri.label}</span>`;
     eventsTarget.innerHTML = events.length
-        ? events.map(event => `<article class="calendar-event-card"><strong>${event.name}</strong><span>${event.description}</span></article>`).join('')
+        ? events.map(event => `<article class="calendar-event-card"><div class="calendar-event-heading">${calendarOccasionIcon(event)}<strong>${event.name}</strong></div><span>${event.description}</span></article>`).join('')
         : '<p class="calendar-no-event">No major Islamic occasion is marked for this date. Every day can still hold personal acts of worship and remembrance.</p>';
 }
 
@@ -3819,12 +3839,12 @@ function renderIslamicCalendar() {
         const key = calendarDateKey(date);
         const eventName = events[0]?.name || '';
         const ariaLabel = `${gregorianLongFormatter.format(date)}, ${hijri.label}${eventName ? `, ${eventName}` : ''}`;
-        gridHtml += `<button type="button" class="calendar-day${outside ? ' outside' : ''}${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}${events.length ? ' has-event' : ''}" onclick="selectIslamicCalendarDate('${key}')" aria-label="${ariaLabel}"${isToday ? ' aria-current="date"' : ''}><span class="calendar-greg-day">${date.getDate()}</span><span class="calendar-hijri-day">${hijri.day} ${hijri.monthName}</span>${eventName ? `<span class="calendar-event-label">${eventName}</span>` : ''}</button>`;
+        gridHtml += `<button type="button" class="calendar-day${outside ? ' outside' : ''}${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}${events.length ? ' has-event' : ''}" onclick="selectIslamicCalendarDate('${key}')" aria-label="${ariaLabel}"${isToday ? ' aria-current="date"' : ''}><span class="calendar-greg-day">${date.getDate()}</span><span class="calendar-hijri-day">${hijri.day} ${hijri.monthName}</span>${eventName ? `${calendarOccasionIcon(events[0], 'calendar-day-occasion')}<span class="calendar-event-label">${eventName}</span>` : ''}</button>`;
         if (!outside && events.length) events.forEach(event => monthEvents.push({ date: new Date(date), event }));
     }
     grid.innerHTML = gridHtml;
     monthEventsTarget.innerHTML = monthEvents.length
-        ? monthEvents.map(({ date, event }) => `<div class="calendar-month-event"><time datetime="${calendarDateKey(date)}">${date.getDate()}</time><span>${event.name}</span></div>`).join('')
+        ? monthEvents.map(({ date, event }) => `<div class="calendar-month-event"><time datetime="${calendarDateKey(date)}">${date.getDate()}</time>${calendarOccasionIcon(event)}<span>${event.name}</span></div>`).join('')
         : '<p class="calendar-no-event">No major occasion falls within this displayed Gregorian month.</p>';
     renderIslamicCalendarDetails();
 }
