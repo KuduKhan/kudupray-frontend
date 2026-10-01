@@ -38713,6 +38713,10 @@ body.dark-mode #tab-quran-reader .quran-reader-preference-select-row select {
 }
 
 /* Selected Reading-layer values carry the same compact identity cue as the Surah and reciter controls. */
+#tab-quran-reader .quran-reader-toolbar .quran-reader-more-panel .quran-reader-preference-select-row {
+  padding-right: 3px !important;
+}
+
 #tab-quran-reader .quran-reader-translation-select select,
 #tab-quran-reader .quran-reader-arabic-style-select select {
   padding-left: 34px;
