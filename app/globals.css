@@ -23134,7 +23134,7 @@ body.dark-mode #sunnah-card .section-header>.sunnah-note .sunnah-note-panel stro
   z-index: 1;
   max-width: 100%;
   color: var(--sunnah-deep);
-  font-size: 0.64rem;
+  font-size: 0.72rem;
   font-weight: 850;
   line-height: 1.25;
   letter-spacing: 0.075em;
@@ -23154,9 +23154,9 @@ body.dark-mode #sunnah-card .section-header>.sunnah-note .sunnah-note-panel stro
 }
 
 #sunnah-card .sunnah-val span {
-  font-size: 0.58rem !important;
+  font-size: 0.7rem !important;
   font-weight: 750 !important;
-  opacity: 0.76 !important;
+  opacity: 1 !important;
 }
 
 #sunnah-card .sunnah-context {
@@ -23169,7 +23169,7 @@ body.dark-mode #sunnah-card .section-header>.sunnah-note .sunnah-note-panel stro
   border: 1px solid rgba(var(--sunnah-rgb), 0.1);
   border-radius: 999px;
   background: rgba(var(--sunnah-rgb), 0.055);
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   font-weight: 650;
   line-height: 1.25;
   text-align: center;
@@ -42274,7 +42274,7 @@ body.dark-mode #sunnah-card .sunnah-val {
 
 /* Final palette reset: retain the original colour system in both themes. */
 body:not(.dark-mode) #sunnah-card {
-  border-color: rgba(99, 102, 241, 0.24);
+  border-color: rgba(99, 102, 241, 0.38) !important;
   background:
     radial-gradient(circle at 100% 0, rgba(139, 92, 246, 0.13), transparent 32%),
     radial-gradient(circle at 0 100%, rgba(245, 158, 11, 0.09), transparent 31%),
@@ -42360,19 +42360,50 @@ body.dark-mode #sunnah-card .sunnah-context {
   background: rgba(var(--sunnah-rgb), 0.09);
 }
 
-/* Carry the night-time guidance outline through each of the four time cards. */
+/* Keep supporting text legible after the compact phone overrides. */
+#sunnah-card .sunnah-label { font-size: 0.72rem; }
+#sunnah-card .sunnah-context { font-size: 0.65rem; }
+
+/* Keep the guidance control readable through its closed and open states. */
+body.dark-mode #sunnah-card .section-title {
+  color: #f0ecff;
+}
+
+body.dark-mode #sunnah-card .section-header > .sunnah-note > summary {
+  color: #ede9fe;
+  border-color: rgba(196, 181, 253, 0.38);
+  background: linear-gradient(145deg, #30274d, #1c2530);
+}
+
+body.dark-mode #sunnah-card .section-header > .sunnah-note > summary .sunnah-note-label {
+  color: #f0ecff;
+  text-shadow: none;
+}
+
+body.dark-mode #sunnah-card .section-header > .sunnah-note .sunnah-note-panel {
+  color: #e2e8f0;
+  border-color: rgba(196, 181, 253, 0.38);
+  background: #14251f;
+}
+
+/* Give each time card a clear outline in its own accent color. */
 body:not(.dark-mode) #sunnah-card .sunnah-item {
-  border-color: rgba(124, 58, 237, 0.36);
+  border-color: rgba(var(--sunnah-rgb), 0.32) !important;
   box-shadow:
     0 10px 24px rgba(99, 102, 241, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 body.dark-mode #sunnah-card .sunnah-item {
-  border-color: rgba(167, 139, 250, 0.45);
+  border-color: rgba(var(--sunnah-rgb), 0.45) !important;
+  border-color: color-mix(in srgb, color-mix(in srgb, rgb(var(--sunnah-rgb)) 55%, #ffffff 45%) 48%, transparent) !important;
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode #sunnah-card {
+  border-color: rgba(167, 139, 250, 0.46) !important;
 }
 
 /* Compact only the outer section shells; the original inner card sizing remains intact. */
