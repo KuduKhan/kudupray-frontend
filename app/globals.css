@@ -21022,14 +21022,6 @@ body.dark-mode #tab-duas.dua-library-mode-ruqyah .dua-arabic {
     border-radius: 10px;
   }
 
-  .dua-mode-copy strong {
-    font-size: 0.7rem;
-  }
-
-  .dua-mode-copy small {
-    font-size: 0.5rem;
-  }
-
   .ruqyah-library-intro {
     grid-template-columns: 38px minmax(0, 1fr);
     gap: 10px;
@@ -28285,6 +28277,81 @@ body.dark-mode #tab-duas .filter-inside-wrapper:has(.glass-select:focus) {
 }
 
 /* Consistent rounded search treatment for Duas and Ruqyah at every size. */
+#tab-duas {
+  --dua-library-control-height: 50px;
+}
+
+#tab-duas .dua-library-switcher {
+  height: var(--dua-library-control-height);
+  min-height: var(--dua-library-control-height);
+  padding: 4px !important;
+  align-items: center;
+  border-radius: 21px;
+}
+
+#tab-duas .dua-mode-button {
+  box-sizing: border-box;
+  height: 40px !important;
+  min-height: 40px !important;
+  grid-template-columns: 34px minmax(0, 1fr);
+  padding: 2px 8px 2px 2px;
+  gap: 8px;
+  border-radius: 14px;
+  border-color: rgba(5, 150, 105, 0.17);
+}
+
+#tab-duas .dua-mode-button:not([aria-selected="true"]) {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(240, 253, 250, 0.62));
+}
+
+body.dark-mode #tab-duas .dua-mode-button:not([aria-selected="true"]) {
+  border-color: rgba(110, 231, 183, 0.2);
+  background: linear-gradient(145deg, rgba(28, 42, 35, 0.85), rgba(12, 22, 18, 0.72));
+}
+
+#tab-duas .dua-mode-button > i {
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+#tab-duas .ruqyah-library-intro {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  padding: 6px;
+  gap: 8px;
+  border-radius: 18px;
+}
+
+#tab-duas .ruqyah-library-intro[hidden] {
+  display: none;
+}
+
+#tab-duas .ruqyah-intro-icon {
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px !important;
+  align-self: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+@media (max-width: 599px) {
+  #tab-duas .ruqyah-library-intro strong {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+    line-height: 1.25;
+  }
+
+  #tab-duas .ruqyah-library-intro p {
+    font-size: 0.62rem;
+    line-height: 1.28;
+  }
+}
+
 #tab-duas .search-row,
 #tab-duas .search-wrapper {
   border-radius: 22px;
@@ -34758,14 +34825,18 @@ body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
 
 @media (min-width: 1024px) {
   #tab-duas.active.dua-library-mode-ruqyah {
-    --ruqyah-switcher-height: 68px;
     --ruqyah-search-height: 50px;
   }
 
-  #tab-duas.active.dua-library-mode-ruqyah>.dua-library-switcher,
+  #tab-duas.active.dua-library-mode-ruqyah>.dua-library-switcher {
+    height: var(--dua-library-control-height) !important;
+    min-height: var(--dua-library-control-height) !important;
+    align-self: center;
+  }
+
   #tab-duas.active.dua-library-mode-ruqyah>.ruqyah-library-intro {
-    height: var(--ruqyah-switcher-height) !important;
-    min-height: var(--ruqyah-switcher-height) !important;
+    height: auto !important;
+    min-height: var(--dua-library-control-height) !important;
   }
 
   #tab-duas.active.dua-library-mode-ruqyah>.search-row,
@@ -34776,14 +34847,14 @@ body.dark-mode .floating-nav .nav-item[aria-current="page"] .nav-tile i {
   }
 
   #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro {
-    padding: 10px 12px !important;
-    grid-template-columns: 36px minmax(0, 1fr) !important;
-    gap: 10px !important;
+    padding: 6px !important;
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    gap: 8px !important;
   }
 
   #tab-duas.active.dua-library-mode-ruqyah .ruqyah-intro-icon {
-    width: 36px !important;
-    height: 36px !important;
+    width: 34px !important;
+    height: 34px !important;
   }
 
   #tab-duas.active.dua-library-mode-ruqyah .ruqyah-library-intro strong {
