@@ -3481,10 +3481,15 @@ function initAccessibility() {
 
     const backToTop = document.getElementById('back-to-top');
     if (backToTop) {
-        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        backToTop.addEventListener('click', () => window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
+        }));
         const updateBackToTop = () => {
             const threshold = Math.max(900, window.innerHeight * 1.15);
-            backToTop.classList.toggle('visible', window.scrollY > threshold);
+            const visible = window.scrollY > threshold;
+            backToTop.classList.toggle('visible', visible);
+            backToTop.tabIndex = visible ? 0 : -1;
         };
         window.addEventListener('scroll', updateBackToTop, { passive: true });
         window.addEventListener('resize', updateBackToTop, { passive: true });
