@@ -3342,16 +3342,39 @@ function removeLegacyQuranOfflineAudio() {
 
 function initScrollActivity() {
     const timers = new WeakMap();
+    const indicator = document.createElement('div');
+    indicator.className = 'scroll-overlay-thumb';
+    indicator.setAttribute('aria-hidden', 'true');
+    document.body.append(indicator);
+    let hideIndicator;
     document.addEventListener('scroll', (event) => {
         const target = event.target === document ? document.documentElement : event.target;
         if (!(target instanceof Element)) return;
+        const isPage = target === document.documentElement || target === document.body;
+        const rect = isPage ? { top: 0, right: window.innerWidth, height: window.innerHeight }
+            : target.getBoundingClientRect();
+        const viewport = isPage ? window.innerHeight : target.clientHeight;
+        const range = target.scrollHeight - viewport;
+        if (range > 0 && rect.height > 0) {
+            const trackTop = Math.max(0, rect.top) + 4;
+            const trackHeight = Math.max(0, Math.min(window.innerHeight, rect.top + rect.height) - trackTop - 4);
+            const thumbHeight = Math.min(trackHeight, Math.max(22, trackHeight * viewport / target.scrollHeight));
+            const progress = Math.max(0, Math.min(1, target.scrollTop / range));
+            indicator.style.height = `${thumbHeight}px`;
+            indicator.style.top = `${trackTop + progress * (trackHeight - thumbHeight)}px`;
+            indicator.style.left = `${Math.min(window.innerWidth, rect.right) - 5}px`;
+            indicator.classList.add('is-visible');
+            clearTimeout(hideIndicator);
+            hideIndicator = setTimeout(() => indicator.classList.remove('is-visible'), 150);
+        }
         target.classList.add('is-scrolling');
         clearTimeout(timers.get(target));
         timers.set(target, setTimeout(() => {
             target.classList.remove('is-scrolling');
             timers.delete(target);
-        }, 700));
+        }, 150));
     }, { capture: true, passive: true });
+    window.addEventListener('resize', () => indicator.classList.remove('is-visible'));
 }
 
 function init() {
