@@ -3355,6 +3355,12 @@ function initScrollActivity() {
 }
 
 function init() {
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') tick();
+    });
+    window.addEventListener('pageshow', () => tick());
+    window.addEventListener('kudupray:resume', () => tick());
+    window.addEventListener('online', () => { livePrayerRefreshAfter = 0; tick(); });
     initScrollActivity();
     document.querySelector('.knowledge-hub')?.remove();
     document.getElementById('view-special-legacy')?.remove();
@@ -3443,7 +3449,7 @@ function initAccessibility() {
             modal.setAttribute('aria-labelledby', heading.id);
         }
         const closeButton = modal.querySelector('.modal-close-btn');
-        if (closeButton) closeButton.setAttribute('aria-label', 'Close guide');
+        if (closeButton && !closeButton.hasAttribute('aria-label')) closeButton.setAttribute('aria-label', 'Close guide');
     });
 
     const navButtons = Array.from(document.querySelectorAll('.nav-item'));
@@ -4209,9 +4215,10 @@ function loadSettings() {
     const size = Number(savedSize);
     if (savedSize !== null && Number.isFinite(size) && size >= 12 && size <= 24) {
         document.documentElement.style.fontSize = size + 'px';
-        const pct = Math.round((parseInt(size) / 16) * 100);
+        const pct = Math.round((size / 16) * 100);
         document.getElementById('text-size-display').innerText = pct + '%';
     }
+    syncTextSizeControls();
 
     // Language
     const lang = kuduStorage.getItem('kudu_lang') || 'en';
@@ -4236,20 +4243,36 @@ function loadSettings() {
     refreshSettingsSummary();
 }
 
+function syncTextSizeControls() {
+    const root = document.documentElement;
+    const size = parseFloat(root.style.fontSize) || parseFloat(window.getComputedStyle(root).fontSize) || 16;
+    const display = document.getElementById('text-size-display');
+    if (display) display.innerText = Math.round((size / 16) * 100) + '%';
+    const decrease = document.querySelector('[aria-label="Decrease text size"]');
+    const increase = document.querySelector('[aria-label="Increase text size"]');
+    if (decrease) decrease.disabled = size <= 12;
+    if (increase) increase.disabled = size >= 24;
+}
+
 window.adjustTextSize = function (dir) {
-    let currentSize = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
+    if (dir !== -1 && dir !== 1) return;
+    const root = document.documentElement;
+    // Computed size may be between animation frames: use the last target instead.
+    const currentSize = parseFloat(root.style.fontSize) || parseFloat(window.getComputedStyle(root).fontSize) || 16;
     let newSize = currentSize + dir;
 
     // Limits
     if (newSize < 12) newSize = 12;
     if (newSize > 24) newSize = 24;
 
-    document.documentElement.style.fontSize = newSize + 'px';
+    root.style.fontSize = newSize + 'px';
     kuduStorage.setItem('kudu_size', newSize);
 
-    const pct = Math.round((newSize / 16) * 100);
-    document.getElementById('text-size-display').innerText = pct + '%';
+    syncTextSizeControls();
     refreshSettingsSummary();
+    requestAnimationFrame(() => document.querySelectorAll('.guide-modal .panel:not([hidden])').forEach(panel => {
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+    }));
 }
 
 window.changeLanguage = function () {
@@ -4701,6 +4724,7 @@ async function fetchAPI(url) {
         if (locText.includes('/')) locText = locText.split('/').pop().replace(/_/g, ' ');
         elements.locName.innerText = locText;
 
+        livePrayerDate = getLivePrayerDate();
         currentTimings = t;
         renderTimetable(t);
         renderPrayerJourney(t);
@@ -5416,8 +5440,46 @@ function updateHeaderClock(now) {
     clock.dateTime = now.toISOString();
 }
 
+let livePrayerDate = '';
+let livePrayerRefreshAfter = 0;
+let livePrayerRefreshing = false;
+let liveMoonMinute = '';
+
+function getLivePrayerDate() {
+    return new Intl.DateTimeFormat('en-CA', {
+        timeZone: currentSolarTimeZone || undefined, year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date());
+}
+
+function refreshLiveDay(now) {
+    const minute = Math.floor(now.getTime() / 60000);
+    if (liveMoonMinute !== minute) {
+        liveMoonMinute = minute;
+        updateMoonPhase();
+        elements.greg.innerText = now.toLocaleDateString('en-GB', {
+            timeZone: currentSolarTimeZone || undefined, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+    }
+    if (!livePrayerDate || livePrayerDate === getLivePrayerDate() || livePrayerRefreshing
+        || now.getTime() < livePrayerRefreshAfter || navigator.onLine === false) return;
+    livePrayerRefreshAfter = now.getTime() + 60000;
+    livePrayerRefreshing = true;
+    let request;
+    try {
+        const saved = JSON.parse(kuduStorage.getItem('kudu_location') || 'null');
+        request = saved?.type === 'manual' && saved.city && saved.country
+            ? fetchTimingsByCity(saved.city, saved.country)
+            : currentSunCoordinates && fetchTimingsByCoords(currentSunCoordinates.latitude, currentSunCoordinates.longitude);
+    } catch {
+        // A damaged saved location must not interrupt the live clock.
+    } finally {
+        Promise.resolve(request).finally(() => { livePrayerRefreshing = false; });
+    }
+}
+
 function tick() {
     const now = new Date();
+    refreshLiveDay(now);
     updateHeaderClock(now);
     updateSolarPosition(currentTimings);
     if (!nextEvent) return;
