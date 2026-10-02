@@ -35359,11 +35359,10 @@ body.dark-mode .footer-partner-credit {
 }
 
 body.dark-mode .footer-kudu-credit {
-  border-color: rgba(187, 239, 224, 0.25);
-  background: rgba(219, 255, 242, 0.06);
-  box-shadow:
-    0 7px 16px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
 body.dark-mode .footer-social-credit {
