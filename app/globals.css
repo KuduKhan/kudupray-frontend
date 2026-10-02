@@ -44726,8 +44726,9 @@ html body :is(#quran-reader-scroll, .modal-card, .modal-body, .companion-card, .
   height: 0 !important;
 }
 
-/* Give the support heading breathing room above its divider and content. */
-#tab-support .support-shell > .section-header {
+/* Give Support and Preferences equal breathing room around their dividers. */
+#tab-support .support-shell > .section-header,
+#tab-settings .settings-preferences-header {
   padding-bottom: 10px;
   margin-bottom: 14px;
 }
