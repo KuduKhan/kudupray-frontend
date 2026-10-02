@@ -44541,3 +44541,106 @@ body.dark-mode .qibla-action:disabled {
     font-variant-numeric: tabular-nums;
   }
 }
+
+/* Zakat: shared Companion geometry with a focused, responsive calculation form. */
+#tab-companion .companion-menu-tile[data-companion="zakat"], .companion-menu-tile[data-companion="zakat"] { grid-column: 1 / -1; min-height: 86px; flex-direction: row; align-items: center; justify-content: flex-start; gap: 14px; }
+.companion-menu-tile[data-companion="zakat"] .companion-menu-arrow { margin-left: auto; }
+.zakat-modal .zakat-card { width: min(720px, 100%); color: var(--text-primary, #174639); overflow-x: hidden !important; overflow-y: auto !important; max-height: calc(100dvh - 32px); min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.zakat-intro, .zakat-hint, .zakat-guidance p { font-size: .8rem; line-height: 1.55; }
+.zakat-intro { margin: 0 0 12px; }
+.zakat-section { padding: 14px; margin-bottom: 12px; border: 1px solid rgba(5,150,105,.18); border-radius: 18px; background: linear-gradient(120deg,rgba(236,253,245,.7),rgba(255,255,255,.48)); }
+.zakat-section h3 { margin: 0 0 12px; font-size: .9rem; }
+.zakat-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+.zakat-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; font-size: .76rem; font-weight: 650; }
+.zakat-input { display: flex; align-items: center; gap: 8px; }
+.zakat-input, .zakat-field select { width: 100%; min-height: 42px; box-sizing: border-box; border: 1px solid rgba(5,150,105,.22); border-radius: 12px; background: rgba(255,255,255,.72); color: inherit; padding: 8px 10px; }
+.zakat-input small { font-size: .65rem; opacity: .7; }
+.zakat-input input { min-width: 0; width: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; color: inherit; font: inherit; }
+.zakat-input:focus-within, .zakat-field select:focus-visible { outline: 2px solid #059669; outline-offset: 2px; }
+.zakat-threshold { display: flex; flex-direction: column; justify-content: center; gap: 6px; font-size: .8rem; }
+.zakat-threshold small, .zakat-hint { opacity: .8; }
+.zakat-hint { margin: 10px 0 0; font-size: .7rem; }
+.zakat-hawl { display: flex; gap: 9px; align-items: flex-start; margin-top: 14px; font-size: .76rem; line-height: 1.5; }
+.zakat-hawl input { accent-color: #059669; width: 17px; height: 17px; flex-shrink: 0; margin-top: 2px; }
+.zakat-result { padding: 16px; border-radius: 18px; border: 1px solid rgba(212,170,69,.45); background: linear-gradient(125deg,#075344,#123e32); color: #ecfdf5; }
+.zakat-result > small { display: block; font-size: .7rem; }
+.zakat-result > strong { display: block; margin: 6px 0; font-size: clamp(1.5rem,5vw,2rem); color: #fde68a; overflow-wrap: anywhere; }
+.zakat-result p { font-size: .76rem; margin: 0; }
+.zakat-result dl { margin: 14px 0 0; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.16); font-size: .75rem; }
+.zakat-result dl div { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; }
+.zakat-result dd { margin: 0; overflow-wrap: anywhere; text-align: right; }
+.zakat-guidance { margin-top: 14px; font-size: .78rem; }
+.zakat-guidance summary { cursor: pointer; font-weight: 700; }
+.zakat-guidance a { color: #047857; }
+.zakat-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.zakat-footer small { font-size: .65rem; opacity: .8; }
+.zakat-footer button { padding: 8px 12px; border: 1px solid rgba(5,150,105,.24); border-radius: 12px; background: rgba(5,150,105,.08); color: inherit; font: inherit; font-size: .72rem; cursor: pointer; }
+body.dark-mode .zakat-section { background: linear-gradient(125deg,rgba(17,60,47,.75),rgba(15,25,23,.7)); }
+body.dark-mode .zakat-card { color: #e2f5ed; }
+body.dark-mode .zakat-input, body.dark-mode .zakat-field select { background: #152f27; color: #e2f5ed; }
+body.dark-mode .zakat-guidance a { color: #6ee7b7; }
+@media (max-width: 480px) { .zakat-section { padding: 10px; } .zakat-grid { gap: 10px; } .zakat-field { font-size: .68rem; } .zakat-field select { font-size: .7rem; padding: 8px 6px; } .zakat-input { gap: 5px; padding: 8px; } }
+.zakat-modal .zakat-card > * { flex-shrink: 0; }
+.zakat-modal .zakat-card .companion-header { min-height: 62px; box-sizing: border-box; }
+.zakat-modal .zakat-card .zakat-input { height: 42px; min-height: 42px; padding: 8px 10px; }
+.zakat-modal .zakat-card .zakat-input input { height: auto; min-height: 0; padding: 0; box-shadow: none; }
+.zakat-modal .zakat-card .zakat-result, .zakat-modal .zakat-card .zakat-result p, .zakat-modal .zakat-card .zakat-result small, .zakat-modal .zakat-card .zakat-result dt, .zakat-modal .zakat-card .zakat-result dd { color: #ecfdf5 !important; }
+.zakat-modal .zakat-card .zakat-result > strong { color: #fde68a !important; }
+@media (min-width: 900px) {
+  #tab-companion .companion-menu { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  #tab-companion .companion-menu-tile[data-companion="zakat"] { grid-column: auto; min-height: 164px; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 13px; }
+  #tab-companion .companion-menu-tile[data-companion="zakat"] .companion-menu-arrow { margin-left: 0; }
+}
+
+/* One activity-driven scrollbar treatment for pages, modals and dropdowns. */
+html, body, body * {
+  scrollbar-width: thin !important;
+  scrollbar-color: transparent transparent !important;
+}
+html.is-scrolling, body.is-scrolling, body .is-scrolling {
+  scrollbar-color: rgba(5, 150, 105, .48) transparent !important;
+}
+body.dark-mode .is-scrolling, html.is-scrolling:has(body.dark-mode) {
+  scrollbar-color: rgba(110, 231, 183, .48) transparent !important;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar, body *::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+html::-webkit-scrollbar-track, body::-webkit-scrollbar-track, body *::-webkit-scrollbar-track,
+html::-webkit-scrollbar-corner, body::-webkit-scrollbar-corner, body *::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb, body *::-webkit-scrollbar-thumb {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+}
+html.is-scrolling::-webkit-scrollbar-thumb, body.is-scrolling::-webkit-scrollbar-thumb, body .is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(5, 150, 105, .48) !important;
+}
+body.dark-mode .is-scrolling::-webkit-scrollbar-thumb, html.is-scrolling:has(body.dark-mode)::-webkit-scrollbar-thumb {
+  background: rgba(110, 231, 183, .48) !important;
+}
+
+/* Hidden modal scrollbars release their gutter; active scrollbars stay slim. */
+:is(.guide-modal, .info-popup, .islamic-calendar-modal) :is(.modal-card, .modal-body, .companion-card, .info-popup-content, .islamic-calendar-card),
+.quran-reader-scroll {
+  scrollbar-gutter: auto;
+  scrollbar-width: none !important;
+}
+:is(.guide-modal, .info-popup, .islamic-calendar-modal) :is(.modal-card, .modal-body, .companion-card, .info-popup-content, .islamic-calendar-card).is-scrolling,
+.quran-reader-scroll.is-scrolling {
+  scrollbar-width: thin !important;
+}
+:is(.guide-modal, .info-popup, .islamic-calendar-modal) :is(.modal-card, .modal-body, .companion-card, .info-popup-content, .islamic-calendar-card)::-webkit-scrollbar,
+.quran-reader-scroll::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
+:is(.guide-modal, .info-popup, .islamic-calendar-modal) :is(.modal-card, .modal-body, .companion-card, .info-popup-content, .islamic-calendar-card).is-scrolling::-webkit-scrollbar,
+.quran-reader-scroll.is-scrolling::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}

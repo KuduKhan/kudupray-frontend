@@ -3340,7 +3340,22 @@ function removeLegacyQuranOfflineAudio() {
     }
 }
 
+function initScrollActivity() {
+    const timers = new WeakMap();
+    document.addEventListener('scroll', (event) => {
+        const target = event.target === document ? document.documentElement : event.target;
+        if (!(target instanceof Element)) return;
+        target.classList.add('is-scrolling');
+        clearTimeout(timers.get(target));
+        timers.set(target, setTimeout(() => {
+            target.classList.remove('is-scrolling');
+            timers.delete(target);
+        }, 700));
+    }, { capture: true, passive: true });
+}
+
 function init() {
+    initScrollActivity();
     document.querySelector('.knowledge-hub')?.remove();
     document.getElementById('view-special-legacy')?.remove();
     enhanceGuideRecitations();

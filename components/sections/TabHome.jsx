@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { dispatch } from "../runtime-events";
+import ZakatTool from "../ZakatTool";
 
 function DhikrSelector({ children }) {
   const rootRef = useRef(null);
@@ -425,6 +426,7 @@ export default function TabHome() {
               aria-hidden="true"
             ></i>
           </button>
+          <ZakatTool />
         </div>
         <div
           id="view-companion-verse"
