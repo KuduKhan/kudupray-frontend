@@ -6829,14 +6829,15 @@ window.duaPillAction = function (action, index) {
     if (action === 'share') {
         const language = kuduStorage.getItem('kudu_lang') || 'en';
         const translation = dua.translations[language] || dua.translations.en;
-        const text = [dua.ar, dua.tr, translation, dua.source].filter(Boolean).join('\n\n');
-        if (navigator.share) {
-            navigator.share({ title: 'KuduPray Dua', text }).catch(error => {
-                if (error?.name !== 'AbortError') window.copyDua(text);
+        const title = dua.title.replace(/^\d+\.\s*/, '');
+        const text = [title, dua.ar, dua.tr, translation, dua.source,
+            'Shared from KuduPray · Your daily worship companion.\nRead more duas, explore the Qur’an, and find prayer times — free and ad-free.']
+            .filter(Boolean).join('\n\n');
+        shareKuduPray({ title: `${title} | KuduPray`, text, url: `${getKuduPrayPublicUrl()}#tab-duas` })
+            .then(result => {
+                if (result === 'copied') showToast('Dua and KuduPray link copied — ready to share.');
+                if (result === 'failed') showToast('Unable to share or copy. Please try again.');
             });
-        } else {
-            window.copyDua(text);
-        }
         return;
     }
     if (action === 'favourite') {
@@ -7112,20 +7113,48 @@ window.openSupportContribute = function (trigger) {
     setSupportActionStatus('Continue on Buy Me a Coffee to support KuduPray.', trigger);
 };
 
+function getKuduPrayPublicUrl() {
+    try {
+        const url = new URL(document.querySelector('link[rel="canonical"][href]')?.href || 'https://kudupray.vercel.app');
+        if (url.protocol !== 'https:' || /^(localhost|127\.|\[::1\])/.test(url.hostname)) return 'https://kudupray.vercel.app/';
+        url.hash = '';
+        url.search = '';
+        return url.href;
+    } catch { return 'https://kudupray.vercel.app/'; }
+}
+
 function getKuduPrayShareData() {
-    const canonicalUrl = document.querySelector('link[rel="canonical"][href]')?.href;
-    const liveUrl = /^https?:$/i.test(window.location.protocol) ? window.location.href : '';
-    const url = canonicalUrl || liveUrl;
-    const text = 'KuduPray is a free, ad-free worship companion with prayer times, guides, and duas.';
-    return { title: 'KuduPray', text, ...(url ? { url } : {}) };
+    return {
+        title: 'KuduPray · Your daily worship companion',
+        text: 'Discover KuduPray — your daily worship companion.\n\nPrayer times and Adhan, Qibla direction, Qur’an reading and listening, daily duas, dhikr, and practical worship guidance in one peaceful place.\n\nFree, ad-free, and privacy-minded. Explore it and share with someone who may find it useful.',
+        url: getKuduPrayPublicUrl()
+    };
 }
 
 function copySupportLink(data) {
-    const copyText = data.url ? `${data.text}\n${data.url}` : data.text;
+    const copyText = [data.title, data.text, data.url].filter(Boolean).join('\n\n');
     if (navigator.clipboard && window.isSecureContext) {
         return navigator.clipboard.writeText(copyText).then(() => true).catch(() => fallbackCopy(copyText));
     }
     return Promise.resolve(fallbackCopy(copyText));
+}
+
+let kuduPraySharePending = false;
+async function shareKuduPray(data) {
+    if (kuduPraySharePending) return 'busy';
+    kuduPraySharePending = true;
+    try {
+        if (typeof navigator.share === 'function') {
+            try {
+                await navigator.share(data);
+                return 'shared';
+            } catch (error) {
+                if (error?.name === 'AbortError') return 'cancelled';
+            }
+        }
+        return await copySupportLink(data) ? 'copied' : 'failed';
+    } catch { return 'failed'; }
+    finally { kuduPraySharePending = false; }
 }
 
 window.startSupportAction = function (action, trigger) {
@@ -7142,23 +7171,14 @@ window.suggestFeature = function (trigger) {
 };
 
 window.shareApp = function (trigger) {
-    const data = getKuduPrayShareData();
-    if (navigator.share) {
-        navigator.share(data)
-            .then(() => setSupportActionStatus('Thank you for sharing KuduPray thoughtfully.', trigger))
-            .catch(error => {
-                if (error?.name === 'AbortError') {
-                    setSupportActionStatus('Sharing was cancelled—nothing was sent.', trigger);
-                    return;
-                }
-                copySupportLink(data).then(copied => {
-                    setSupportActionStatus(copied ? 'A KuduPray share message was copied to your clipboard.' : 'Sharing is unavailable in this browser right now.', trigger);
-                });
-            });
-        return;
-    }
-    copySupportLink(data).then(copied => {
-        setSupportActionStatus(copied ? 'A KuduPray share message was copied to your clipboard.' : 'Sharing is unavailable in this browser right now.', trigger);
+    return shareKuduPray(getKuduPrayShareData()).then(result => {
+        const messages = {
+            shared: 'Thank you for sharing KuduPray thoughtfully.',
+            copied: 'KuduPray’s introduction and app link are copied — paste them into your message.',
+            cancelled: 'Sharing was cancelled — nothing was sent.',
+            failed: 'Unable to share or copy. Please try again.'
+        };
+        if (messages[result]) setSupportActionStatus(messages[result], trigger);
     });
 };
 
