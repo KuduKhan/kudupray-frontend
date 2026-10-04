@@ -64,28 +64,6 @@ export default function AppNavigation() {
         <span>{"Duas"}</span>
       </button>
 
-      <button
-        type="button"
-        className="nav-item support-nav-item"
-        onClick={(event) => dispatch(199, event)}
-        aria-label="Support KuduPray"
-      >
-        <div className="nav-tile icon-rose">
-          <i className="fa-solid fa-hand-holding-heart"></i>
-        </div>
-        <span>{"Support"}</span>
-      </button>
-      <button
-        type="button"
-        className="nav-item"
-        onClick={(event) => dispatch(200, event)}
-        aria-label="Settings"
-      >
-        <div className="nav-tile icon-purple">
-          <i className="fa-solid fa-gear"></i>
-        </div>
-        <span>{"Settings"}</span>
-      </button>
     </nav>
   );
 }

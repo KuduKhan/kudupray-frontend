@@ -5649,18 +5649,11 @@ window.nav = function (id, btn) {
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.nav-item').forEach(b => b.setAttribute('aria-current', b === btn ? 'page' : 'false'));
-    const mobileSettingsButton = document.getElementById('mobile-settings-button');
-    if (mobileSettingsButton) {
-        const settingsActive = id === 'settings';
-        mobileSettingsButton.classList.toggle('active', settingsActive);
-        mobileSettingsButton.setAttribute('aria-current', settingsActive ? 'page' : 'false');
-    }
-    const mobileSupportButton = document.getElementById('mobile-support-button');
-    if (mobileSupportButton) {
-        const supportActive = id === 'support';
-        mobileSupportButton.classList.toggle('active', supportActive);
-        mobileSupportButton.setAttribute('aria-current', supportActive ? 'page' : 'false');
-    }
+    document.querySelectorAll('[data-shortcut-page]').forEach(button => {
+        const active = button.dataset.shortcutPage === id;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-current', active ? 'page' : 'false');
+    });
     requestAnimationFrame(() => {
         window.scrollTo({ top: pageScrollPositions[nextPage.id] || 0, behavior: 'auto' });
     });
@@ -5675,12 +5668,12 @@ window.nav = function (id, btn) {
 }
 
 window.openMobileSettings = function () {
-    const settingsNavButton = document.querySelector('.nav-item[aria-label="Settings"]');
+    const settingsNavButton = document.getElementById('mobile-settings-button');
     if (settingsNavButton) window.nav('settings', settingsNavButton);
 };
 
 window.openMobileSupport = function () {
-    const supportNavButton = document.querySelector('.nav-item.support-nav-item');
+    const supportNavButton = document.getElementById('mobile-support-button');
     if (supportNavButton) window.nav('support', supportNavButton);
 };
 

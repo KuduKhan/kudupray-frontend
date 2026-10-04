@@ -9,6 +9,8 @@ export default function AppHeader() {
   const appDialog = useRef(null);
   const appTrigger = useRef(null);
   const appFrame = useRef(null);
+  const [pageHeaders, setPageHeaders] = useState([]);
+  useEffect(() => { setPageHeaders(Array.from(document.querySelectorAll(".desktop-page-heading"))); }, []);
   useEffect(() => {
     if (!islamuslimOpen) return;
     const previousOverflow = document.body.style.overflow;
@@ -25,6 +27,46 @@ export default function AppHeader() {
       appTrigger.current?.focus();
     };
   }, [islamuslimOpen]);
+  const renderShortcuts = (primary = false) => (
+        <div className="kudupray-header-actions" role="group" aria-label="App shortcuts">
+        <button
+          ref={primary ? appTrigger : undefined}
+          type="button"
+          className="mobile-support-button islamuslim-launch-button"
+          onClick={(event) => { appTrigger.current = event.currentTarget; setIslamuslimOpen(true); }}
+          aria-label="Open IslaMuslim"
+          aria-haspopup="dialog"
+          title="IslaMuslim · open app"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9" />
+            <path d="M20 3v4M22 5h-4" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className="mobile-support-button"
+          id={primary ? "mobile-support-button" : undefined}
+          data-shortcut-page="support"
+          onClick={(event) => dispatch(0, event)}
+          aria-label="Open Support"
+          title="Support"
+        >
+          <i className="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          className="mobile-settings-button"
+          id={primary ? "mobile-settings-button" : undefined}
+          data-shortcut-page="settings"
+          onClick={(event) => dispatch(1, event)}
+          aria-label="Open Settings"
+          title="Settings"
+        >
+          <i className="fa-solid fa-gear" aria-hidden="true"></i>
+        </button>
+        </div>
+  );
   return (
     <>
     <header>
@@ -40,42 +82,7 @@ export default function AppHeader() {
             </span>
           </div>
         </div>
-        <div className="kudupray-header-actions" role="group" aria-label="App shortcuts">
-        <button
-          ref={appTrigger}
-          type="button"
-          className="mobile-support-button islamuslim-launch-button"
-          onClick={() => setIslamuslimOpen(true)}
-          aria-label="Open IslaMuslim"
-          aria-haspopup="dialog"
-          title="IslaMuslim · open app"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9" />
-            <path d="M20 3v4M22 5h-4" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          className="mobile-support-button"
-          id="mobile-support-button"
-          onClick={(event) => dispatch(0, event)}
-          aria-label="Open Support"
-          title="Support"
-        >
-          <i className="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
-        </button>
-        <button
-          type="button"
-          className="mobile-settings-button"
-          id="mobile-settings-button"
-          onClick={(event) => dispatch(1, event)}
-          aria-label="Open Settings"
-          title="Settings"
-        >
-          <i className="fa-solid fa-gear" aria-hidden="true"></i>
-        </button>
-        </div>
+        {renderShortcuts(true)}
       </div>
       <p className="brand-tagline">
         {
@@ -137,6 +144,7 @@ export default function AppHeader() {
         </section>
       </div>
     </header>
+    {pageHeaders.map((heading, index) => createPortal(renderShortcuts(), heading, `header-shortcuts-${index}`))}
     {islamuslimOpen && createPortal(
       <dialog
         ref={appDialog}

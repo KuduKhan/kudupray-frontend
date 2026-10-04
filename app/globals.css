@@ -26463,6 +26463,12 @@ body.dark-mode .companion-modal :is(.reflection-content, .tasbih-phrase-display,
 }
 
 #tab-duas .desktop-page-heading p {
+  display: block;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
   margin: 0;
   color: rgba(255, 255, 255, 0.76);
   font-size: 0.74rem;
@@ -44741,7 +44747,7 @@ body.dark-mode #tab-quran-reader .quran-reader-heading small {
 }
 
 /* Header shortcuts share IslaMuslim's compact inset glass container. */
-header .kudupray-header-actions {
+.kudupray-header-actions {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -44752,8 +44758,8 @@ header .kudupray-header-actions {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
   flex-shrink: 0;
 }
-header .kudupray-header-actions > button,
-body.dark-mode header .kudupray-header-actions > button {
+.kudupray-header-actions > button,
+body.dark-mode .kudupray-header-actions > button {
   position: relative;
   inset: auto;
   display: inline-flex;
@@ -44774,31 +44780,31 @@ body.dark-mode header .kudupray-header-actions > button {
   cursor: pointer;
   transition: background .18s ease, border-color .18s ease;
 }
-header .kudupray-header-actions > button::before { content: none; }
-header .kudupray-header-actions > button i { filter: none; }
-header .kudupray-header-actions > button:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.14); }
-header .kudupray-header-actions > button:focus-visible { outline: 2px solid #fde68a; outline-offset: 2px; }
-header .kudupray-header-actions > .islamuslim-launch-button { color: #fbbf24; }
+.kudupray-header-actions > button::before { content: none; }
+.kudupray-header-actions > button i { filter: none; }
+.kudupray-header-actions > button:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.14); }
+.kudupray-header-actions > button:focus-visible { outline: 2px solid #fde68a; outline-offset: 2px; }
+.kudupray-header-actions > .islamuslim-launch-button { color: #fbbf24; }
 @media (max-width: 599px) {
   header .mobile-header-row { grid-template-columns: minmax(0, 1fr) auto; }
   header .brand-copy { min-width: 0; }
   header .brand-wordmark { max-width: 100%; height: auto; }
   header .brand-kicker { white-space: normal; }
-  header .kudupray-header-actions { gap: 2px; padding: 3px; border-radius: 15px; }
-  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 34px; min-width: 34px; height: 40px; min-height: 40px; border-radius: 11px; }
+  .kudupray-header-actions { gap: 2px; padding: 3px; border-radius: 15px; }
+  .kudupray-header-actions > button, body.dark-mode .kudupray-header-actions > button { width: 34px; min-width: 34px; height: 40px; min-height: 40px; border-radius: 11px; }
 }
 @media (max-width: 400px) {
-  header .kudupray-header-actions { gap: 1px; padding: 2px; }
-  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 28px; min-width: 28px; }
+  .kudupray-header-actions { gap: 1px; padding: 2px; }
+  .kudupray-header-actions > button, body.dark-mode .kudupray-header-actions > button { width: 28px; min-width: 28px; }
 }
 @media (min-width: 600px) and (max-width: 767px) {
-  header .kudupray-header-actions { gap: 2px; padding: 3px; border-radius: 15px; }
-  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 34px; min-width: 34px; border-radius: 11px; }
+  .kudupray-header-actions { gap: 2px; padding: 3px; border-radius: 15px; }
+  .kudupray-header-actions > button, body.dark-mode .kudupray-header-actions > button { width: 34px; min-width: 34px; border-radius: 11px; }
 }
 @media (min-width: 600px) {
   header .mobile-header-row { display: flex; align-items: center; gap: 12px; }
   header .mobile-header-row .brand-lockup { min-width: 0; padding-right: 0; }
-  header .kudupray-header-actions { position: relative; margin-left: auto; }
+  .kudupray-header-actions { position: relative; margin-left: auto; }
 }
 
 /* Isolated in-app IslaMuslim view; native dialog keeps background controls inert. */
@@ -44821,3 +44827,48 @@ header .kudupray-header-actions > .islamuslim-launch-button { color: #fbbf24; }
 
 
 header .islamuslim-launch-button svg { width: 24px; height: 24px; flex-shrink: 0; }
+
+/* Desktop navigation keeps five destinations; header shortcuts handle support/settings. */
+@media (min-width: 600px) and (max-width: 1199px) {
+  #primary-navigation .nav-item { width: 20%; }
+}
+@media (min-width: 1200px) {
+  #primary-navigation { grid-template-columns: repeat(5, minmax(0, 1fr)); width: 490px; min-width: 490px; max-width: 490px; }
+  body header { padding-right: 540px; }
+}
+
+/* Center desktop shortcuts consistently in the main and page banners. */
+.desktop-page-heading > .kudupray-header-actions { display:none; }
+.kudupray-header-actions > button[aria-current="page"],
+body.dark-mode .kudupray-header-actions > button[aria-current="page"] {
+  color:#fde68a;
+  border-color:rgba(253,230,138,.6);
+  background:rgba(253,230,138,.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 0 10px rgba(253,230,138,.12);
+}
+@media(min-width:1200px){
+ header .mobile-header-row > .kudupray-header-actions { position:absolute;left:50%;top:16px;margin:0;transform:translateX(-50%); }
+ .desktop-page-heading > .kudupray-header-actions,
+ #tab-duas .desktop-page-heading > .kudupray-header-actions { display:flex;position:absolute;left:50%;top:50%;width:max-content;margin:0;transform:translate(-50%,-50%);z-index:2; }
+ .desktop-page-heading > div:not(.desktop-heading-icon):not(.kudupray-header-actions) { max-width:calc(50% - 190px); }
+ #primary-navigation .nav-item:nth-child(1){order:1}
+ #primary-navigation .nav-item:nth-child(2){order:2}
+ #primary-navigation .nav-item:nth-child(3){order:3}
+ #primary-navigation .nav-item:nth-child(4){order:5}
+ #primary-navigation .nav-item:nth-child(5){order:4}
+ #tab-duas .desktop-page-heading {
+   grid-template-columns:minmax(0,1fr);
+   grid-template-rows:80px 36px;
+   gap:8px;
+   padding:14px 20px;
+ }
+ #tab-duas .desktop-page-heading > .kudupray-header-actions { top:54px; }
+ #tab-duas .dua-heading-help {
+   grid-row:2;
+   justify-self:end;
+   width:max-content;
+   max-width:100%;
+   margin:0;
+ }
+ #tab-duas .dua-heading-help > summary { min-height:34px;padding:5px 12px; }
+}
