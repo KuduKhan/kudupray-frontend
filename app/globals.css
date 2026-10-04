@@ -44762,6 +44762,7 @@ body.dark-mode header .kudupray-header-actions > button {
   width: 40px;
   min-width: 40px;
   height: 40px;
+  min-height: 40px;
   margin: 0;
   padding: 0;
   border: 1px solid transparent;
@@ -44784,11 +44785,15 @@ header .kudupray-header-actions > .islamuslim-launch-button { color: #fbbf24; }
   header .brand-wordmark { max-width: 100%; height: auto; }
   header .brand-kicker { white-space: normal; }
   header .kudupray-header-actions { gap: 2px; padding: 3px; border-radius: 15px; }
-  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 36px; min-width: 36px; height: 38px; border-radius: 11px; }
+  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 34px; min-width: 34px; height: 40px; min-height: 40px; border-radius: 11px; }
 }
-@media (max-width: 350px) {
+@media (max-width: 400px) {
   header .kudupray-header-actions { gap: 1px; padding: 2px; }
-  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 30px; min-width: 30px; }
+  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 28px; min-width: 28px; }
+}
+@media (min-width: 600px) and (max-width: 767px) {
+  header .kudupray-header-actions { gap: 2px; padding: 3px; border-radius: 15px; }
+  header .kudupray-header-actions > button, body.dark-mode header .kudupray-header-actions > button { width: 34px; min-width: 34px; border-radius: 11px; }
 }
 @media (min-width: 600px) {
   header .mobile-header-row { display: flex; align-items: center; gap: 12px; }
