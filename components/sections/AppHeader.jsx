@@ -1,9 +1,32 @@
 "use client";
 
 import { dispatch } from "../runtime-events";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 export default function AppHeader() {
+  const [islamuslimOpen, setIslamuslimOpen] = useState(false);
+  const appDialog = useRef(null);
+  const appTrigger = useRef(null);
+  const appFrame = useRef(null);
+  useEffect(() => {
+    if (!islamuslimOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    appDialog.current?.showModal();
+    const handleBack = (event) => {
+      if (event.origin === window.location.origin && event.source === appFrame.current?.contentWindow
+        && event.data?.type === "islamuslim:close") setIslamuslimOpen(false);
+    };
+    window.addEventListener("message", handleBack);
+    return () => {
+      window.removeEventListener("message", handleBack);
+      document.body.style.overflow = previousOverflow;
+      appTrigger.current?.focus();
+    };
+  }, [islamuslimOpen]);
   return (
+    <>
     <header>
       <div className="mobile-header-row">
         <div className="brand-lockup">
@@ -17,6 +40,21 @@ export default function AppHeader() {
             </span>
           </div>
         </div>
+        <div className="kudupray-header-actions" role="group" aria-label="App shortcuts">
+        <button
+          ref={appTrigger}
+          type="button"
+          className="mobile-support-button islamuslim-launch-button"
+          onClick={() => setIslamuslimOpen(true)}
+          aria-label="Open IslaMuslim"
+          aria-haspopup="dialog"
+          title="IslaMuslim · open app"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9" />
+            <path d="M20 3v4M22 5h-4" />
+          </svg>
+        </button>
         <button
           type="button"
           className="mobile-support-button"
@@ -37,6 +75,7 @@ export default function AppHeader() {
         >
           <i className="fa-solid fa-gear" aria-hidden="true"></i>
         </button>
+        </div>
       </div>
       <p className="brand-tagline">
         {
@@ -98,5 +137,16 @@ export default function AppHeader() {
         </section>
       </div>
     </header>
+    {islamuslimOpen && createPortal(
+      <dialog
+        ref={appDialog}
+        className="islamuslim-app-dialog"
+        aria-label="IslaMuslim app"
+        onCancel={(event) => { event.preventDefault(); setIslamuslimOpen(false); }}
+      >
+        <iframe ref={appFrame} src="/islamuslim.html" title="IslaMuslim learning app" className="islamuslim-app-frame" />
+      </dialog>, document.body
+    )}
+    </>
   );
 }
