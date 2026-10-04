@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useEffect } from "react";
 import SkipLink from "./sections/SkipLink";
 import AppHeader from "./sections/AppHeader";
 import TabQuranReader from "./sections/TabQuranReader";
@@ -19,6 +20,10 @@ import Toast from "./sections/Toast";
 
 // Keep this shell stable: the preserved runtime owns dynamic lists, audio, and dialogs.
 export default function KuduPray() {
+  useEffect(() => {
+    window.openKuduPraySnapshot = (source, data) => import('../lib/share-snapshot').then(module => module.openShareSnapshot(source, data));
+    return () => { delete window.openKuduPraySnapshot; };
+  }, []);
   return (
     <>
       <SkipLink />

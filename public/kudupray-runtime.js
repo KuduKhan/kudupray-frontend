@@ -6826,14 +6826,21 @@ window.duaPillAction = function (action, index) {
         window.copyDua(dua.ar);
         return;
     }
-    if (action === 'share') {
+    if (action === 'share' || action === 'share-image') {
         const language = kuduStorage.getItem('kudu_lang') || 'en';
         const translation = dua.translations[language] || dua.translations.en;
         const title = dua.title.replace(/^\d+\.\s*/, '');
         const text = [title, dua.ar, dua.tr, translation, dua.source,
             'Shared from KuduPray · Your daily worship companion.\nRead more duas, explore the Qur’an, and find prayer times — free and ad-free.']
             .filter(Boolean).join('\n\n');
-        shareKuduPray({ title: `${title} | KuduPray`, text, url: `${getKuduPrayPublicUrl()}#tab-duas` })
+        const data = { title: `${title} | KuduPray`, text, url: `${getKuduPrayPublicUrl()}#tab-duas` };
+        if (action === 'share-image' && window.openKuduPraySnapshot) {
+            const card = document.querySelector(`.dua-card[data-dua-index="${index}"]`);
+            if (!card) return showToast('Open this dua card before sharing its image.');
+            window.openKuduPraySnapshot(card, data).catch(() => showToast('Unable to prepare the image. Please use Share message.'));
+            return;
+        }
+        shareKuduPray(data)
             .then(result => {
                 if (result === 'copied') showToast('Dua and KuduPray link copied — ready to share.');
                 if (result === 'failed') showToast('Unable to share or copy. Please try again.');
@@ -6985,7 +6992,7 @@ function renderDuas(list) {
         const translation = d.translations[lang] || d.translations['en'];
 
         return `
-            <div class="dua-card${favourite ? ' is-favourite' : ''}">
+            <div class="dua-card${favourite ? ' is-favourite' : ''}" data-dua-index="${duas.indexOf(d)}">
                 <div class="dua-card-heading">
                     <span class="dua-number" aria-label="Dua ${pageStart + index + 1}">${pageStart + index + 1}</span>
                     <div class="dua-meta">
@@ -6996,7 +7003,8 @@ function renderDuas(list) {
                             </button>
                             <div class="dua-card-options" role="menu">
                                 <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('copy', ${duas.indexOf(d)})"><i class="fa-regular fa-copy" aria-hidden="true"></i>Copy</button>
-                                <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('share', ${duas.indexOf(d)})"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>Share</button>
+                                <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('share', ${duas.indexOf(d)})"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>Share message</button>
+                                <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('share-image', ${duas.indexOf(d)})"><i class="fa-regular fa-image" aria-hidden="true"></i>Share card image</button>
                                 <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('favourite', ${duas.indexOf(d)})"><i class="fa-${isDuaFavourite(duas.indexOf(d)) ? 'solid' : 'regular'} fa-star" aria-hidden="true"></i>${isDuaFavourite(duas.indexOf(d)) ? 'Favourited' : 'Add to favourite'}</button>
                             </div>
                         </div>
@@ -7171,6 +7179,10 @@ window.suggestFeature = function (trigger) {
 };
 
 window.shareApp = function (trigger) {
+    if (window.openKuduPraySnapshot) {
+        return window.openKuduPraySnapshot(null, getKuduPrayShareData())
+            .catch(() => setSupportActionStatus('Unable to prepare the image. Please try again.', trigger));
+    }
     return shareKuduPray(getKuduPrayShareData()).then(result => {
         const messages = {
             shared: 'Thank you for sharing KuduPray thoughtfully.',
@@ -7181,6 +7193,8 @@ window.shareApp = function (trigger) {
         if (messages[result]) setSupportActionStatus(messages[result], trigger);
     });
 };
+
+window.shareKuduPrayMessage = shareKuduPray;
 
 window.safeOpen = function (url) {
     const opened = window.open(url, '_blank', 'noopener,noreferrer');
