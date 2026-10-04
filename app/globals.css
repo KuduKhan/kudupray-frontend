@@ -257,7 +257,7 @@ header h1 {
   margin: -25px auto 0 auto;
   position: relative;
   z-index: 60;
-  animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: pageReveal 140ms ease-out;
   width: 100%;
   overflow-x: hidden;
 }
@@ -5319,6 +5319,12 @@ body.dark-mode .adhan-meaning-line {
       rgba(248, 253, 250, 0.76));
   -webkit-backdrop-filter: blur(22px) saturate(145%);
   backdrop-filter: blur(22px) saturate(145%);
+}
+
+/* Fade pages without moving their fixed players, menus, or navigation. */
+@keyframes pageReveal {
+  from { opacity: .85; }
+  to { opacity: 1; }
 }
 
 .modal-title {
@@ -44871,4 +44877,32 @@ body.dark-mode .kudupray-header-actions > button[aria-current="page"] {
    margin:0;
  }
  #tab-duas .dua-heading-help > summary { min-height:34px;padding:5px 12px; }
+}
+
+/* Shared, short interaction timing keeps content immediately available. */
+body .guide-modal:not([data-guide-page]),
+body .guide-modal:not([data-guide-page]) .modal-card,
+body .info-popup-layer,
+body .info-popup-card,
+body .islamic-calendar-layer,
+body .islamic-calendar-card {
+  transition-duration:160ms !important;
+}
+body .guide-modal .panel {
+  transition:max-height 180ms ease-out,opacity 140ms ease-out,transform 140ms ease-out;
+}
+.companion-panel { animation-duration:160ms; }
+:is(.nav-item,.kudupray-header-actions > button,.accordion-btn,.companion-menu-tile,.dua-library-tab) {
+  transition-duration:120ms;
+  touch-action:manipulation;
+}
+@media (prefers-reduced-motion:reduce) {
+  .page,.companion-panel { animation:none !important; }
+  body .guide-modal:not([data-guide-page]),
+  body .guide-modal:not([data-guide-page]) .modal-card,
+  body .guide-modal .panel,
+  body .info-popup-layer,body .info-popup-card,
+  body .islamic-calendar-layer,body .islamic-calendar-card {
+    transition:none !important;
+  }
 }

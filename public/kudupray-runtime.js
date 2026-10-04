@@ -5655,6 +5655,7 @@ window.nav = function (id, btn) {
         button.setAttribute('aria-current', active ? 'page' : 'false');
     });
     requestAnimationFrame(() => {
+        if (!nextPage.classList.contains('active')) return;
         window.scrollTo({ top: pageScrollPositions[nextPage.id] || 0, behavior: 'auto' });
     });
 
@@ -6496,19 +6497,22 @@ window.closeGuide = function () {
     }
 
     const activeModals = Array.from(document.querySelectorAll('.guide-modal.active:not([data-guide-page])'));
+    if (!activeModals.length) return;
     activeModals.forEach(el => {
         el.classList.remove('is-visible');
         el.setAttribute('aria-hidden', 'true');
     });
-    const motionDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 280;
+    const motionDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 160;
     window.setTimeout(() => {
         activeModals.forEach(el => {
+            if (el.getAttribute('aria-hidden') !== 'true') return;
             el.classList.remove('active');
             // Reset modal state after the closing transition.
             const modalBody = el.querySelector('.modal-body');
             if (modalBody) resetModal(modalBody);
             el.querySelectorAll('details.info-disclosure').forEach(detail => detail.open = false);
         });
+        if (document.querySelector('.guide-modal.active:not([data-guide-page])')) return;
         document.querySelectorAll('[data-modal-inert="true"]').forEach(el => {
             el.inert = false;
             delete el.dataset.modalInert;
@@ -6524,7 +6528,7 @@ function setAccordionState(btn, open) {
     const panel = btn?.nextElementSibling;
     if (!panel?.classList.contains('panel')) return;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const duration = reduceMotion ? 0 : 360;
+    const duration = reduceMotion ? 0 : 180;
     const animationId = String((Number(panel.dataset.motionId || 0) + 1));
     panel.dataset.motionId = animationId;
     btn.classList.toggle('active', open);
@@ -6609,7 +6613,7 @@ function alignAccordionStart(btn, modalBody) {
     // Align once as the requested section starts opening, then once more after
     // the previous section's height transition has fully settled.
     requestAnimationFrame(align);
-    window.setTimeout(align, reduceMotion ? 0 : 380);
+    window.setTimeout(align, reduceMotion ? 0 : 200);
 }
 
 function resetModal(modalBody) {
