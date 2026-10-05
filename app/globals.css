@@ -16491,15 +16491,10 @@ body.dark-mode .calendar-occasion-icon[data-symbol="qadr"] {
 /* Quran ayahs keep the original card surface, with playback and options controls. */
 #tab-quran-reader .quran-reader-verse {
   position: relative;
-  z-index: 1;
   display: block;
   box-sizing: border-box;
   padding: 18px 19px;
   cursor: default;
-}
-
-#tab-quran-reader .quran-reader-verse.has-open-options {
-  z-index: 40;
 }
 
 #tab-quran-reader .quran-reader-verse-main {
@@ -16563,18 +16558,10 @@ body.dark-mode .calendar-occasion-icon[data-symbol="qadr"] {
 }
 
 #tab-quran-reader .quran-reader-verse-options .dua-card-options {
-  top: calc(100% + 7px);
-  right: 0;
-  bottom: auto;
-  width: 176px;
-  max-height: min(220px, 34dvh);
-  overflow-y: auto;
-  z-index: 100;
-}
-
-#tab-quran-reader .quran-reader-verse-options.opens-up .dua-card-options {
   top: auto;
+  right: 0;
   bottom: calc(100% + 7px);
+  width: 176px;
 }
 
 #tab-quran-reader .quran-reader-translation .quran-reader-verse-options {
