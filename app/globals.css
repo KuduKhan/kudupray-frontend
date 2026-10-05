@@ -45208,6 +45208,101 @@ body.dark-mode #tab-guides .guide-modal[data-guide-page] .guide-back-btn:active 
   }
 }
 
+/* Soften the snapshot action buttons to match IslaMuslim's translucent header controls. */
+.share-snapshot-dialog .snapshot-actions button {
+  border-color: rgba(5, 150, 105, 0.16);
+  color: var(--primary);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.76), rgba(16, 185, 129, 0.055));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.share-snapshot-dialog .snapshot-actions button:hover:not(:disabled) {
+  border-color: rgba(5, 150, 105, 0.28);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(16, 185, 129, 0.11));
+  box-shadow: inset 0 1px 0 #fff, 0 4px 12px rgba(6, 78, 59, 0.08);
+}
+
+.share-snapshot-dialog .snapshot-actions button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.share-snapshot-dialog .snapshot-actions button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+body.dark-mode .share-snapshot-dialog .snapshot-actions button {
+  border-color: rgba(52, 211, 153, 0.2);
+  color: #d1fae5;
+  background: linear-gradient(145deg, rgba(52, 211, 153, 0.09), rgba(255, 255, 255, 0.035));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .share-snapshot-dialog .snapshot-actions button:hover:not(:disabled) {
+  border-color: rgba(52, 211, 153, 0.34);
+  background: linear-gradient(145deg, rgba(52, 211, 153, 0.14), rgba(255, 255, 255, 0.055));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.11), 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* Keep the snapshot sheet and its actions balanced on both phone and desktop. */
+.share-snapshot-dialog {
+  width: min(640px, calc(100% - 24px));
+  max-width: 640px;
+}
+
+.share-snapshot-dialog .snapshot-actions {
+  display: grid;
+  width: min(100%, 500px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-inline: auto;
+}
+
+.share-snapshot-dialog .snapshot-actions button {
+  min-width: 0;
+  min-height: 38px;
+  padding: 7px 8px;
+  font-size: .74rem;
+  line-height: 1.15;
+  white-space: normal;
+}
+
+@media (max-width: 400px) {
+  .share-snapshot-dialog .snapshot-actions {
+    gap: 5px;
+  }
+
+  .share-snapshot-dialog .snapshot-actions button {
+    min-height: 36px;
+    padding: 6px 3px;
+    font-size: .68rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .share-snapshot-dialog .snapshot-actions button {
+    min-height: 35px;
+    padding: 5px 3px;
+    font-size: .68rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .dua-options-trigger {
+    min-height: 24px;
+    height: 24px;
+    gap: 4px;
+    padding: 0 11px;
+    font-size: .62rem;
+    letter-spacing: .45px;
+  }
+
+  .dua-options-trigger i {
+    font-size: .48rem;
+  }
+}
+
 /* Center and compact the support promise within its desktop card. */
 @media (min-width: 921px) {
   #tab-support .support-three-column .support-hero-message {
