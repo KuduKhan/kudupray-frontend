@@ -1558,6 +1558,7 @@ const quranReaderState = {
     arabicNumbers: true,
     translationEdition: 'en.asad',
     arabicTextStyle: 'naskh',
+    favourites: new Set(),
     ayahs: [],
     activeAyahIndex: 0,
     audioEventsBound: false,
@@ -2270,6 +2271,8 @@ function hydrateQuranReader() {
         if (QURAN_READER_TRANSLATION_OPTIONS.some(option => option.edition === savedTranslation)) quranReaderState.translationEdition = savedTranslation;
         const savedArabicStyle = kuduStorage.getItem('kudu_quran_reader_arabic_style');
         if (savedArabicStyle === 'naskh' || savedArabicStyle === 'uthmani') quranReaderState.arabicTextStyle = savedArabicStyle;
+        const savedFavourites = JSON.parse(kuduStorage.getItem('kudu_quran_reader_ayah_favourites') || '[]');
+        quranReaderState.favourites = new Set(Array.isArray(savedFavourites) ? savedFavourites.filter(item => /^\d{1,3}:\d{1,3}$/.test(item)) : []);
     } catch (error) {
         // The reader remains fully usable when device storage is unavailable.
     }
@@ -2295,7 +2298,7 @@ function setQuranReaderActiveAyah(index, { scroll = false } = {}) {
     const activeVerse = document.querySelector(`.quran-reader-verse[data-ayah-index="${safeIndex}"]`);
     document.querySelectorAll('.quran-reader-verse').forEach(verse => {
         const isActive = Number(verse.dataset.ayahIndex) === safeIndex;
-        verse.classList.remove('is-active');
+        verse.classList.toggle('is-active', isActive);
         verse.querySelector('.quran-reader-arabic')?.classList.toggle('is-active', isActive);
         if (isActive) verse.setAttribute('aria-current', 'location');
         else verse.removeAttribute('aria-current');
@@ -3087,12 +3090,26 @@ function renderQuranReaderSurah(payload, translationInfo) {
     quranReaderState.ayahs = arabic.ayahs.map(ayah => ({ number: ayah.number, numberInSurah: ayah.numberInSurah }));
     quranReaderState.activeAyahIndex = 0;
     arabic.ayahs.forEach((ayah, index) => {
-        const verse = document.createElement('button');
-        verse.type = 'button';
+        const verse = document.createElement('article');
         verse.className = 'quran-reader-verse';
         verse.dataset.ayahIndex = String(index);
-        verse.setAttribute('aria-label', `Play ayah ${ayah.numberInSurah}`);
-        verse.addEventListener('click', () => window.playQuranReaderAyah(index));
+        verse.dataset.surahNumber = String(surah.number);
+        verse.setAttribute('role', 'group');
+        verse.setAttribute('aria-label', `Ayah ${ayah.numberInSurah}`);
+        const verseMain = document.createElement('div');
+        verseMain.className = 'quran-reader-verse-main';
+        verseMain.setAttribute('role', 'button');
+        verseMain.tabIndex = 0;
+        verseMain.setAttribute('aria-label', `Play ayah ${ayah.numberInSurah}`);
+        verseMain.addEventListener('click', event => {
+            if (event.target.closest('.quran-reader-verse-options')) return;
+            window.playQuranReaderAyah(index);
+        });
+        verseMain.addEventListener('keydown', event => {
+            if (event.target !== verseMain || (event.key !== 'Enter' && event.key !== ' ')) return;
+            event.preventDefault();
+            window.playQuranReaderAyah(index);
+        });
         const verseNumber = document.createElement('span');
         verseNumber.className = 'quran-reader-ayah-number';
         verseNumber.dataset.number = String(ayah.numberInSurah);
@@ -3108,14 +3125,96 @@ function renderQuranReaderSurah(payload, translationInfo) {
         const transliterationText = document.createElement('p');
         transliterationText.className = 'quran-reader-transliteration transliteration-layer';
         transliterationText.textContent = transliteration.ayahs[index]?.text || '—';
-        const translationText = document.createElement('p');
+        const translationText = document.createElement('div');
         translationText.className = 'quran-reader-translation translation-layer';
-        translationText.textContent = translation.ayahs[index]?.text || '—';
-        verse.append(arabicText, transliterationText, translationText);
+        translationText.append(document.createTextNode(translation.ayahs[index]?.text || '—'));
+        verseMain.append(arabicText, transliterationText, translationText);
+        verse.append(verseMain);
+
+        const favouriteKey = `${surah.number}:${ayah.numberInSurah}`;
+        const isFavourite = quranReaderState.favourites.has(favouriteKey);
+        const options = document.createElement('div');
+        options.className = 'dua-card-category-menu quran-reader-verse-options';
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'dua-cat chip-emerald dua-options-trigger quran-reader-verse-menu-trigger';
+        trigger.setAttribute('aria-label', `Options for ayah ${ayah.numberInSurah}`);
+        trigger.setAttribute('aria-haspopup', 'menu');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path d="M8 6h11M8 12h11M8 18h11"></path><path d="M4 6h.01M4 12h.01M4 18h.01" stroke-width="3"></path></svg>';
+        trigger.addEventListener('click', window.toggleDuaOptions);
+        const menu = document.createElement('div');
+        menu.className = 'dua-card-options';
+        menu.setAttribute('role', 'menu');
+        const addOption = (action, icon, label, pressed) => {
+            const option = document.createElement('button');
+            option.type = 'button';
+            option.className = 'dua-card-option';
+            option.setAttribute('role', 'menuitem');
+            option.dataset.action = action;
+            if (pressed !== undefined) option.setAttribute('aria-pressed', String(pressed));
+            const iconStyle = action === 'share-image' || (action === 'favourite' && pressed) ? 'solid' : 'regular';
+            option.innerHTML = `<i class="fa-${iconStyle} ${icon}" aria-hidden="true"></i><span>${label}</span>`;
+            option.addEventListener('click', event => {
+                event.stopPropagation();
+                window.quranReaderAyahAction(action, surah.number, index);
+            });
+            menu.append(option);
+        };
+        addOption('copy', 'fa-copy', 'Copy');
+        addOption('share-image', 'fa-share-nodes', 'Share');
+        addOption('favourite', 'fa-star', isFavourite ? 'Remove from favourites' : 'Add to favourites', isFavourite);
+        options.append(trigger, menu);
+        translationText.append(document.createTextNode(' '), options);
         verses.append(verse);
     });
     syncQuranReaderVisibility();
 }
+
+window.quranReaderAyahAction = function (action, surahNumber, ayahIndex) {
+    const card = document.querySelector(`.quran-reader-verse[data-ayah-index="${ayahIndex}"][data-surah-number="${surahNumber}"]`);
+    const ayah = quranReaderState.ayahs[ayahIndex];
+    if (!card || !ayah) return;
+    closeDuaOptions();
+    const arabicNode = card.querySelector('.quran-reader-arabic');
+    const arabicCopy = arabicNode?.cloneNode(true);
+    arabicCopy?.querySelector('.quran-reader-ayah-number')?.remove();
+    const surah = getQuranReaderSurah(surahNumber);
+    const reference = `${surah?.englishName || 'Surah'} ${surahNumber}:${ayah.numberInSurah}`;
+    const arabic = arabicCopy?.textContent?.trim() || '';
+    const transliteration = card.querySelector('.quran-reader-transliteration')?.textContent?.trim() || '';
+    const translation = card.querySelector('.quran-reader-translation')?.textContent?.trim() || '';
+    const text = [reference, arabic, transliteration, translation,
+        'Shared from KuduPray. Read the Qur’an and explore more worship tools — free and ad-free.']
+        .filter(Boolean).join('\n\n');
+    const data = { title: `${reference} | KuduPray`, text, url: `${getKuduPrayPublicUrl()}#tab-quran-reader` };
+
+    if (action === 'copy') {
+        window.copyDua(`${arabic}\n\n${transliteration}\n\n${translation}\n— ${reference}`);
+        return;
+    }
+    if (action === 'share-image') {
+        if (!window.openKuduPraySnapshot) return showToast('Sharing is unavailable right now.');
+        window.openKuduPraySnapshot(card, data).catch(() => showToast('Unable to prepare the image. Please try again.'));
+        return;
+    }
+    if (action === 'favourite') {
+        const key = `${surahNumber}:${ayah.numberInSurah}`;
+        const wasFavourite = quranReaderState.favourites.has(key);
+        if (wasFavourite) quranReaderState.favourites.delete(key);
+        else quranReaderState.favourites.add(key);
+        try {
+            kuduStorage.setItem('kudu_quran_reader_ayah_favourites', JSON.stringify([...quranReaderState.favourites]));
+        } catch (error) { /* The current session still reflects the choice. */ }
+        const option = card.querySelector('.quran-reader-verse-options [data-action="favourite"]');
+        if (option) {
+            option.setAttribute('aria-pressed', String(!wasFavourite));
+            option.innerHTML = `<i class="fa-${wasFavourite ? 'regular' : 'solid'} fa-star" aria-hidden="true"></i><span>${wasFavourite ? 'Add to favourites' : 'Remove from favourites'}</span>`;
+        }
+        card.classList.toggle('is-favourite', !wasFavourite);
+        showToast(wasFavourite ? 'Removed from favourites.' : 'Ayah added to favourites.');
+    }
+};
 
 async function loadQuranReaderSurah(number = quranReaderState.surahNumber, { play = false } = {}) {
     const normalizedNumber = Number(number);
