@@ -6831,7 +6831,7 @@ window.duaPillAction = function (action, index) {
         const translation = dua.translations[language] || dua.translations.en;
         const title = dua.title.replace(/^\d+\.\s*/, '');
         const text = [title, dua.ar, dua.tr, translation, dua.source,
-            'Shared from KuduPray · Your daily worship companion.\nRead more duas, explore the Qur’an, and find prayer times — free and ad-free.']
+            'Shared from KuduPray. Read more duas, explore the Qur’an, and find prayer times — free and ad-free.']
             .filter(Boolean).join('\n\n');
         const data = { title: `${title} | KuduPray`, text, url: `${getKuduPrayPublicUrl()}#tab-duas` };
         if (action === 'share-image' && window.openKuduPraySnapshot) {
@@ -7003,8 +7003,7 @@ function renderDuas(list) {
                             </button>
                             <div class="dua-card-options" role="menu">
                                 <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('copy', ${duas.indexOf(d)})"><i class="fa-regular fa-copy" aria-hidden="true"></i>Copy</button>
-                                <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('share', ${duas.indexOf(d)})"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>Share message</button>
-                                <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('share-image', ${duas.indexOf(d)})"><i class="fa-regular fa-image" aria-hidden="true"></i>Share card image</button>
+                                <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('share-image', ${duas.indexOf(d)})"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>Share</button>
                                 <button type="button" class="dua-card-option" role="menuitem" onclick="duaPillAction('favourite', ${duas.indexOf(d)})"><i class="fa-${isDuaFavourite(duas.indexOf(d)) ? 'solid' : 'regular'} fa-star" aria-hidden="true"></i>${isDuaFavourite(duas.indexOf(d)) ? 'Favourited' : 'Add to favourite'}</button>
                             </div>
                         </div>
@@ -7134,7 +7133,7 @@ function getKuduPrayPublicUrl() {
 function getKuduPrayShareData() {
     return {
         title: 'KuduPray · Your daily worship companion',
-        text: 'Discover KuduPray — your daily worship companion.\n\nPrayer times and Adhan, Qibla direction, Qur’an reading and listening, daily duas, dhikr, and practical worship guidance in one peaceful place.\n\nFree, ad-free, and privacy-minded. Explore it and share with someone who may find it useful.',
+        text: 'Prayer times and Adhan, Qibla direction, Qur’an reading and listening, daily duas, dhikr, and practical worship guidance in one peaceful place.\n\nFree, ad-free, and privacy-minded. Explore it and share with someone who may find it useful.',
         url: getKuduPrayPublicUrl()
     };
 }

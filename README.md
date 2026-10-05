@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open <http://localhost:3000>.
 
 For production:
 
@@ -61,6 +61,7 @@ changes. To verify ownership in Google Search Console, set
 the URL-prefix property and submit `https://<your-domain>/sitemap.xml` in
 Search Console. Indexing and rankings still depend on Google crawling the
 deployed site and on the usefulness and authority of the published content.
+
 ## Reader release checks
 
 The reader offers full-surah and ayah-by-ayah audio downloads. Browser downloads
