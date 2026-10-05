@@ -31,32 +31,34 @@ export default function TabSupport() {
         <div className="support-content">
           <div className="support-three-column">
             <div className="info-glass-card support-hero">
-              <div className="premium-badge">
-                <i className="fa-solid fa-circle-check"></i>
-                {" Free · Ad-free · Privacy-minded"}
-              </div>
-              <div className="heart-icon-container">
-                <i className="fa-solid fa-heart"></i>
-              </div>
-              <p className="support-hero-lead">
-                <strong>{"KuduPray"}</strong>
-                {
-                  " is built to make dependable worship tools easier to reach—without ads, paywalls, or attention tracking.\n                "
-                }
-              </p>
-              <p className="support-hero-copy">
-                {
-                  "\n                    If KuduPray has been useful to you, you can help through a contribution, an honest review, a thoughtful share, or clear feedback. Each one helps the app improve.\n                "
-                }
-              </p>
-              <div className="support-assurance">
-                <i className="fa-solid fa-shield-heart" aria-hidden="true"></i>
-                <span>
-                  <strong>{"Support is always optional."}</strong>
+              <div className="support-hero-message">
+                <div className="premium-badge">
+                  <i className="fa-solid fa-circle-check"></i>
+                  {" Free · Ad-free · Privacy-minded"}
+                </div>
+                <div className="heart-icon-container">
+                  <i className="fa-solid fa-heart"></i>
+                </div>
+                <p className="support-hero-lead">
+                  <strong>{"KuduPray"}</strong>
                   {
-                    " Core prayer, guide, and dua features will remain free to use."
+                    " is built to make dependable worship tools easier to reach—without ads, paywalls, or attention tracking.\n                "
                   }
-                </span>
+                </p>
+                <p className="support-hero-copy">
+                  {
+                    "\n                    If KuduPray has been useful to you, you can help through a contribution, an honest review, a thoughtful share, or clear feedback. Each one helps the app improve.\n                "
+                  }
+                </p>
+                <div className="support-assurance">
+                  <i className="fa-solid fa-shield-heart" aria-hidden="true"></i>
+                  <span>
+                    <strong>{"Support is always optional."}</strong>
+                    {
+                      " Core prayer, guide, and dua features will remain free to use."
+                    }
+                  </span>
+                </div>
               </div>
               <details className="info-disclosure compact support-impact">
                 <summary>

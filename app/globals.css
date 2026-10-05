@@ -45022,3 +45022,85 @@ body.dark-mode .snapshot-heading small { color:#6ee7b7; }
   .share-snapshot-dialog .snapshot-header-actions > .snapshot-close { width:32px;min-width:32px;flex-basis:32px; }
 }
 @media(prefers-reduced-motion:reduce){.share-snapshot-dialog .snapshot-header-actions>button{transition:none}}
+
+/* Center and compact the support promise within its desktop card. */
+@media (min-width: 921px) {
+  #tab-support .support-three-column .support-hero-message {
+    display:flex;
+    flex:1 1 auto;
+    min-height:0;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6px 0 12px;
+  }
+  #tab-support .support-three-column .support-hero-message .premium-badge {
+    margin-bottom:10px;
+  }
+  #tab-support .support-three-column .support-hero-message .heart-icon-container {
+    width:52px;
+    height:52px;
+    margin-bottom:11px;
+  }
+  #tab-support .support-three-column .support-hero-message .support-hero-lead {
+    max-width:520px;
+    font-size:.82rem;
+    line-height:1.5;
+  }
+  #tab-support .support-three-column .support-hero-message .support-hero-copy {
+    max-width:550px;
+    margin-top:8px;
+    font-size:.68rem;
+    line-height:1.5;
+  }
+  #tab-support .support-three-column .support-hero-message .support-assurance {
+    max-width:550px;
+    margin-top:12px;
+  }
+  #tab-support .support-three-column .support-hero .support-impact {
+    margin-top:14px;
+  }
+}
+
+/* Carry the same centered support-message rhythm into the compact phone card. */
+@media (max-width: 599px) {
+  #tab-support .support-three-column .support-hero-message {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+  }
+  #tab-support .support-three-column .support-hero-message .premium-badge {
+    margin:0 auto 10px;
+  }
+  #tab-support .support-three-column .support-hero-message .heart-icon-container {
+    width:50px;
+    height:50px;
+    margin:0 auto 10px;
+  }
+  #tab-support .support-three-column .support-hero-message .support-hero-lead {
+    width:100%;
+    max-width:36rem;
+    margin:0 auto;
+    font-size:.86rem;
+    line-height:1.52;
+    text-align:center;
+  }
+  #tab-support .support-three-column .support-hero-message .support-hero-copy {
+    width:100%;
+    max-width:36rem;
+    margin:8px auto 0;
+    font-size:.67rem;
+    line-height:1.5;
+    text-align:center;
+  }
+  #tab-support .support-three-column .support-hero-message .support-assurance {
+    width:100%;
+    max-width:36rem;
+    margin:10px auto 0;
+  }
+  #tab-support .support-three-column .support-hero .support-impact {
+    margin-top:12px;
+  }
+}
