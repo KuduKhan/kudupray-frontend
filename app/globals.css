@@ -45023,6 +45023,191 @@ body.dark-mode .snapshot-heading small { color:#6ee7b7; }
 }
 @media(prefers-reduced-motion:reduce){.share-snapshot-dialog .snapshot-header-actions>button{transition:none}}
 
+/* Give every X-shaped close control the Qur’an Reader's ruby-glass treatment. */
+:is(
+  #tab-quran-reader .quran-reader-header > .modal-close-btn,
+  .companion-modal .companion-header .modal-close-btn,
+  .modal-close-btn:not(.guide-back-btn):has(> i.fa-xmark),
+  .info-popup-close,
+  .islamic-calendar-close,
+  .share-snapshot-dialog .snapshot-header-actions > .snapshot-close
+) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  flex: 0 0 40px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 1px solid rgba(185, 57, 70, 0.22);
+  border-radius: 14px;
+  color: #a83243;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(252, 228, 231, 0.8));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96), 0 3px 9px rgba(130, 32, 48, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transform: none;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, color 160ms ease;
+}
+
+:is(
+  #tab-quran-reader .quran-reader-header > .modal-close-btn > i,
+  .companion-modal .companion-header .modal-close-btn > i,
+  .modal-close-btn:not(.guide-back-btn):has(> i.fa-xmark) > i
+) {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.share-snapshot-dialog .snapshot-close svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:is(
+  #tab-quran-reader .quran-reader-header > .modal-close-btn,
+  .companion-modal .companion-header .modal-close-btn,
+  .modal-close-btn:not(.guide-back-btn):has(> i.fa-xmark),
+  .info-popup-close,
+  .islamic-calendar-close,
+  .share-snapshot-dialog .snapshot-header-actions > .snapshot-close
+):hover:not(:disabled) {
+  color: #922638;
+  border-color: rgba(185, 57, 70, 0.36);
+  background: linear-gradient(145deg, #fff5f6, #f8dce1);
+  box-shadow: inset 0 1px 0 #fff, 0 4px 12px rgba(130, 32, 48, 0.12);
+  transform: none;
+}
+
+:is(
+  #tab-quran-reader .quran-reader-header > .modal-close-btn,
+  .companion-modal .companion-header .modal-close-btn,
+  .modal-close-btn:not(.guide-back-btn):has(> i.fa-xmark),
+  .info-popup-close,
+  .islamic-calendar-close,
+  .share-snapshot-dialog .snapshot-header-actions > .snapshot-close
+):focus-visible {
+  color: #922638;
+  outline: 2px solid #bb4255;
+  outline-offset: 3px;
+  transform: none;
+}
+
+:is(
+  #tab-quran-reader .quran-reader-header > .modal-close-btn,
+  .companion-modal .companion-header .modal-close-btn,
+  .modal-close-btn:not(.guide-back-btn):has(> i.fa-xmark),
+  .info-popup-close,
+  .islamic-calendar-close,
+  .share-snapshot-dialog .snapshot-header-actions > .snapshot-close
+):active:not(:disabled) {
+  background: #f3d2d9;
+  box-shadow: inset 0 1px 3px rgba(130, 32, 48, 0.12);
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(
+    #tab-quran-reader .quran-reader-header > .modal-close-btn,
+    .companion-modal .companion-header .modal-close-btn,
+    .modal-close-btn:not(.guide-back-btn):has(> i.fa-xmark),
+    .info-popup-close,
+    .islamic-calendar-close,
+    .share-snapshot-dialog .snapshot-header-actions > .snapshot-close
+  ) {
+    transition: none;
+  }
+}
+
+/* Compact Guides back controls use KuduPray's emerald and amber accents. */
+#tab-guides .guide-modal[data-guide-page] .guide-back-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px;
+  flex: 0 0 40px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(4, 120, 87, 0.28) !important;
+  border-radius: 12px !important;
+  color: var(--primary) !important;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(209, 250, 229, 0.82)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94), 0 4px 12px rgba(4, 120, 87, 0.12) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: none !important;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+#tab-guides .guide-modal[data-guide-page] .guide-back-btn > i {
+  color: inherit !important;
+  font-size: 16px;
+  line-height: 1;
+}
+
+#tab-guides .guide-modal[data-guide-page] .guide-back-btn > span {
+  display: none !important;
+}
+
+#tab-guides .guide-modal[data-guide-page] .guide-back-btn:hover,
+#tab-guides .guide-modal[data-guide-page] .guide-back-btn:focus-visible {
+  border-color: rgba(4, 120, 87, 0.48) !important;
+  background: linear-gradient(145deg, #ffffff, rgba(167, 243, 208, 0.86)) !important;
+  box-shadow: inset 0 1px 0 #ffffff, 0 5px 14px rgba(4, 120, 87, 0.2) !important;
+  transform: none !important;
+}
+
+#tab-guides .guide-modal[data-guide-page] .guide-back-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+#tab-guides .guide-modal[data-guide-page] .guide-back-btn:active {
+  background: rgba(167, 243, 208, 0.9) !important;
+  box-shadow: inset 0 2px 4px rgba(4, 120, 87, 0.2) !important;
+}
+
+body.dark-mode #tab-guides .guide-modal[data-guide-page] .guide-back-btn {
+  border-color: rgba(52, 211, 153, 0.34) !important;
+  color: var(--primary) !important;
+  background: linear-gradient(145deg, rgba(6, 78, 59, 0.96), rgba(4, 120, 87, 0.72)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode #tab-guides .guide-modal[data-guide-page] .guide-back-btn:hover,
+body.dark-mode #tab-guides .guide-modal[data-guide-page] .guide-back-btn:focus-visible {
+  border-color: rgba(52, 211, 153, 0.58) !important;
+  background: linear-gradient(145deg, rgba(6, 95, 70, 0.98), rgba(4, 120, 87, 0.9)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 5px 14px rgba(0, 0, 0, 0.26) !important;
+}
+
+body.dark-mode #tab-guides .guide-modal[data-guide-page] .guide-back-btn:active {
+  background: #064e3b !important;
+}
+
+@media (max-width: 600px) {
+  #tab-guides .guide-modal[data-guide-page] .guide-back-btn {
+    width: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    height: 36px !important;
+    min-height: 36px;
+    flex-basis: 36px !important;
+  }
+}
+
 /* Center and compact the support promise within its desktop card. */
 @media (min-width: 921px) {
   #tab-support .support-three-column .support-hero-message {
