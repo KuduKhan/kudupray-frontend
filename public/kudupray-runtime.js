@@ -6903,6 +6903,7 @@ function closeDuaOptions(except) {
     document.querySelectorAll('.dua-card-category-menu.is-open').forEach(menu => {
         if (menu === except) return;
         menu.classList.remove('is-open');
+        menu.closest('.quran-reader-verse')?.classList.remove('has-open-options');
         menu.querySelector('.dua-options-trigger')?.setAttribute('aria-expanded', 'false');
     });
 }
@@ -6914,7 +6915,27 @@ window.toggleDuaOptions = function (event) {
     const willOpen = !menu.classList.contains('is-open');
     closeDuaOptions(menu);
     menu.classList.toggle('is-open', willOpen);
+    menu.closest('.quran-reader-verse')?.classList.toggle('has-open-options', willOpen);
     event.currentTarget.setAttribute('aria-expanded', String(willOpen));
+    if (menu.classList.contains('quran-reader-verse-options')) {
+        menu.classList.remove('opens-up');
+        if (willOpen) requestAnimationFrame(() => {
+            if (!menu.classList.contains('is-open')) return;
+            const panel = menu.querySelector('.dua-card-options');
+            const trigger = menu.querySelector('.dua-options-trigger');
+            if (!panel || !trigger) return;
+            const panelHeight = panel.getBoundingClientRect().height;
+            const triggerRect = trigger.getBoundingClientRect();
+            const toolbarBottom = document.querySelector('#tab-quran-reader .quran-reader-toolbar-shell')?.getBoundingClientRect().bottom || 0;
+            const playerRect = document.getElementById('quran-player')?.getBoundingClientRect();
+            const lowerEdge = playerRect?.height ? Math.min(window.innerHeight, playerRect.top) : window.innerHeight;
+            const roomAbove = triggerRect.top - toolbarBottom - 10;
+            const roomBelow = lowerEdge - triggerRect.bottom - 10;
+            if (roomBelow < panelHeight && roomAbove > roomBelow && roomAbove >= panelHeight) {
+                menu.classList.add('opens-up');
+            }
+        });
+    }
 };
 
 window.duaPillAction = function (action, index) {
