@@ -39,3 +39,47 @@ test('cancelling a share does not copy and rapid duplicate requests open one sha
   assert.equal(calls, 1);
   assert.equal(copied, 0);
 });
+
+test('ayah share messages and copied text exclude embedded action menus and number badges', () => {
+  const node = (text, controls = '') => ({
+    textContent: text + controls,
+    cloneNode() {
+      let removed = false;
+      return {
+        querySelectorAll: () => controls ? [{ remove() { removed = true; } }] : [],
+        get textContent() { return text + (removed ? '' : controls); }
+      };
+    }
+  });
+  const nodes = {
+    '.quran-reader-arabic': node('بسم الله', '١'),
+    '.quran-reader-transliteration': node('Bismillaah'),
+    '.quran-reader-translation': node('In the name of God.', 'CopyShareAdd to favourites')
+  };
+  const card = { querySelector: selector => nodes[selector] };
+  let shared, copied;
+  const ctx = {
+    window: {
+      openKuduPraySnapshot: (_card, data) => { shared = data; return Promise.resolve(); },
+      copyDua: text => { copied = text; }
+    },
+    document: { querySelector: () => card },
+    quranReaderState: { ayahs: [{ numberInSurah: 1 }] },
+    getQuranReaderSurah: () => ({ englishName: 'Al-Faatiha' }),
+    getKuduPrayPublicUrl: () => 'https://kudupray.vercel.app/',
+    closeDuaOptions() {}
+  };
+  vm.createContext(ctx);
+  const start = runtime.indexOf('function getQuranReaderShareText(');
+  const end = runtime.indexOf('\nasync function loadQuranReaderSurah(', start);
+  vm.runInContext(runtime.slice(start, end), ctx);
+  ctx.window.quranReaderAyahAction('share-image', 1, 0);
+  ctx.window.quranReaderAyahAction('copy', 1, 0);
+  for (const text of [shared.text, copied]) {
+    assert.match(text, /In the name of God\./);
+    assert.match(text, /Al-Faatiha 1:1/);
+    assert.doesNotMatch(text, /Copy|ShareAdd|favourites|١/);
+  }
+  assert.match(shared.text, /Shared from KuduPray/);
+  assert.equal(nodes['.quran-reader-translation'].textContent, 'In the name of God.CopyShareAdd to favourites');
+});

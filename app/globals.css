@@ -45047,6 +45047,80 @@ body .guide-modal .panel {
 .snapshot-preview { min-height:0;overflow:auto;border-radius:16px;text-align:center; }
 .snapshot-preview img { display:block;width:100%;height:auto;border-radius:12px; }
 .snapshot-preview img[hidden] { display:none; }
+.snapshot-capture-card .dua-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.snapshot-capture-card .dua-title {
+  flex: 1 1 200px;
+  min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+.snapshot-capture-card.dua-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 11px;
+  padding: 18px 19px;
+}
+.snapshot-capture-card .dua-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.snapshot-capture-card .dua-number {
+  position: static;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  border-width: 2px;
+  border-radius: 10px;
+  font-size: .85rem;
+}
+.snapshot-capture-card .dua-meta {
+  flex: 1;
+  margin: 0;
+}
+.snapshot-capture-card .dua-title {
+  font-size: .95rem;
+  line-height: 1.4;
+}
+.snapshot-capture-card .dua-arabic {
+  margin: 0;
+  padding: 14px 17px;
+  border-radius: 16px;
+  font-size: 1.35rem;
+  line-height: 1.92;
+}
+.snapshot-capture-card .dua-trans {
+  margin: 0;
+  padding: 0 2px;
+  color: #168563;
+  font-size: .83rem;
+  font-weight: 680;
+  font-style: italic;
+  line-height: 1.6;
+}
+.snapshot-capture-card .dua-eng {
+  margin: 0;
+  padding: 0 2px;
+  font-size: .88rem;
+  font-weight: 520;
+  font-style: normal;
+  line-height: 1.65;
+}
+.snapshot-capture-card .dua-source {
+  justify-self: start;
+  margin: 0;
+}
+body.dark-mode .snapshot-capture-card .dua-trans {
+  color: #a7f3d0;
+}
 .snapshot-status { margin:0;font-size:.8rem;line-height:1.45; }
 .snapshot-actions { display:flex;flex-wrap:wrap;gap:8px; }
 .snapshot-actions button { flex:1;min-width:120px;padding:10px 12px;border:1px solid rgba(5,150,105,.25);border-radius:12px;color:inherit;background:rgba(16,185,129,.12);font-weight:700;cursor:pointer; }

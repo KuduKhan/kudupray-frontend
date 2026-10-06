@@ -3171,19 +3171,24 @@ function renderQuranReaderSurah(payload, translationInfo) {
     syncQuranReaderVisibility();
 }
 
+function getQuranReaderShareText(node) {
+    if (!node) return '';
+    const copy = node.cloneNode(true);
+    copy.querySelectorAll('.quran-reader-verse-options, .dua-card-options, .quran-reader-ayah-number')
+        .forEach(control => control.remove());
+    return copy.textContent.trim();
+}
+
 window.quranReaderAyahAction = function (action, surahNumber, ayahIndex) {
     const card = document.querySelector(`.quran-reader-verse[data-ayah-index="${ayahIndex}"][data-surah-number="${surahNumber}"]`);
     const ayah = quranReaderState.ayahs[ayahIndex];
     if (!card || !ayah) return;
     closeDuaOptions();
-    const arabicNode = card.querySelector('.quran-reader-arabic');
-    const arabicCopy = arabicNode?.cloneNode(true);
-    arabicCopy?.querySelector('.quran-reader-ayah-number')?.remove();
     const surah = getQuranReaderSurah(surahNumber);
     const reference = `${surah?.englishName || 'Surah'} ${surahNumber}:${ayah.numberInSurah}`;
-    const arabic = arabicCopy?.textContent?.trim() || '';
-    const transliteration = card.querySelector('.quran-reader-transliteration')?.textContent?.trim() || '';
-    const translation = card.querySelector('.quran-reader-translation')?.textContent?.trim() || '';
+    const arabic = getQuranReaderShareText(card.querySelector('.quran-reader-arabic'));
+    const transliteration = getQuranReaderShareText(card.querySelector('.quran-reader-transliteration'));
+    const translation = getQuranReaderShareText(card.querySelector('.quran-reader-translation'));
     const text = [reference, arabic, transliteration, translation,
         'Shared from KuduPray. Read the Qur’an and explore more worship tools — free and ad-free.']
         .filter(Boolean).join('\n\n');
