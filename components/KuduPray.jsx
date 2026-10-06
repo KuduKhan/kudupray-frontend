@@ -21,8 +21,23 @@ import Toast from "./sections/Toast";
 // Keep this shell stable: the preserved runtime owns dynamic lists, audio, and dialogs.
 export default function KuduPray() {
   useEffect(() => {
-    window.openKuduPraySnapshot = (source, data) => import('../lib/share-snapshot').then(module => module.openShareSnapshot(source, data));
-    return () => { delete window.openKuduPraySnapshot; };
+    let snapshotModule;
+    const loadSnapshotModule = () => {
+      snapshotModule ||= import('../lib/share-snapshot').catch(error => {
+        snapshotModule = null;
+        throw error;
+      });
+      return snapshotModule;
+    };
+    const prepare = () => loadSnapshotModule().then(module => module.prepareShareSnapshots()).catch(() => {});
+    const idle = 'requestIdleCallback' in window;
+    const warmup = idle ? window.requestIdleCallback(prepare, { timeout: 2000 }) : window.setTimeout(prepare, 500);
+    window.openKuduPraySnapshot = (source, data) => loadSnapshotModule().then(module => module.openShareSnapshot(source, data));
+    return () => {
+      if (idle) window.cancelIdleCallback(warmup);
+      else window.clearTimeout(warmup);
+      delete window.openKuduPraySnapshot;
+    };
   }, []);
   return (
     <>

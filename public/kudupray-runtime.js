@@ -3654,6 +3654,12 @@ function initAccessibility() {
         const activeGuidePage = document.querySelector('.guide-modal[data-guide-page].guide-page-active');
         const activeModal = document.querySelector('.guide-modal.active');
         const activeQuranPage = document.getElementById('tab-quran-reader')?.classList.contains('active');
+        const activeAyahOptions = document.querySelector('.quran-reader-verse-options.is-open');
+        if (event.key === 'Escape' && activeAyahOptions) {
+            closeDuaOptions();
+            activeAyahOptions.querySelector('.dua-options-trigger')?.focus({ preventScroll: true });
+            return;
+        }
         if (event.key === 'Escape' && activeCalendar) {
             closeIslamicCalendar();
             return;
@@ -6903,8 +6909,27 @@ function closeDuaOptions(except) {
     document.querySelectorAll('.dua-card-category-menu.is-open').forEach(menu => {
         if (menu === except) return;
         menu.classList.remove('is-open');
+        const popup = menu.querySelector('.dua-card-options');
+        if (typeof popup?.hidePopover === 'function' && popup.matches(':popover-open')) popup.hidePopover();
+        menu.closest('.quran-reader-verse')?.classList.remove('has-open-options');
         menu.querySelector('.dua-options-trigger')?.setAttribute('aria-expanded', 'false');
     });
+}
+
+function positionQuranAyahOptions(menu) {
+    const popup = menu.querySelector('.dua-card-options');
+    if (!popup?.hasAttribute('popover')) return;
+    const trigger = menu.querySelector('.dua-options-trigger').getBoundingClientRect();
+    const viewport = document.getElementById('quran-reader-scroll')?.getBoundingClientRect();
+    const topEdge = Math.max(8, (viewport?.top || 0) + 8);
+    const bottomEdge = Math.min(window.innerHeight - 8, (viewport?.bottom || window.innerHeight) - 8);
+    if (trigger.bottom < topEdge || trigger.top > bottomEdge) return closeDuaOptions();
+    popup.style.maxHeight = `${Math.max(80, bottomEdge - topEdge)}px`;
+    const bounds = popup.getBoundingClientRect();
+    let top = trigger.top - bounds.height - 8;
+    if (top < topEdge) top = trigger.bottom + 8;
+    popup.style.top = `${Math.max(topEdge, Math.min(top, bottomEdge - bounds.height))}px`;
+    popup.style.left = `${Math.max(10, Math.min(trigger.right - bounds.width, window.innerWidth - bounds.width - 10))}px`;
 }
 
 window.toggleDuaOptions = function (event) {
@@ -6914,8 +6939,23 @@ window.toggleDuaOptions = function (event) {
     const willOpen = !menu.classList.contains('is-open');
     closeDuaOptions(menu);
     menu.classList.toggle('is-open', willOpen);
+    menu.closest('.quran-reader-verse')?.classList.toggle('has-open-options', willOpen);
     event.currentTarget.setAttribute('aria-expanded', String(willOpen));
+    if (menu.classList.contains('quran-reader-verse-options')) {
+        const popup = menu.querySelector('.dua-card-options');
+        if (typeof popup.showPopover === 'function') {
+            popup.setAttribute('popover', 'manual');
+            if (willOpen) {
+                popup.showPopover();
+                positionQuranAyahOptions(menu);
+            } else popup.hidePopover();
+        }
+    }
 };
+
+const repositionOpenAyahOptions = () => document.querySelectorAll('.quran-reader-verse-options.is-open').forEach(positionQuranAyahOptions);
+document.addEventListener('scroll', repositionOpenAyahOptions, true);
+window.addEventListener('resize', repositionOpenAyahOptions);
 
 window.duaPillAction = function (action, index) {
     const dua = duas[index];

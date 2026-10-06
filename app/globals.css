@@ -16564,6 +16564,20 @@ body.dark-mode .calendar-occasion-icon[data-symbol="qadr"] {
   width: 176px;
 }
 
+#tab-quran-reader .quran-reader-verse.has-open-options {
+  z-index: 30;
+  overflow: visible;
+  transform: none;
+}
+
+#tab-quran-reader .quran-reader-verse-options .dua-card-options[popover] {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  max-width: calc(100vw - 20px);
+  overflow: auto;
+}
+
 #tab-quran-reader .quran-reader-translation .quran-reader-verse-options {
   white-space: nowrap;
 }
@@ -45364,6 +45378,23 @@ body.dark-mode .share-snapshot-dialog .snapshot-actions button:hover:not(:disabl
 .share-snapshot-dialog {
   width: min(640px, calc(100% - 24px));
   max-width: 640px;
+}
+
+@media (min-width: 921px) {
+  .share-snapshot-dialog {
+    width: min(900px, calc(100vw - 48px));
+    max-width: 900px;
+    max-height: calc(100dvh - 32px);
+  }
+
+  .share-snapshot-dialog[open] {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .share-snapshot-dialog .snapshot-heading h2 {
+    font-size: 1.2rem;
+  }
 }
 
 .share-snapshot-dialog .snapshot-actions {
