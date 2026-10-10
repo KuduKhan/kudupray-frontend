@@ -2960,9 +2960,11 @@ function updateQuranReaderAudio({ play = false, scroll = false } = {}) {
 async function requestQuranWakeLock(audio = getQuranReaderActiveAudio()) {
     if (!('wakeLock' in navigator) || document.visibilityState !== 'visible' || !audio || audio.paused || audio.ended) return;
     if (quranReaderState.wakeLock && !quranReaderState.wakeLock.released) return;
+    if (quranReaderState.wakeLockPending) return;
+    quranReaderState.wakeLockPending = true;
     try {
         const wakeLock = await navigator.wakeLock.request('screen');
-        if (audio.paused || audio.ended || document.visibilityState !== 'visible') {
+        if (audio !== getQuranReaderActiveAudio() || audio.paused || audio.ended || document.visibilityState !== 'visible') {
             await wakeLock.release();
             return;
         }
@@ -2972,6 +2974,12 @@ async function requestQuranWakeLock(audio = getQuranReaderActiveAudio()) {
         });
     } catch (error) {
         // Wake Lock is optional and can be denied by the browser or device policy.
+    } finally {
+        quranReaderState.wakeLockPending = false;
+        const currentAudio = getQuranReaderActiveAudio();
+        if (currentAudio && currentAudio !== audio && !currentAudio.paused && !currentAudio.ended && document.visibilityState === 'visible') {
+            void requestQuranWakeLock(currentAudio);
+        }
     }
 }
 
@@ -2988,6 +2996,14 @@ function bindQuranReaderAudio() {
     quranReaderState.activeAudio = activeAudio;
     quranReaderState.standbyAudio = standbyAudio;
     quranReaderState.audioEventsBound = true;
+    document.addEventListener('visibilitychange', () => {
+        const audio = getQuranReaderActiveAudio();
+        if (document.visibilityState === 'visible' && audio && !audio.paused && !audio.ended) {
+            void requestQuranWakeLock(audio);
+        } else if (document.visibilityState !== 'visible') {
+            releaseQuranWakeLock();
+        }
+    });
     [activeAudio, standbyAudio].forEach(audio => {
         audio.addEventListener('play', () => {
             if (audio === quranReaderState.activeAudio) setQuranReaderActiveAyah(quranReaderState.activeAyahIndex, { scroll: true });
@@ -3051,14 +3067,6 @@ function bindQuranReaderAudio() {
 
 function renderQuranReaderSurah(payload, translationInfo) {
     const editions = Array.isArray(payload?.data) ? payload.data : [];
-    document.addEventListener('visibilitychange', () => {
-        const audio = getQuranReaderActiveAudio();
-        if (document.visibilityState === 'visible' && audio && !audio.paused && !audio.ended) {
-            void requestQuranWakeLock(audio);
-        } else if (document.visibilityState !== 'visible') {
-            releaseQuranWakeLock();
-        }
-    });
     const arabic = editions.find(item => item?.edition?.identifier === 'quran-uthmani');
     const transliteration = editions.find(item => item?.edition?.identifier === 'en.transliteration');
     const translation = editions.find(item => item?.edition?.identifier === translationInfo.edition);
@@ -3399,7 +3407,7 @@ window.selectQuranReaderSurah = function (number, { play = false } = {}) {
 
 window.selectQuranReaderReciter = function (identifier) {
     if (!QURAN_READER_RECITERS.some(reciter => reciter.identifier === identifier)) return;
-    const audio = document.getElementById('quran-reader-audio');
+    const audio = getQuranReaderActiveAudio();
     const shouldContinue = Boolean(audio && !audio.paused && !audio.ended);
     clearQuranDownload();
     quranReaderState.reciter = identifier;
