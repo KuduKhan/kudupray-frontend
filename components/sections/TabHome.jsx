@@ -50,14 +50,23 @@ function DhikrSelector({ children }) {
     setSelected(value);
     setOpen(false);
     select.dispatchEvent(new Event("change", { bubbles: true }));
-    rootRef.current?.querySelector(".tasbih-select-trigger")?.focus();
+    rootRef.current?.querySelector(".tasbih-select-trigger")?.focus({ preventScroll: true });
+  }
+
+  function focusOption(button) {
+    const list = listRef.current;
+    if (!button || !list) return;
+    button.focus({ preventScroll: true });
+    const item = button.getBoundingClientRect(), bounds = list.getBoundingClientRect();
+    if (item.top < bounds.top) list.scrollTop -= bounds.top - item.top;
+    else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
   }
 
   function handleListKeyDown(event) {
     if (event.key === "Escape") {
       event.preventDefault();
       setOpen(false);
-      rootRef.current?.querySelector(".tasbih-select-trigger")?.focus();
+      rootRef.current?.querySelector(".tasbih-select-trigger")?.focus({ preventScroll: true });
       return;
     }
     const buttons = Array.from(
@@ -73,7 +82,7 @@ function DhikrSelector({ children }) {
     else if (event.key === "PageUp") nextIndex = Math.max(currentIndex - 6, 0);
     else return;
     event.preventDefault();
-    buttons[nextIndex]?.focus();
+    focusOption(buttons[nextIndex]);
   }
 
   function openList() {
@@ -82,7 +91,7 @@ function DhikrSelector({ children }) {
       const buttons = Array.from(
         listRef.current?.querySelectorAll('[role="option"]') || [],
       );
-      (buttons.find((button) => button.dataset.value === selected) || buttons[0])?.focus();
+      focusOption(buttons.find((button) => button.dataset.value === selected) || buttons[0]);
     });
   }
 

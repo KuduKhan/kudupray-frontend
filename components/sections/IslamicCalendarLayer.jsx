@@ -102,6 +102,7 @@ export default function IslamicCalendarLayer() {
               aria-label="Calendar dates"
             ></div>
             <div className="calendar-legend">
+              <span>Gregorian / Hijri day</span>
               <span>
                 <i className="calendar-event-dot"></i>
                 {"Islamic occasion"}

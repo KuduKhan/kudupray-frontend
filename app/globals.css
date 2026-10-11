@@ -17052,6 +17052,157 @@ body.dark-mode .calendar-observance-note {
   }
 }
 
+/* Calendar dates stay legible without repeating month names in narrow cells. */
+body .islamic-calendar-layer {
+  --calendar-inset: 20px;
+  box-sizing: border-box;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  align-items: center;
+}
+
+body .islamic-calendar-card {
+  box-sizing: border-box;
+  height: auto;
+  max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+.islamic-calendar-card :is(.islamic-calendar-header, .islamic-calendar-toolbar, .calendar-data-status) {
+  flex-shrink: 0;
+  padding-inline: var(--calendar-inset);
+}
+
+.islamic-calendar-card :is(.calendar-grid-panel, .calendar-details-panel) {
+  padding-inline: var(--calendar-inset);
+}
+
+.islamic-calendar-card .islamic-calendar-layout {
+  flex: 0 1 auto;
+  min-height: 0;
+  scrollbar-width: none;
+}
+
+.islamic-calendar-card .islamic-calendar-layout::-webkit-scrollbar {
+  display: none;
+}
+
+.islamic-calendar-card .calendar-month-heading :is(strong, span) {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.islamic-calendar-card .calendar-month-heading span {
+  font-size: .7rem;
+  line-height: 1.5;
+}
+
+.islamic-calendar-card .calendar-day {
+  justify-content: flex-start;
+  gap: 5px;
+  min-height: 78px;
+  font-variant-numeric: tabular-nums;
+}
+
+.islamic-calendar-card .calendar-greg-day {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.islamic-calendar-card .calendar-hijri-day {
+  font-size: .75rem;
+  line-height: 1.3;
+}
+
+.islamic-calendar-card .calendar-day.selected {
+  border-color: rgba(5, 150, 105, .5);
+  background: linear-gradient(145deg, #d1fae5, #ecfdf5);
+  box-shadow: inset 0 0 0 1px rgba(5, 150, 105, .15);
+}
+
+.islamic-calendar-card .calendar-selected-date {
+  border-color: rgba(5, 150, 105, .18);
+}
+
+.islamic-calendar-card .calendar-selected-date strong {
+  color: var(--primary-dark);
+}
+
+.islamic-calendar-card .calendar-month-event {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.islamic-calendar-card .calendar-month-event:hover {
+  border-color: rgba(5, 150, 105, .35);
+  background: rgba(16, 185, 129, .09);
+}
+
+.islamic-calendar-card :is(.calendar-day, .calendar-month-event, .calendar-nav-button, .calendar-today-button):focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+.islamic-calendar-card :is(.calendar-no-event, .calendar-event-card span, .calendar-month-event span, .calendar-observance-note) {
+  font-size: .75rem;
+  line-height: 1.6;
+}
+
+body.dark-mode .islamic-calendar-card .calendar-day.selected {
+  border-color: rgba(110, 231, 183, .6);
+  background: rgba(6, 95, 70, .48);
+}
+
+body.dark-mode .islamic-calendar-card .calendar-selected-date strong {
+  color: #a7f3d0;
+}
+
+body.dark-mode .islamic-calendar-card :is(.calendar-nav-button, .calendar-today-button) {
+  color: #6ee7b7;
+}
+
+body.dark-mode .islamic-calendar-card :is(.calendar-nav-button, .calendar-today-button):hover {
+  border-color: rgba(110, 231, 183, .35);
+  background: rgba(6, 95, 70, .45);
+}
+
+@media (max-width: 860px) {
+  body .islamic-calendar-layer { --calendar-inset: 12px; }
+
+  body .islamic-calendar-card {
+    width: min(100%, 720px);
+    border-radius: 24px;
+  }
+
+  .islamic-calendar-card .islamic-calendar-layout {
+    display: block;
+  }
+
+  .islamic-calendar-card .calendar-details-panel {
+    padding-block: 14px;
+    border-left: 0;
+    border-top: 1px solid rgba(4, 120, 87, .09);
+  }
+
+  .islamic-calendar-card .calendar-grid-panel { padding-block: 12px; }
+
+  .islamic-calendar-card .calendar-day {
+    min-height: 58px;
+    padding: 7px 5px;
+    gap: 5px;
+  }
+
+  .islamic-calendar-card .calendar-greg-day { font-size: .9rem; }
+  .islamic-calendar-card .calendar-hijri-day { font-size: .68rem; }
+  .islamic-calendar-card .calendar-month-heading span { font-size: .64rem; }
+  .islamic-calendar-card .calendar-data-status { font-size: .65rem; }
+  .islamic-calendar-card .calendar-legend { gap: 10px; font-size: .62rem; }
+  .islamic-calendar-card .calendar-day-occasion { top: auto; bottom: 6px; right: 4px; width: 16px; height: 16px; }
+  .islamic-calendar-card .calendar-event-label { display: none; }
+}
+
 /* === KUDUPRAY SIGNATURE POLISH + QIBLA HERO === */
 :root {
   --primary: #0b6b50;

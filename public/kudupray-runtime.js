@@ -401,6 +401,7 @@ let islamicCalendarCursor = new Date(new Date().getFullYear(), new Date().getMon
 let islamicCalendarSelectedDate = new Date();
 let islamicCalendarActiveData = new Map();
 let islamicCalendarLoadToken = 0;
+let islamicCalendarController = null;
 const islamicCalendarMemoryCache = new Map();
 const pageScrollPositions = {};
 let prayerFetchController = null;
@@ -1663,9 +1664,19 @@ function getQuranReaderSurahJuzLabel(surah) {
     return first === last ? `Juz ${first}` : `Juz ${first}–${last}`;
 }
 
-function renderQuranSurahPickerList() {
+function focusPickerOption(option, list) {
+    if (!option || !list) return;
+    option.focus({ preventScroll: true });
+    const item = option.getBoundingClientRect(), bounds = list.getBoundingClientRect();
+    if (item.top < bounds.top) list.scrollTop -= bounds.top - item.top;
+    else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
+}
+
+function renderQuranSurahPickerList({ resetScroll = false } = {}) {
     const list = document.getElementById('quran-surah-list');
     if (!list) return;
+    const scrollTop = resetScroll ? 0 : list.scrollTop;
+    const focusedSurah = list.contains(document.activeElement) ? document.activeElement.dataset.surah : null;
     const normalize = value => String(value).normalize('NFKD').replace(/[\u0300-\u036f\u064b-\u065f\u0670\u0640]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - 1632)).toLowerCase().replace(/[^a-z0-9\u0621-\u064a]/g, '');
     const query = normalize(document.getElementById('quran-surah-search').value);
     const matches = quranReaderState.catalog.filter(surah => !query || String(surah.number) === query || [surah.name, surah.englishName, surah.englishNameTranslation].some(name => normalize(name || '').includes(query)));
@@ -1686,6 +1697,7 @@ function renderQuranSurahPickerList() {
         const option = document.createElement('button');
         option.type = 'button'; option.className = 'quran-reciter-option'; option.tabIndex = -1;
         option.setAttribute('role', 'option');
+        option.dataset.surah = String(surah.number);
         option.setAttribute('aria-selected', String(surah.number === quranReaderState.surahNumber));
         option.setAttribute('aria-label', formatQuranReaderSurah(surah));
         const badge = document.createElement('span'); badge.className = 'quran-surah-badge'; badge.setAttribute('aria-hidden', 'true'); setQuranSurahNumberBadge(badge, surah.number);
@@ -1699,6 +1711,8 @@ function renderQuranSurahPickerList() {
         option.addEventListener('click', () => { window.selectQuranReaderSurah(surah.number); renderQuranSurahPickerList(); });
         list.append(option);
     });
+    list.scrollTop = scrollTop;
+    if (!resetScroll && focusedSurah) list.querySelector(`[data-surah="${focusedSurah}"]`)?.focus({ preventScroll: true });
 }
 
 function initQuranSurahPicker() {
@@ -1711,13 +1725,7 @@ function initQuranSurahPicker() {
     const search = document.getElementById('quran-surah-search');
     const list = document.getElementById('quran-surah-list');
     const position = () => positionQuranPicker(panel, trigger, 430);
-    const focusOption = option => {
-        if (!option) return;
-        option.focus({ preventScroll: true });
-        const item = option.getBoundingClientRect(), bounds = list.getBoundingClientRect();
-        if (item.top < bounds.top) list.scrollTop -= bounds.top - item.top;
-        else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
-    };
+    const focusOption = option => focusPickerOption(option, list);
     const open = (keyboard = false) => {
         search.value = ''; renderQuranSurahPickerList(); panel.hidden = false;
         trigger.setAttribute('aria-expanded', 'true'); position();
@@ -1726,7 +1734,7 @@ function initQuranSurahPicker() {
     };
     trigger.addEventListener('click', event => panel.hidden ? open(event.detail === 0) : closeQuranSurahPicker(true));
     trigger.addEventListener('keydown', event => { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); open(true); } });
-    search.addEventListener('input', () => { renderQuranSurahPickerList(); position(); });
+    search.addEventListener('input', () => { renderQuranSurahPickerList({ resetScroll: true }); position(); });
     panel.addEventListener('keydown', event => {
         if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
         const options = [...list.querySelectorAll('[role="option"]')], index = options.indexOf(document.activeElement);
@@ -1742,7 +1750,7 @@ function initQuranSurahPicker() {
         else if (event.key === 'ArrowUp') { event.preventDefault(); focusOption(options[index <= 0 ? options.length - 1 : index - 1]); }
         else if (document.activeElement !== search && (event.key === 'Home' || event.key === 'End')) { event.preventDefault(); focusOption(event.key === 'Home' ? options[0] : options[options.length - 1]); }
         else if (document.activeElement === search && event.key === 'Enter') { event.preventDefault(); options[0].click(); }
-        else if (document.activeElement !== search && event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) { event.preventDefault(); search.value = event.key; search.focus({ preventScroll: true }); renderQuranSurahPickerList(); }
+        else if (document.activeElement !== search && event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) { event.preventDefault(); search.value = event.key; search.focus({ preventScroll: true }); renderQuranSurahPickerList({ resetScroll: true }); }
     });
     document.addEventListener('pointerdown', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) closeQuranSurahPicker(); });
     window.addEventListener('resize', position);
@@ -1890,13 +1898,7 @@ function initQuranReciterPicker() {
     panel.append(heading, list);
     // Mount outside the reader header so the list cannot be clipped by sticky containers.
     document.body.append(panel);
-    const revealOption = option => {
-        if (!option) return;
-        const itemRect = option.getBoundingClientRect();
-        const listRect = list.getBoundingClientRect();
-        if (itemRect.top < listRect.top) list.scrollTop -= listRect.top - itemRect.top;
-        else if (itemRect.bottom > listRect.bottom) list.scrollTop += itemRect.bottom - listRect.bottom;
-    };
+    const revealOption = option => focusPickerOption(option, list);
     const open = () => {
         panel.hidden = false;
         syncQuranReciterPicker();
@@ -2756,13 +2758,7 @@ function initQuranSpeedPicker() {
         list.append(option);
     });
     const position = () => positionQuranPicker(panel, trigger, 280);
-    const focusOption = option => {
-        option?.focus({ preventScroll: true });
-        if (!option) return;
-        const item = option.getBoundingClientRect(), bounds = list.getBoundingClientRect();
-        if (item.top < bounds.top) list.scrollTop -= bounds.top - item.top;
-        else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
-    };
+    const focusOption = option => focusPickerOption(option, list);
     const open = () => {
         panel.hidden = false; trigger.setAttribute('aria-expanded', 'true'); syncQuranSpeedPicker(); position();
         focusOption(list.querySelector('[aria-selected="true"]'));
@@ -3932,6 +3928,10 @@ function saveCalendarCache(key, rawData, normalised) {
 }
 
 async function loadIslamicCalendarMonth() {
+    islamicCalendarController?.abort();
+    const controller = new AbortController();
+    islamicCalendarController = controller;
+    const timeout = setTimeout(() => controller.abort(), 10000);
     const year = islamicCalendarCursor.getFullYear();
     const month = islamicCalendarCursor.getMonth() + 1;
     const cacheKey = `${year}-${String(month).padStart(2, '0')}`;
@@ -3942,7 +3942,7 @@ async function loadIslamicCalendarMonth() {
     setCalendarDataStatus(cached ? 'cached' : 'loading', cached ? 'Showing saved AlAdhan calendar data while checking for updates…' : 'Loading verified Hijri dates from AlAdhan…');
 
     try {
-        const response = await fetch(`https://api.aladhan.com/v1/gToHCalendar/${month}/${year}`, { headers: { Accept: 'application/json' } });
+        const response = await fetch(`https://api.aladhan.com/v1/gToHCalendar/${month}/${year}`, { headers: { Accept: 'application/json' }, signal: controller.signal });
         if (!response.ok) throw new Error(`Calendar request failed (${response.status})`);
         const payload = await response.json();
         if (payload?.code !== 200 || !Array.isArray(payload.data) || !payload.data.length) throw new Error('Calendar data was incomplete');
@@ -3956,6 +3956,8 @@ async function loadIslamicCalendarMonth() {
     } catch (error) {
         if (token !== islamicCalendarLoadToken) return;
         setCalendarDataStatus(cached ? 'cached' : 'fallback', cached ? 'Using saved AlAdhan dates—live refresh is unavailable.' : 'Offline estimate shown—connect to load verified AlAdhan dates.');
+    } finally {
+        clearTimeout(timeout);
     }
 }
 
@@ -3993,8 +3995,10 @@ function renderIslamicCalendar() {
     const lastLabel = `${lastHijri.monthName} ${lastHijri.year} AH`;
     hijriHeading.textContent = firstLabel === lastLabel ? firstLabel : `${firstLabel} — ${lastLabel}`;
 
+    const focusedDate = grid.contains(document.activeElement) ? document.activeElement.dataset.date : null;
+    const dayCount = Math.ceil((monthStart.getDay() + monthEnd.getDate()) / 7) * 7;
     let gridHtml = '';
-    for (let index = 0; index < 42; index += 1) {
+    for (let index = 0; index < dayCount; index += 1) {
         const date = new Date(gridStart);
         date.setDate(gridStart.getDate() + index);
         const hijri = getCalendarHijriData(date);
@@ -4005,12 +4009,26 @@ function renderIslamicCalendar() {
         const key = calendarDateKey(date);
         const eventName = events[0]?.name || '';
         const ariaLabel = `${gregorianLongFormatter.format(date)}, ${hijri.label}${eventName ? `, ${eventName}` : ''}`;
-        gridHtml += `<button type="button" class="calendar-day${outside ? ' outside' : ''}${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}${events.length ? ' has-event' : ''}" onclick="selectIslamicCalendarDate('${key}')" aria-label="${ariaLabel}"${isToday ? ' aria-current="date"' : ''}><span class="calendar-greg-day">${date.getDate()}</span><span class="calendar-hijri-day">${hijri.day} ${hijri.monthName}</span>${eventName ? `${calendarOccasionIcon(events[0], 'calendar-day-occasion')}<span class="calendar-event-label">${eventName}</span>` : ''}</button>`;
+        gridHtml += `<button type="button" data-date="${key}" class="calendar-day${outside ? ' outside' : ''}${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}${events.length ? ' has-event' : ''}" onclick="selectIslamicCalendarDate('${key}')" aria-label="${ariaLabel}" aria-pressed="${isSelected}" tabindex="${isSelected ? '0' : '-1'}"${isToday ? ' aria-current="date"' : ''}><span class="calendar-greg-day">${date.getDate()}</span><span class="calendar-hijri-day">${outside ? '' : hijri.day}</span>${!outside && eventName ? `${calendarOccasionIcon(events[0], 'calendar-day-occasion')}<span class="calendar-event-label">${eventName}</span>` : ''}</button>`;
         if (!outside && events.length) events.forEach(event => monthEvents.push({ date: new Date(date), event }));
     }
     grid.innerHTML = gridHtml;
+    if (focusedDate) grid.querySelector(`[data-date="${focusedDate}"]`)?.focus({ preventScroll: true });
+    grid.onkeydown = event => {
+        const key = event.target.closest('.calendar-day')?.dataset.date;
+        if (!key) return;
+        const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+        const selected = calendarDateFromKey(key);
+        if (event.key in offsets) selected.setDate(selected.getDate() + offsets[event.key]);
+        else if (event.key === 'Home') selected.setDate(selected.getDate() - selected.getDay());
+        else if (event.key === 'End') selected.setDate(selected.getDate() + 6 - selected.getDay());
+        else return;
+        event.preventDefault();
+        selectIslamicCalendarDate(calendarDateKey(selected));
+        grid.querySelector('.calendar-day.selected')?.focus({ preventScroll: true });
+    };
     monthEventsTarget.innerHTML = monthEvents.length
-        ? monthEvents.map(({ date, event }) => `<div class="calendar-month-event"><time datetime="${calendarDateKey(date)}">${date.getDate()}</time>${calendarOccasionIcon(event)}<span>${event.name}</span></div>`).join('')
+        ? monthEvents.map(({ date, event }) => `<button type="button" class="calendar-month-event" onclick="selectIslamicCalendarDate('${calendarDateKey(date)}')"><time datetime="${calendarDateKey(date)}">${date.getDate()}</time>${calendarOccasionIcon(event)}<span>${event.name}</span></button>`).join('')
         : '<p class="calendar-no-event">No major occasion falls within this displayed Gregorian month.</p>';
     renderIslamicCalendarDetails();
 }
@@ -4037,6 +4055,7 @@ window.closeIslamicCalendar = function () {
     const layer = document.getElementById('islamic-calendar-layer');
     if (!layer?.classList.contains('active')) return;
     islamicCalendarLoadToken += 1;
+    islamicCalendarController?.abort();
     layer.classList.remove('active');
     layer.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('islamic-calendar-open');
@@ -5301,12 +5320,7 @@ window.toggleAdhanPicker = function () {
 };
 
 function focusAdhanOption(option) {
-    if (!option) return;
-    option.focus({ preventScroll: true });
-    const list = document.getElementById('adhan-voice-list');
-    const item = option.getBoundingClientRect(), bounds = list.getBoundingClientRect();
-    if (item.top < bounds.top) list.scrollTop -= bounds.top - item.top;
-    else if (item.bottom > bounds.bottom) list.scrollTop += item.bottom - bounds.bottom;
+    focusPickerOption(option, document.getElementById('adhan-voice-list'));
 }
 
 function syncAdhanCardControls() {
@@ -7074,8 +7088,7 @@ function syncDuaCategoryPicker() {
             trigger.setAttribute('aria-expanded', 'true');
             positionQuranPicker(panel, trigger, 300);
             const selected = list.querySelector('[aria-selected="true"]');
-            selected?.focus({ preventScroll: true });
-            selected?.scrollIntoView({ block: 'nearest' });
+            focusPickerOption(selected, list);
         };
         trigger.addEventListener('click', () => panel.hidden ? open() : close(true));
         trigger.addEventListener('keydown', event => {
@@ -7096,7 +7109,7 @@ function syncDuaCategoryPicker() {
                 typedAt = Date.now();
                 next = options.findIndex(option => option.textContent.toLowerCase().startsWith(typed.toLowerCase()));
             }
-            if (next >= 0) { event.preventDefault(); options[next].focus({ preventScroll: true }); options[next].scrollIntoView({ block: 'nearest' }); }
+            if (next >= 0) { event.preventDefault(); focusPickerOption(options[next], list); }
         });
         document.addEventListener('pointerdown', event => { if (!panel.contains(event.target) && !trigger.contains(event.target)) close(); });
         window.addEventListener('resize', () => { if (!panel.hidden) positionQuranPicker(panel, trigger, 300); });
