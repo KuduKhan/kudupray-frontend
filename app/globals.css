@@ -16410,14 +16410,22 @@ body.dark-mode .nav-item:not(.active) .icon-purple i {
   display: block;
   width: 28px;
   height: 28px;
-  padding: 3px;
+  padding: 2px;
   flex-shrink: 0;
   color: rgb(var(--occasion-rgb));
   border: 1px solid rgba(var(--occasion-rgb), 0.18);
   border-radius: 8px;
   background: linear-gradient(145deg, rgba(var(--occasion-rgb), 0.11), rgba(var(--occasion-rgb), 0.025));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
-  stroke-width: 1.75;
+  stroke-width: 1.8;
+}
+
+.islamic-calendar-title-icon > svg { width: 24px; height: 24px; }
+
+.calendar-event-heading .calendar-occasion-icon {
+  width: 30px;
+  height: 30px;
+  padding: 3px;
 }
 
 .calendar-occasion-icon[data-symbol="hajj"],
@@ -17098,10 +17106,40 @@ body .islamic-calendar-card {
 
 .islamic-calendar-card .calendar-day {
   justify-content: flex-start;
-  gap: 5px;
-  min-height: 78px;
+  gap: 3px;
+  min-height: 60px;
+  padding: 7px;
+  border-radius: 10px;
   font-variant-numeric: tabular-nums;
 }
+
+.islamic-calendar-card :is(.calendar-weekdays, .islamic-calendar-grid) {
+  gap: 5px;
+}
+
+.islamic-calendar-card .calendar-grid-panel { padding-block: 14px; }
+.islamic-calendar-card .calendar-details-panel { padding-block: 14px; }
+
+.islamic-calendar-card :is(.calendar-selected-date, .calendar-event-card) {
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.islamic-calendar-card .calendar-event-card { margin-top: 6px; }
+.islamic-calendar-card .calendar-selected-events { margin-top: 8px; }
+.islamic-calendar-card .calendar-month-events-wrap { margin-top: 12px; }
+.islamic-calendar-card .calendar-observance-note { margin-top: 12px; padding: 9px; }
+.islamic-calendar-card .calendar-month-events { gap: 5px; }
+
+.islamic-calendar-card .calendar-month-event {
+  min-height: 42px;
+  padding: 6px 8px;
+  grid-template-columns: 30px 24px minmax(0, 1fr);
+  gap: 7px;
+}
+
+.islamic-calendar-card .calendar-month-event time { min-height: 28px; border-radius: 8px; }
+.islamic-calendar-card .calendar-month-event .calendar-occasion-icon { width: 24px; height: 24px; padding: 1px; }
 
 .islamic-calendar-card .calendar-greg-day {
   font-size: 1rem;
@@ -17181,17 +17219,18 @@ body.dark-mode .islamic-calendar-card :is(.calendar-nav-button, .calendar-today-
   }
 
   .islamic-calendar-card .calendar-details-panel {
-    padding-block: 14px;
+    padding-block: 10px;
     border-left: 0;
     border-top: 1px solid rgba(4, 120, 87, .09);
   }
 
-  .islamic-calendar-card .calendar-grid-panel { padding-block: 12px; }
+  .islamic-calendar-card .calendar-grid-panel { padding-block: 10px; }
+  .islamic-calendar-card :is(.calendar-weekdays, .islamic-calendar-grid) { gap: 3px; }
 
   .islamic-calendar-card .calendar-day {
-    min-height: 58px;
-    padding: 7px 5px;
-    gap: 5px;
+    min-height: 46px;
+    padding: 5px;
+    gap: 3px;
   }
 
   .islamic-calendar-card .calendar-greg-day { font-size: .9rem; }

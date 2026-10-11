@@ -21,7 +21,10 @@ export default function IslamicCalendarLayer() {
       <section className="islamic-calendar-card" role="document">
         <div className="islamic-calendar-header">
           <span className="islamic-calendar-title-icon" aria-hidden="true">
-            <i className="fa-solid fa-moon"></i>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="5" width="18" height="16" rx="3" />
+              <path d="M7 3v4M17 3v4M3 10h18M13 12a3 3 0 0 0 3 4 3 3 0 1 1-3-4Z" />
+            </svg>
           </span>
           <div className="islamic-calendar-heading">
             <span className="islamic-calendar-kicker">

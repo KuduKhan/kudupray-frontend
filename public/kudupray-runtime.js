@@ -3818,23 +3818,26 @@ const islamicShortFormatter = new Intl.DateTimeFormat('en-u-ca-islamic', { day: 
 const gregorianLongFormatter = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
 // Local SVG symbols are shared by day cells, occasion details and the monthly list.
+// Moon-star and book-open-text geometry: Lucide (ISC), public/licenses/lucide.txt.
+const CALENDAR_MOON_STAR = '<path d="M18 5h4M20 3v4M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>';
+const CALENDAR_OPEN_BOOK = '<path d="M12 5v16M16 13h2M16 9h2M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2ZM6 13h2M6 9h2"/>';
 const CALENDAR_OCCASION_SYMBOLS = {
-    '1-1': ['new-year', '<path d="M16 3a8.5 8.5 0 1 0 5 13A7 7 0 0 1 16 3Z"/><path d="m19 3 .6 1.4L21 5l-1.4.6L19 7l-.6-1.4L17 5l1.4-.6Z"/>'],
-    '1-10': ['fasting', '<path d="M3 17h18M6 14a6 6 0 0 1 12 0M12 3v3M4 7l2 2M20 7l-2 2M5 21h14"/>'],
-    '3-12': ['remembrance', '<path d="M12 6v15M3 4c3-1 6 0 9 2 3-2 6-3 9-2v15c-3-1-6 0-9 2-3-2-6-3-9-2Z"/><path d="M6 9h3M15 9h3M6 13h3M15 13h3"/>'],
-    '7-27': ['journey', '<path d="M4 21V11h16v10M9 21v-6h6v6M8 11c0-3 4-5 4-5s4 2 4 5M2 21h20M5 8V4M19 8V4"/><path d="m12 1 .5 1.5L14 3l-1.5.5L12 5l-.5-1.5L10 3l1.5-.5Z"/>'],
-    '8-15': ['night', '<path d="M14 3a8 8 0 1 0 7 13A7 7 0 0 1 14 3Z"/><path d="m19 4 .6 1.4L21 6l-1.4.6L19 8l-.6-1.4L17 6l1.4-.6ZM17 11h.01"/>'],
-    '9-1': ['ramadan', '<path d="M9 5h6l3 4-2 11H8L6 9ZM6 9h12M8 16h8M12 9v7M10 5V3h4v2M9 22h6"/>'],
-    '9-27': ['qadr', '<path d="M12 11v10M3 9c3-1 6 0 9 2 3-2 6-3 9-2v10c-3-1-6 0-9 2-3-2-6-3-9-2Z"/><path d="m12 2 1 2 2 1-2 1-1 2-1-2-2-1 2-1ZM4 4h.01M20 4h.01"/>'],
-    '10-1': ['eid-fitr', '<path d="M4 21V11h16v10M9 21v-6h6v6M8 11c0-3 4-5 4-5s4 2 4 5M2 21h20M5 7V4M19 7V4M12 2v1"/>'],
-    '12-8': ['hajj', '<path d="m4 7 8-4 8 4v13H4ZM4 7h16M4 11h16M15 20v-5h3v5M12 3v4"/><path d="M7 11v9"/>'],
-    '12-9': ['arafah', '<path d="m2 21 8-15 5 8 3-4 4 11ZM7 12l3-1 3 1M10 6V2h5l-2 2 2 2Z"/>'],
-    '12-10': ['eid-adha', '<path d="M8 7a3 3 0 0 1 5-1 3 3 0 0 1 4 3 3 3 0 0 1 2 5 3 3 0 0 1-3 4H7a4 4 0 0 1-3-6 3 3 0 0 1 4-5ZM7 18v3M16 18v3"/><path d="M17 10h3v5h-3M20 12h.01"/>']
+    '1-1': ['new-year', CALENDAR_MOON_STAR],
+    '1-10': ['fasting', '<path d="M3 19h18M5 16h14M7 13a5 5 0 0 1 10 0M12 3v3M4 6l2 2M20 6l-2 2"/>'],
+    '3-12': ['remembrance', CALENDAR_OPEN_BOOK],
+    '7-27': ['journey', '<path d="M3 21h18M5 21V11h14v10M8 11c0-3 4-5 4-5s4 2 4 5M10 21v-5a2 2 0 0 1 4 0v5M3 14V7M21 14V7"/><path d="M14 2a3 3 0 0 0 4 4 3 3 0 1 1-4-4Z"/>'],
+    '8-15': ['night', CALENDAR_MOON_STAR],
+    '9-1': ['ramadan', '<path d="M12 2v3M9 5h6l4 5-3 10H8L5 10ZM5 10h14M8 20h8M10 22h4M12 10v10M8 10l2 10M16 10l-2 10"/>'],
+    '9-27': ['qadr', '<path d="M12 12v9M3 10c3-1 6 0 9 2 3-2 6-3 9-2v9c-3-1-6 0-9 2-3-2-6-3-9-2ZM6 14h3M15 14h3"/><path d="M12 2a3 3 0 0 0 4 4 3 3 0 1 1-4-4Z"/>'],
+    '10-1': ['eid-fitr', '<path d="M2 21h20M4 21V9l2-3 2 3v12M16 21V9l2-3 2 3v12M8 13h8M9 13c0-3 3-5 3-5s3 2 3 5M10 21v-4a2 2 0 0 1 4 0v4M12 3v2"/>'],
+    '12-8': ['hajj', '<path d="m3 7 9-4 9 4v13l-9 2-9-2ZM3 7l9 3 9-3M12 10v12M3 11l9 3 9-3M16 21v-5l3-1v5"/>'],
+    '12-9': ['arafah', '<path d="m3 21 8-15 5 9 2-4 4 10ZM8 12l3 2 3-2M3 21h18"/><circle cx="18" cy="5" r="2"/>'],
+    '12-10': ['eid-adha', '<path d="M9 8a3 3 0 0 1 6 0v7a3 3 0 0 1-6 0ZM9 9C3 11 2 4 6 3c3-1 4 3 2 4M15 9c6 2 7-5 3-6-3-1-4 3-2 4M9 12H5l2 3h2M15 12h4l-2 3h-2M12 18v3M9 21h6"/>']
 };
 
 function calendarOccasionIcon(event, extraClass = '') {
     const [symbol, paths] = CALENDAR_OCCASION_SYMBOLS[`${event.month}-${event.day}`] || ['occasion', '<path d="m12 3 3 6 6 1-4 5 1 6-6-3-6 3 1-6-4-5 6-1Z"/>'];
-    return `<svg class="calendar-occasion-icon ${extraClass}" data-symbol="${symbol}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths}</svg>`;
+    return `<svg class="calendar-occasion-icon ${extraClass}" data-symbol="${symbol}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths}</svg>`;
 }
 
 function sameCalendarDay(first, second) {
