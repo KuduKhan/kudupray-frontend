@@ -4824,6 +4824,11 @@ async function fetchAPI(url) {
     prayerFetchController?.abort();
     const controller = new AbortController();
     prayerFetchController = controller;
+    let timedOut = false;
+    const timeoutId = setTimeout(() => {
+        timedOut = true;
+        controller.abort();
+    }, 12000);
     try {
         elements.loader.style.display = 'block';
         elements.loader.className = 'loading-message';
@@ -4881,12 +4886,17 @@ async function fetchAPI(url) {
         countdownTimer = setInterval(tick, 1000);
 
     } catch (e) {
-        if (e.name === 'AbortError') return;
+        if (prayerFetchController !== controller || (controller.signal.aborted && !timedOut)) return;
         elements.loader.style.display = 'grid';
         elements.loader.className = 'error-message';
-        elements.loader.innerHTML = '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span>Prayer times could not be loaded. Check your connection or choose a manual location.</span>';
+        const message = timedOut
+            ? 'Prayer times took too long to load. Check your connection or choose a manual location.'
+            : 'Prayer times could not be loaded. Check your connection or choose a manual location.';
+        elements.loader.innerHTML = `<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span>${message}</span>`;
         elements.locName.innerText = "Choose location";
-        console.error('KuduPray timing request failed:', e);
+        console.warn('KuduPray timing request failed:', e);
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 
