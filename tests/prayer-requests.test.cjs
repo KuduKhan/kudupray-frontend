@@ -19,7 +19,7 @@ function setup() {
     })
   };
   vm.createContext(ctx);
-  const start = runtime.indexOf('async function fetchAPI(url) {');
+  const start = runtime.indexOf('async function fetchAPI(');
   vm.runInContext(runtime.slice(start, runtime.indexOf('function renderTimetable(t)', start)), ctx);
   return { ctx, pending, timers };
 }

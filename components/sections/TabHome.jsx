@@ -955,118 +955,69 @@ export default function TabHome() {
             <h3 className="section-title">{"Today's Schedule"}</h3>
           </div>
 
-          <div style={{ textAlign: "right" }}>
-            <div
+          <div className="location-selector-wrap">
+            <button
+              type="button"
               id="loc-display"
+              className="location-selector"
+              aria-label="Change location"
+              aria-controls="loc-input-container"
+              aria-expanded="false"
               onClick={(event) => dispatch(32, event)}
-              style={{
-                fontSize: "0.8rem",
-                color: "var(--text-sub)",
-                cursor: "pointer",
-                padding: "6px 14px",
-                borderRadius: "20px",
-                display: "inline-flex",
-                alignItems: "center",
-                background: "var(--glass-bg)",
-                border: "1px solid rgba(0,0,0,0.05)",
-                transition: "all 0.2s",
-                fontWeight: "600",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.02)",
-              }}
             >
               <i
                 className="fa-solid fa-location-dot"
-                style={{ color: "var(--primary)", marginRight: "6px" }}
+                aria-hidden="true"
               ></i>
               <span id="loc-name">{"Detecting..."}</span>
               <i
                 className="fa-solid fa-pen-to-square"
-                style={{
-                  fontSize: "0.7rem",
-                  opacity: "0.5",
-                  marginLeft: "8px",
-                }}
+                aria-hidden="true"
               ></i>
-            </div>
+            </button>
           </div>
         </div>
 
         <div
           id="loc-input-container"
-          style={{
-            display: "none",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            gap: "4px",
-            background: "rgba(0,0,0,0.02)",
-            padding: "4px 6px",
-            borderRadius: "10px",
-            border: "1px solid rgba(0,0,0,0.04)",
-          }}
+          className="location-editor"
+          style={{ display: "none" }}
         >
+          <svg className="location-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 5 5" />
+          </svg>
           <input
             type="text"
             id="manual-loc"
-            placeholder="City, Country"
-            aria-label="City and country"
+            className="location-city-input"
+            placeholder="City, Country or latitude, longitude"
+            aria-label="City and country or latitude and longitude"
             autoComplete="address-level2"
-            style={{
-              flex: "1 1 160px",
-              minWidth: 0,
-              boxSizing: "border-box",
-              padding: "5px 9px",
-              height: "30px",
-              lineHeight: "18px",
-              borderRadius: "15px",
-              border: "1px solid #ccc",
-              width: "auto",
-              maxWidth: "220px",
-              fontSize: "0.8rem",
-              outline: "none",
-              boxShadow: "inset 0 1px 3px rgba(0,0,0,0.05)",
-            }}
           />
           <button
             type="button"
             onClick={(event) => dispatch(33, event)}
-            className="icon-btn"
+            className="location-action location-apply"
             aria-label="Use entered location"
             title="Use entered location"
-            style={{
-              width: "30px",
-              height: "30px",
-              minWidth: "30px",
-              minHeight: "30px",
-              flexShrink: 0,
-              padding: 0,
-              background: "var(--primary)",
-              color: "white",
-              border: "none",
-              boxShadow: "0 2px 5px rgba(4, 120, 87, 0.3)",
-            }}
           >
-            <i className="fa-solid fa-check"></i>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="m5 12 4 4 10-10" />
+            </svg>
           </button>
           <button
             type="button"
             onClick={(event) => dispatch(34, event)}
-            className="icon-btn"
+            className="location-action location-detect"
             aria-label="Use current position"
             title="Use current position"
-            style={{
-              width: "30px",
-              height: "30px",
-              minWidth: "30px",
-              minHeight: "30px",
-              flexShrink: 0,
-              padding: 0,
-              background: "var(--accent)",
-              color: "white",
-              border: "none",
-              boxShadow: "0 2px 5px rgba(217, 119, 6, 0.3)",
-            }}
           >
-            <i className="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="7" />
+              <circle cx="12" cy="12" r="2" />
+              <path d="M12 2v3m0 14v3M2 12h3m14 0h3" />
+            </svg>
           </button>
         </div>
         <div

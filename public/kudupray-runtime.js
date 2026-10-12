@@ -405,6 +405,9 @@ let islamicCalendarController = null;
 const islamicCalendarMemoryCache = new Map();
 const pageScrollPositions = {};
 let prayerFetchController = null;
+let currentLocation = null;
+let locationRequestToken = 0;
+let locationNameController = null;
 const qiblaState = { bearing: null, heading: 0, listening: false };
 
 function normaliseGuideRecitation(value) {
@@ -1736,7 +1739,7 @@ function initQuranSurahPicker() {
     trigger.addEventListener('keydown', event => { if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); open(true); } });
     search.addEventListener('input', () => { renderQuranSurahPickerList({ resetScroll: true }); position(); });
     panel.addEventListener('keydown', event => {
-        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeQuranSurahPicker(true); return; }
         const options = [...list.querySelectorAll('[role="option"]')], index = options.indexOf(document.activeElement);
         if (event.key === 'Tab') {
             event.preventDefault();
@@ -1914,7 +1917,7 @@ function initQuranReciterPicker() {
     });
     let typed = '', typedAt = 0;
     panel.addEventListener('keydown', event => {
-        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeQuranReciterPicker(true); return; }
         const options = [...list.children];
         const index = options.indexOf(document.activeElement);
         let next = -1;
@@ -2033,7 +2036,7 @@ function initQuranReaderPreferencePickers() {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); open(true); }
         });
         panel.addEventListener('keydown', event => {
-            if (event.key === 'Escape') { event.preventDefault(); closeQuranReaderPreferencePickers({ restoreFocus: config.triggerId }); }
+            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeQuranReaderPreferencePickers({ restoreFocus: config.triggerId }); }
         });
     });
     document.addEventListener('pointerdown', event => {
@@ -2116,7 +2119,7 @@ function initAppSelectPickers(root = document) {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); open(true); }
         });
         panel.addEventListener('keydown', event => {
-            if (event.key === 'Escape') { event.preventDefault(); close(); trigger.focus({ preventScroll: true }); }
+            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(); trigger.focus({ preventScroll: true }); }
         });
         select.addEventListener('change', sync);
         select.dataset.appPickerEnhanced = pickerId;
@@ -2766,7 +2769,7 @@ function initQuranSpeedPicker() {
     trigger.addEventListener('click', () => panel.hidden ? open() : closeQuranSpeedPicker(true));
     trigger.addEventListener('keydown', event => { if (event.key === 'ArrowUp' || event.key === 'ArrowDown') { event.preventDefault(); open(); } });
     panel.addEventListener('keydown', event => {
-        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeQuranSpeedPicker(true); return; }
         const options = [...list.children], index = options.indexOf(document.activeElement);
         let next = -1;
         if (event.key === 'ArrowDown') next = (index + 1) % options.length;
@@ -3528,11 +3531,13 @@ function init() {
     if (savedLoc) {
         try {
             const locData = JSON.parse(savedLoc);
+            currentLocation = { ...locData, saved: locData.type === 'auto' };
             if (locData.type === 'manual' && locData.city && locData.country) {
                 fetchTimingsByCity(locData.city, locData.country);
-            } else if (Number.isFinite(locData.lat) && Number.isFinite(locData.lng)) {
+            } else if (validLocationCoordinates(locData.lat, locData.lng)) {
                 updateQibla(locData.lat, locData.lng);
                 fetchTimingsByCoords(locData.lat, locData.lng);
+                if (locData.type === 'auto') triggerAutoLocation({ preserveExisting: true });
             } else {
                 throw new Error('Invalid saved location');
             }
@@ -3546,7 +3551,7 @@ function init() {
 }
 
 function initAccessibility() {
-    document.querySelectorAll('.guide-tile, .accordion-btn, .modal-close-btn, #loc-display').forEach(el => {
+    document.querySelectorAll('.guide-tile, .accordion-btn, .modal-close-btn').forEach(el => {
         el.setAttribute('tabindex', '0');
         el.setAttribute('role', 'button');
         el.addEventListener('keydown', event => {
@@ -4484,19 +4489,34 @@ function toggleLocationInput(forceOpen) {
     const shouldOpen = typeof forceOpen === 'boolean'
         ? forceOpen
         : elements.locInputContainer.style.display === 'none';
+    elements.locDisplay.setAttribute('aria-expanded', String(shouldOpen));
     if (shouldOpen) {
+        if (currentLocation?.type === 'manual') elements.manualLocInput.value = `${currentLocation.city}, ${currentLocation.country}`;
+        else if (currentLocation && validLocationCoordinates(currentLocation.lat, currentLocation.lng)) elements.manualLocInput.value = `${currentLocation.lat}, ${currentLocation.lng}`;
         elements.locInputContainer.style.display = 'flex';
         elements.locDisplay.style.display = 'none';
-        elements.manualLocInput.focus();
+        elements.manualLocInput.focus({ preventScroll: true });
     } else {
         elements.locInputContainer.style.display = 'none';
         elements.locDisplay.style.display = 'inline-flex';
-        elements.locDisplay.focus();
+        elements.locDisplay.focus({ preventScroll: true });
     }
 }
 
 function saveManualLocation() {
     const val = elements.manualLocInput.value.trim();
+    const coordinateParts = val.split(',').map(part => part.trim());
+    if (coordinateParts.length === 2 && coordinateParts.every(part => /^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(part))) {
+        const [lat, lng] = coordinateParts.map(Number);
+        if (!validLocationCoordinates(lat, lng)) return alert('Latitude must be between -90 and 90; longitude between -180 and 180.');
+        locationRequestToken++;
+        currentLocation = { type: 'coordinates', lat, lng };
+        kuduStorage.setItem('kudu_location', JSON.stringify(currentLocation));
+        renderLocationLabel();
+        fetchTimingsByCoords(lat, lng);
+        toggleLocationInput(false);
+        return;
+    }
     if (!val.includes(',')) {
         alert("Please enter as 'City, Country'");
         return;
@@ -4505,31 +4525,112 @@ function saveManualLocation() {
     const city = parts.shift();
     const country = parts.join(', ');
     if (city && country) {
-        kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'manual', city, country }));
+        locationRequestToken++;
+        currentLocation = { type: 'manual', city, country };
+        kuduStorage.setItem('kudu_location', JSON.stringify(currentLocation));
+        renderLocationLabel();
         fetchTimingsByCity(city, country);
         toggleLocationInput();
     }
 }
 
-function triggerAutoLocation() {
+function validLocationCoordinates(lat, lng) {
+    return Number.isFinite(lat) && Number.isFinite(lng) && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
+}
+
+function renderLocationLabel() {
+    if (!currentLocation) return;
+    const point = currentLocation;
+    let name, detail, coordinates = '';
+    if (point.type === 'manual') {
+        name = `${point.city}, ${point.country}`;
+        detail = 'City-based estimate';
+    } else {
+        name = point.type === 'default' ? 'Makkah · default location' : point.type === 'coordinates' ? 'Pinned location' : point.saved ? 'Saved location' : point.accuracy > 1000 ? 'Approximate location' : 'Current location';
+        const accuracy = Number.isFinite(point.accuracy) && point.accuracy > 0
+            ? `±${point.accuracy >= 1000 ? `${(point.accuracy / 1000).toFixed(1)} km` : `${Math.ceil(point.accuracy)} m`}` : '';
+        coordinates = `${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}`;
+        detail = point.type === 'coordinates' ? 'Custom map position' : point.type === 'default' ? 'Default prayer location' : accuracy ? `Accuracy ${accuracy}` : 'Device location';
+        if (point.reason) detail = point.reason;
+        if (point.type === 'auto' && point.placeName) {
+            name = point.placeName;
+            detail = [point.placeContext, point.saved ? 'Saved location' : point.accuracy > 1000 ? 'Approximate' : ''].filter(Boolean).join(' · ') || 'Current location';
+        }
+    }
+    elements.locName.innerText = name;
+    elements.locDisplay.setAttribute('aria-label', `Change location: ${name}`);
+    const accuracyNote = Number.isFinite(point.accuracy) && point.accuracy > 0 ? `Device accuracy ±${Math.ceil(point.accuracy)} m` : '';
+    elements.locDisplay.title = `${name} — ${[detail, coordinates, accuracyNote, point.placeName ? 'Area name from BigDataCloud' : ''].filter(Boolean).join(' · ')}. Change location`;
+}
+
+async function resolveCurrentLocationName(point) {
+    // This endpoint permits only fresh coordinates from this calling device.
+    // Saved, manually entered and default coordinates never go to the provider.
+    if (point !== currentLocation || point.type !== 'auto' || point.saved) return;
+    locationNameController?.abort();
+    const controller = new AbortController();
+    locationNameController = controller;
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
+        const query = new URLSearchParams({ latitude: String(point.lat), longitude: String(point.lng), localityLanguage: 'en' });
+        const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?${query}`, { signal: controller.signal, credentials: 'omit' });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (point !== currentLocation || controller.signal.aborted || String(data.lookupSource || '').toLowerCase().includes('ip')) return;
+        const clean = value => typeof value === 'string' ? value.trim() : '';
+        const name = clean(data.locality) || clean(data.city);
+        if (!name) return;
+        const context = [clean(data.city) || clean(data.principalSubdivision), clean(data.countryName)]
+            .filter((value, index, values) => value && value.toLowerCase() !== name.toLowerCase() && values.findIndex(other => other.toLowerCase() === value.toLowerCase()) === index);
+        point.placeName = name;
+        point.placeContext = context.join(', ');
+        kuduStorage.setItem('kudu_location', JSON.stringify(point));
+        renderLocationLabel();
+    } catch {
+        // Naming is optional; coordinate-based worship tools remain available.
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
+function triggerAutoLocation({ preserveExisting = false, qibla = false } = {}) {
+    const token = ++locationRequestToken;
+    locationNameController?.abort();
+    const failed = error => {
+        if (token !== locationRequestToken) return;
+        const message = error?.code === 1 ? 'Location permission denied' : 'A fresh location fix is unavailable';
+        if (preserveExisting && currentLocation && (currentLocation.type === 'manual' || validLocationCoordinates(currentLocation.lat, currentLocation.lng))) {
+            currentLocation.saved = true;
+            renderLocationLabel();
+            showToast(`${message}. Keeping your selected location.`);
+        } else {
+            currentLocation = { type: 'default', lat: 21.4225, lng: 39.8262, reason: message };
+            renderLocationLabel();
+            fetchTimingsByCoords(currentLocation.lat, currentLocation.lng);
+        }
+        if (qibla && elements.qiblaStatus) elements.qiblaStatus.textContent = `${message}. Choose a location in Today's Schedule.`;
+    };
     if (navigator.geolocation) {
-        elements.locName.innerText = "Detecting...";
+        elements.locName.innerText = preserveExisting ? 'Updating location…' : 'Finding current location…';
         navigator.geolocation.getCurrentPosition(
             pos => {
-                const { latitude, longitude } = pos.coords;
-                kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
+                if (token !== locationRequestToken) return;
+                const { latitude, longitude, accuracy } = pos.coords;
+                if (!validLocationCoordinates(latitude, longitude)) return failed();
+                currentLocation = { type: 'auto', lat: latitude, lng: longitude, accuracy: Number.isFinite(accuracy) && accuracy > 0 ? accuracy : null, capturedAt: pos.timestamp || Date.now() };
+                kuduStorage.setItem('kudu_location', JSON.stringify(currentLocation));
+                renderLocationLabel();
+                void resolveCurrentLocationName(currentLocation);
+                updateQibla(latitude, longitude);
                 fetchTimingsByCoords(latitude, longitude);
                 if (elements.locInputContainer.style.display === 'flex') toggleLocationInput();
+                if (qibla) showToast('Qibla direction updated');
             },
-            () => {
-                elements.locName.innerText = "Access Denied. Using Makkah.";
-                fetchTimingsByCoords(21.4225, 39.8262); // Default
-            },
-            { enableHighAccuracy: false, timeout: 10000, maximumAge: 900000 }
+            failed,
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
         );
     } else {
-        elements.locName.innerText = "Geo Not Supported.";
-        fetchTimingsByCoords(21.4225, 39.8262);
+        failed();
     }
 }
 
@@ -4576,16 +4677,7 @@ window.findQibla = function () {
         return;
     }
     elements.qiblaStatus.textContent = 'Finding your precise location…';
-    navigator.geolocation.getCurrentPosition(position => {
-        const { latitude, longitude } = position.coords;
-        kuduStorage.setItem('kudu_location', JSON.stringify({ type: 'auto', lat: latitude, lng: longitude }));
-        updateQibla(latitude, longitude);
-        fetchTimingsByCoords(latitude, longitude);
-        showToast('Qibla direction updated');
-    }, error => {
-        const message = error.code === 1 ? 'Location permission was not granted.' : 'Your location could not be determined.';
-        elements.qiblaStatus.textContent = `${message} You can still choose a city below.`;
-    }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 300000 });
+    triggerAutoLocation({ preserveExisting: true, qibla: true });
 };
 
 function handleDeviceHeading(event) {
@@ -4835,14 +4927,15 @@ async function loadNearbyMosques(latitude, longitude) {
 
 // === API LOGIC ===
 async function fetchTimingsByCoords(lat, lng) {
-    return fetchAPI(`https://api.aladhan.com/v1/timings?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}&method=2`);
+    if (!validLocationCoordinates(Number(lat), Number(lng))) return;
+    return fetchAPI(`https://api.aladhan.com/v1/timings?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}&method=2`, { latitude: Number(lat), longitude: Number(lng) });
 }
 
 async function fetchTimingsByCity(city, country) {
     return fetchAPI(`https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&method=2`);
 }
 
-async function fetchAPI(url) {
+async function fetchAPI(url, coordinates = null) {
     prayerFetchController?.abort();
     const controller = new AbortController();
     prayerFetchController = controller;
@@ -4869,28 +4962,19 @@ async function fetchAPI(url) {
         const meta = data.data.meta;
 
         currentSunCoordinates = {
-            latitude: Number(meta.latitude),
-            longitude: Number(meta.longitude)
+            latitude: coordinates?.latitude ?? Number(meta.latitude),
+            longitude: coordinates?.longitude ?? Number(meta.longitude)
         };
         currentSolarTimeZone = meta.timezone || null;
 
-        updateQibla(meta.latitude, meta.longitude);
+        updateQibla(currentSunCoordinates.latitude, currentSunCoordinates.longitude);
 
         // Update UI
         elements.hijri.innerText = `${d.hijri.day} ${d.hijri.month.en} ${d.hijri.year}`;
         elements.loader.style.display = 'none';
 
         // Location Display Name
-        let locText = meta.timezone;
-        // Try to make it prettier if manual
-        const saved = kuduStorage.getItem('kudu_location');
-        if (saved) {
-            const p = JSON.parse(saved);
-            if (p.type === 'manual') locText = `${p.city}, ${p.country}`;
-        }
-        // Truncate long timezone names
-        if (locText.includes('/')) locText = locText.split('/').pop().replace(/_/g, ' ');
-        elements.locName.innerText = locText;
+        renderLocationLabel();
 
         livePrayerDate = getLivePrayerDate();
         currentTimings = t;
@@ -4915,7 +4999,8 @@ async function fetchAPI(url) {
             ? 'Prayer times took too long to load. Check your connection or choose a manual location.'
             : 'Prayer times could not be loaded. Check your connection or choose a manual location.';
         elements.loader.innerHTML = `<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span>${message}</span>`;
-        elements.locName.innerText = "Choose location";
+        if (typeof currentLocation !== 'undefined' && currentLocation) renderLocationLabel();
+        else elements.locName.innerText = "Choose location";
         console.warn('KuduPray timing request failed:', e);
     } finally {
         clearTimeout(timeoutId);
@@ -5261,7 +5346,7 @@ window.toggleAdhanPicker = function () {
         const position = () => positionQuranPicker(panel, document.getElementById('adhan-picker-trigger'), 350);
         let typed = '', typedAt = 0;
         panel.addEventListener('keydown', event => {
-            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
+            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeAdhanPicker(true); return; }
             const options = [...panel.querySelectorAll('[role="option"]')];
             if (!options.length) return;
             const index = options.indexOf(document.activeElement);
@@ -7099,7 +7184,7 @@ function syncDuaCategoryPicker() {
         });
         let typed = '', typedAt = 0;
         panel.addEventListener('keydown', event => {
-            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return; }
+            if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(true); return; }
             const options = [...list.children];
             const index = options.indexOf(document.activeElement);
             let next = -1;
