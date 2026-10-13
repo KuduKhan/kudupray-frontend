@@ -1,0 +1,18 @@
+KuduPray dua and dhikr listening
+
+Hisn al-Muslim recordings: Muhammad Jumah for OpenDua.
+OpenDua dataset v0.0.4, by Ihsan Labs at the Human Development Fund.
+Based on Hisn al-Muslim by Sa'id ibn Ali ibn Wahf al-Qahtani.
+https://opendua.org/downloads
+https://opendua.org/developers
+OpenDua editorial metadata and dataset structure are CC BY 4.0.
+Recitation terms are separate from the dataset licence. Recordings are streamed
+from their published URLs; audio files are not redistributed by KuduPray.
+Underlying religious texts are not claimed by OpenDua.
+
+Full Qur'anic ayah recordings: Mishary Rashid Alafasy, EveryAyah.
+https://everyayah.com/data/Alafasy_128kbps/
+These are labelled Full ayah(s), as an excerpt may be shorter than the recording.
+
+Other texts: the device's installed Arabic speech voice, when available.
+This is labelled Arabic device voice and is not a recorded recitation.

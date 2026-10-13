@@ -762,6 +762,13 @@ export default function TabHome() {
               </span>
               <span id="tasbih-phrase-meaning">{"Glory be to Allah"}</span>
             </div>
+            <div className="worship-audio-control worship-audio-dhikr">
+              <button type="button" className="worship-listen-button" aria-label="Listen to selected dhikr" aria-pressed="false" onClick={(event) => window.listenToDhikr?.(event)}>
+                <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m8 4 12 8-12 8z" /></svg>
+                <span data-audio-label>Listen</span>
+              </button>
+              <span data-audio-status role="status"></span>
+            </div>
             <div className="tasbih-count-wrap">
               <button
                 type="button"

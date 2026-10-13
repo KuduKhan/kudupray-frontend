@@ -1436,6 +1436,7 @@ window.decrementTasbih = function () {
 
 window.changeTasbihPhrase = function (phrase) {
     if (!TASBIH_PHRASES.includes(phrase)) return;
+    stopWorshipListening();
     tasbihState.phrase = phrase;
     if (!Number.isFinite(Number(tasbihState.counts[phrase]))) tasbihState.counts[phrase] = 0;
     saveTasbihState();
@@ -5439,6 +5440,7 @@ function stopAdhanPlayback() {
 }
 
 async function playSelectedAdhan(isPreview = false, prayerName = adhanPreviewPrayer) {
+    stopWorshipListening();
     const isFajr = prayerName === 'Fajr';
     adhanPreviewPrayer = isFajr ? 'Fajr' : 'Dhuhr';
     const selectedAdhan = isFajr ? getSelectedFajrAdhan() : getSelectedAdhan();
@@ -5862,6 +5864,7 @@ function updateRamadan(hijri) {
 window.nav = function (id, btn) {
     const nextPage = document.getElementById(`tab-${id}`);
     if (!nextPage || !(btn instanceof HTMLElement)) return;
+    stopWorshipListening();
     document.body.classList.remove('nav-hidden', 'quran-reader-nav-hidden');
     const currentPage = document.querySelector('.page.active');
     if (currentPage) pageScrollPositions[currentPage.id] = window.scrollY;
@@ -6705,6 +6708,7 @@ window.openGuide = function (guideId) {
 }
 
 window.closeGuide = function () {
+    stopWorshipListening();
     const activeGuidePage = document.querySelector('.guide-modal[data-guide-page].guide-page-active');
     if (activeGuidePage) {
         activeGuidePage.classList.remove('guide-page-active');
@@ -6872,6 +6876,36 @@ function resetModal(modalBody) {
 }
 
 // === DUAS LOGIC ===
+let worshipAudioPlayer, worshipAudioModule, worshipAudioRequest = 0, pendingWorshipKey;
+function stopWorshipListening() { worshipAudioRequest++; pendingWorshipKey = null; worshipAudioPlayer?.stop(); }
+async function listenToWorship(key, text, button) {
+    if (pendingWorshipKey === key) { stopWorshipListening(); return; }
+    const request = ++worshipAudioRequest;
+    pendingWorshipKey = key;
+    try {
+        worshipAudioModule ||= import('/worship-audio.mjs').catch(error => { worshipAudioModule = null; throw error; });
+        const module = await worshipAudioModule;
+        if (request !== worshipAudioRequest) return;
+        pendingWorshipKey = null;
+        worshipAudioPlayer ||= module.createWorshipAudioPlayer();
+        if (button.isConnected) await worshipAudioPlayer.toggle({ key, text, button });
+    } catch { if (request === worshipAudioRequest) { pendingWorshipKey = null; showToast('Audio is unavailable right now. Please try again.'); } }
+}
+window.listenToDua = function (index, event) {
+    event.stopPropagation();
+    const dua = duas[index];
+    if (dua) void listenToWorship(`dua:${index}`, dua.ar, event.currentTarget);
+};
+window.listenToDhikr = function (event) {
+    event.stopPropagation();
+    void listenToWorship(`dhikr:${tasbihState.phrase}`, TASBIH_DETAILS[tasbihState.phrase].arabic, event.currentTarget);
+};
+window.addEventListener('worship-audio-start', () => {
+    getQuranReaderActiveAudio()?.pause();
+    adhanAudio?.pause();
+});
+document.addEventListener('play', stopWorshipListening, true);
+window.addEventListener('pagehide', stopWorshipListening);
 
 let activeDuaLibraryMode = 'duas';
 let currentDuaPage = 1;
@@ -7210,6 +7244,7 @@ function syncDuaCategoryPicker() {
 }
 
 function renderDuas(list) {
+    stopWorshipListening();
     syncDuaCategoryPicker();
     const container = document.getElementById('dua-container');
     const summary = document.getElementById('dua-result-summary');
@@ -7276,6 +7311,11 @@ function renderDuas(list) {
                 <div class="dua-trans">${d.tr}</div>
                 <div class="dua-eng">${translation}</div>
                 ${d.source ? `<div class="dua-source"><i class="fa-solid fa-book-open" aria-hidden="true"></i>${d.source}</div>` : ''}
+                <div class="worship-audio-control">
+                    <button type="button" class="worship-listen-button" aria-label="Listen to dua ${pageStart + index + 1}" aria-pressed="false" onclick="listenToDua(${duas.indexOf(d)}, event)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m8 4 12 8-12 8z"/></svg><span data-audio-label>Listen</span>
+                    </button><span data-audio-status role="status"></span>
+                </div>
             </div>
         `}).join('');
 
