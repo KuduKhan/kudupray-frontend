@@ -46344,3 +46344,13 @@ body.dark-mode .calendar-occasion-icon {
 body.dark-mode .calendar-observance-note > i {
   background: rgba(252, 211, 77, 0.12);
 }
+
+@media (max-width: 599px) {
+  .app-footer::after {
+    right: 0;
+    bottom: -34px;
+    width: 92px;
+    height: 92px;
+    border-width: 12px;
+  }
+}
