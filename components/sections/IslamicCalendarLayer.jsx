@@ -70,7 +70,7 @@ export default function IslamicCalendarLayer() {
             title="Jump to today"
           >
             <i
-              className="fa-solid fa-location-crosshairs"
+              className="fa-solid fa-calendar-day"
               aria-hidden="true"
             ></i>
             {"Today"}

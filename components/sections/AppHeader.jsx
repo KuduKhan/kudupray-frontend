@@ -76,7 +76,13 @@ export default function AppHeader() {
             <img src="/brand/kudupray-emblem.png" alt="" />
           </div>
           <div className="brand-copy">
-            <img className="brand-wordmark" src="/brand/kudupray-wordmark.png" alt="KuduPray" />
+            <span className="brand-wordmark">
+              <img
+                className="brand-wordmark-base"
+                src="/brand/kudupray-wordmark.png"
+                alt="KuduPray"
+              />
+            </span>
             <span className="brand-kicker">
               {"Your daily worship companion"}
             </span>
